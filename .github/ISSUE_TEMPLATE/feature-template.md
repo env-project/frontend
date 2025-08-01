@@ -1,10 +1,9 @@
 ---
 name: 기능 템플릿
 about: 프로젝트 기능 이슈 생성 템플릿
-title: ''
-labels: ''
-assignees: ''
-
+title: ""
+labels: ""
+assignees: ""
 ---
 
 ## 어떤 기능인가요?
@@ -13,8 +12,8 @@ assignees: ''
 
 ## 작업 상세 내용
 
-- [ ] TODO
-- [ ] TODO
-- [ ] TODO
+- TODO
+- TODO
+- TODO
 
 ## 참고할만한 자료(선택)
