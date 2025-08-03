@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@theme {
+  /* 메인 컬러 (보라 계열) */
+  --color-primary-thick: #540cff;
+  --color-primary: #8b5df9;
+  --color-primary-soft: #e7ddff;
+
+  /* 서브 컬러 (노랑 계열)*/
+  --color-secondary-thick: #ff6b0c;
+  --color-secondary: #ffb30c;
+  --color-secondary-soft: #ffd65c;
+
+  /* 텍스트 컬러 */
+  --color-text-primary: #191919;
+  --color-text-secondary: #d9d9d9;
+  --color-text-on-dark: #f1f1f5;
+
+  /* 배경 컬러 */
+  --color-bg-primary: #f1f1f5;
+  --color-bg-secondary: #e5e5e5;
+  --color-bg-on-dark: #191919;
+}
