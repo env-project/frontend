@@ -5,7 +5,7 @@ import Text from "@/components/text/Text";
 function Home() {
   return (
     <div>
-      <Text>예시 텍스트</Text>
+      <Footer />
     </div>
   );
 }
