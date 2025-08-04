@@ -1,7 +1,7 @@
 import { AiOutlineFacebook } from "react-icons/ai";
 import { FaInstagram } from "react-icons/fa6";
 import { SiKakaotalk } from "react-icons/si";
-import Text from "./text/Text";
+import Text from "@/components/text/Text";
 import type { JSX } from "react";
 
 export default function Footer(): JSX.Element {
