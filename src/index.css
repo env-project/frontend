@@ -20,6 +20,9 @@
   --color-bg-primary: #f1f1f5;
   --color-bg-secondary: #e5e5e5;
   --color-bg-on-dark: #191919;
+
+  /* 에러 컬러 */
+  --color-error: #ff3120;
 }
 
 @font-face {
