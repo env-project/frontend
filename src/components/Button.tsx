@@ -3,7 +3,15 @@ import type { ComponentProps, ReactNode } from "react";
 
 interface ButtonProps extends ComponentProps<"button"> {
   variant?: "default" | "outline";
-  color?: "primary" | "secondary" | "error" | "neutral";
+  color?:
+    | "primary"
+    | "primary-thick"
+    | "primary-soft"
+    | "secondary"
+    | "secondary-thick"
+    | "secondary-soft"
+    | "error"
+    | "neutral";
   children: ReactNode;
 }
 
@@ -11,7 +19,11 @@ const getVariantClasses = (variant: ButtonProps["variant"], color: ButtonProps["
   if (variant === "outline") {
     return clsx("border border-1 bg-bg-primary", {
       "border-primary": color === "primary",
+      "border-primary-thick": color === "primary-thick",
+      "border-primary-soft": color === "primary-soft",
       "border-secondary": color === "secondary",
+      "border-secondary-thick": color === "secondary-thick",
+      "border-secondary-soft": color === "secondary-soft",
       "border-error": color === "error",
       "border-neutral-600": color === "neutral",
     });
@@ -19,11 +31,16 @@ const getVariantClasses = (variant: ButtonProps["variant"], color: ButtonProps["
 
   return clsx({
     "bg-primary": color === "primary",
+    "bg-primary-thick": color === "primary-thick",
+    "bg-primary-soft": color === "primary-soft",
     "bg-secondary": color === "secondary",
+    "bg-secondary-thick": color === "secondary-thick",
+    "bg-secondary-soft": color === "secondary-soft",
     "bg-error": color === "error",
     "bg-neutral-600": color === "neutral",
   });
 };
+
 export default function Button({
   variant = "default",
   color = "primary",
