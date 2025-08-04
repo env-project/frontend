@@ -1,8 +1,13 @@
 import { Routes, Route } from "react-router";
+import Text from "@/components/text/Text";
 
 //react router dom 테스트용 개발 시 삭제
 function Home() {
-  return <div>home</div>;
+  return (
+    <div>
+      <Text>예시 텍스트</Text>
+    </div>
+  );
 }
 //react router dom 테스트용 개발 시 삭제
 function Post() {
