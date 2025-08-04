@@ -21,3 +21,15 @@
   --color-bg-secondary: #e5e5e5;
   --color-bg-on-dark: #191919;
 }
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("/src/assets/font/PretendardVariable.woff2");
+}
+
+body {
+  font-family: "Pretendard", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
