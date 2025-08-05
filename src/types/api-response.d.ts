@@ -7,27 +7,10 @@ interface MyUserInfo {
   profile: MyProfile;
 }
 
-interface MyProfile {
-  image_url: string;
-  is_public: boolean;
-  regions: Region[];
-  positions: PositionAndLevel[];
-  genres: Genre[];
-}
-
 // GET /api/v1/profiles
 interface UserList {
   next_cursor: string;
   profiles: UserProfile[];
-}
-
-interface UserProfile {
-  user_id: string;
-  nickname: string;
-  image_url: string;
-  is_bookmarked: true;
-  regions: Region[];
-  positions: PositionAndLevel[];
 }
 
 // GET /api/v1/profiles/{user_id}
@@ -44,78 +27,11 @@ interface UserProfileDetail {
   })[];
 }
 
-export interface Comment {
-  id: string;
-  author: {
-    user_id: string;
-    nickname: string;
-  };
-  content: string;
-  is_owner: boolean;
-  children: Comment[];
-}
-
-interface PositionAndLevel {
-  position: Position;
-  experience_level: ExperienceLevel;
-}
-
-interface Position {
-  id: string;
-  name: string;
-}
-
-interface Region {
-  id: string;
-  name: string;
-}
-
-interface Genre {
-  id: string;
-  name: string;
-}
-
-interface ExperienceLevel {
-  id: string;
-  name: string;
-}
-
 /* --------------- 구인/구직 --------------- */
 // GET /api/v1/recruiting-posts
 interface PostList {
   next_cursor: string;
   posts: Post[];
-}
-
-interface Post {
-  id: string;
-  title: string;
-  author: Author;
-  is_bookmarked: boolean;
-  post_type: PostType;
-  regions: Region[];
-  created_at: Date;
-  views_count: number;
-  comments_count: number;
-  is_closed: boolean;
-}
-interface Author {
-  user_id: string;
-  nickname: string;
-  image_url?: string;
-}
-interface Orientation {
-  id: string;
-  name: string;
-}
-
-interface RecruitmentType {
-  id: string;
-  name: string;
-}
-interface PostType {
-  id: string;
-  name: string;
 }
 
 //GET /api/v1/recruiting-posts/{post_id}
@@ -176,4 +92,88 @@ interface MasterData {
 // POST /api/v1/uploads/images
 interface UploadedImage {
   image_url: string;
+}
+
+/* ----- 리스폰스로 오는 타입을 아니지만 내부적으로 사용되는 타입 ----- */
+interface MyProfile {
+  image_url: string;
+  is_public: boolean;
+  regions: Region[];
+  positions: PositionAndLevel[];
+  genres: Genre[];
+}
+interface Post {
+  id: string;
+  title: string;
+  author: Author;
+  is_bookmarked: boolean;
+  post_type: PostType;
+  regions: Region[];
+  created_at: Date;
+  views_count: number;
+  comments_count: number;
+  is_closed: boolean;
+}
+interface Author {
+  user_id: string;
+  nickname: string;
+  image_url?: string;
+}
+interface Orientation {
+  id: string;
+  name: string;
+}
+
+interface RecruitmentType {
+  id: string;
+  name: string;
+}
+interface PostType {
+  id: string;
+  name: string;
+}
+
+interface UserProfile {
+  user_id: string;
+  nickname: string;
+  image_url: string;
+  is_bookmarked: true;
+  regions: Region[];
+  positions: PositionAndLevel[];
+}
+
+export interface Comment {
+  id: string;
+  author: {
+    user_id: string;
+    nickname: string;
+  };
+  content: string;
+  is_owner: boolean;
+  children: Comment[];
+}
+
+interface PositionAndLevel {
+  position: Position;
+  experience_level: ExperienceLevel;
+}
+
+interface Position {
+  id: string;
+  name: string;
+}
+
+interface Region {
+  id: string;
+  name: string;
+}
+
+interface Genre {
+  id: string;
+  name: string;
+}
+
+interface ExperienceLevel {
+  id: string;
+  name: string;
 }
