@@ -47,7 +47,11 @@ export default function AuthInput({
           </button>
         )}
       </div>
-      {error && <Text className="text-error text-xs px-2">{error}</Text>}
+      {error && (
+        <Text variant="label" className="text-error text-xs px-2">
+          {error}
+        </Text>
+      )}
     </div>
   );
 }
