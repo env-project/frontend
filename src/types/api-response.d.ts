@@ -94,6 +94,13 @@ interface UploadedImage {
   image_url: string;
 }
 
+/* --------------- 에러 --------------- */
+//에러가 나타났을 때 오는 코드
+interface ErrorResponse {
+  code: string;
+  message: string;
+}
+
 /* ----- 리스폰스로 오는 타입을 아니지만 내부적으로 사용되는 타입 ----- */
 interface MyProfile {
   image_url: string;
