@@ -14,6 +14,21 @@ interface MyProfile {
   genres: Genre[];
 }
 
+// GET /api/v1/profiles
+interface UserList {
+  next_cursor: string;
+  profiles: UserProfile[];
+}
+
+interface UserProfile {
+  user_id: string;
+  nickname: string;
+  image_url: string;
+  is_bookmarked: true;
+  regions: Region[];
+  positions: PositionAndLevel[];
+}
+
 interface PositionAndLevel {
   position: Position;
   experience_level: ExperienceLevel;
