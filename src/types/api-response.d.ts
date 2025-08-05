@@ -14,17 +14,26 @@ interface UserList {
 }
 
 // GET /api/v1/profiles/{user_id}
-interface UserProfileDetail {
+type UserProfileDetail = PublicUserProfileDetail | PrivateUserProfileDetail;
+interface BaseUserProfileDetail {
   nickname: string;
   image_url: string;
   is_bookmarked: true;
+  is_public: boolean;
   regions: Region[];
   positions: PositionAndLevel[];
   genres: Genre[];
+}
+interface PublicUserProfileDetail extends BaseUserProfileDetail {
+  is_public: true;
   recent_posts: Pick<Post, "id" | "title" | "created_at">[];
   recent_comments: (Pick<Comment, "id" | "content" | "created_at"> & {
     post: Pick<Post, "id" | "title">;
   })[];
+}
+interface PrivateUserProfileDetail extends BaseUserProfileDetail {
+  is_public: false;
+  // `recent_posts`와 `recent_comments` 없음
 }
 
 /* --------------- 구인/구직 --------------- */
