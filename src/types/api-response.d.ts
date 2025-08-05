@@ -18,7 +18,7 @@ type UserProfileDetail = PublicUserProfileDetail | PrivateUserProfileDetail;
 interface BaseUserProfileDetail {
   nickname: string;
   image_url: string;
-  is_bookmarked: true;
+  is_bookmarked: false;
   is_public: boolean;
   regions: Region[];
   positions: PositionAndLevel[];
@@ -153,7 +153,7 @@ interface UserProfile {
   user_id: string;
   nickname: string;
   image_url: string;
-  is_bookmarked: true;
+  is_bookmarked: boolean;
   regions: Region[];
   positions: PositionAndLevel[];
 }
