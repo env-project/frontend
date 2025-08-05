@@ -3,10 +3,10 @@ interface MyUserInfo {
   id: string;
   email: string;
   nickname: string;
-  profile: Profile;
+  profile: MyProfile;
 }
 
-interface Profile {
+interface MyProfile {
   image_url: string;
   is_public: boolean;
   regions: Region[];
