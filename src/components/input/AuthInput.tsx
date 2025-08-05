@@ -25,7 +25,7 @@ export default function AuthInput({
   }
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 py-4">
       <div
         className={clsx(
           "flex bg-bg-secondary text-text-primary w-[325px]  md:w-[500px] p-3 rounded-lg ",
@@ -37,7 +37,6 @@ export default function AuthInput({
           placeholder={placeholder}
           className={clsx(
             "focus:outline-none w-full border-none bg-transparent placeholder-text-primary",
-
             className
           )}
           {...rest}
@@ -48,7 +47,7 @@ export default function AuthInput({
           </button>
         )}
       </div>
-      {error && <Text className="text-error text-sm">{error}</Text>}
+      {error && <Text className="text-error text-xs px-2">{error}</Text>}
     </div>
   );
 }
