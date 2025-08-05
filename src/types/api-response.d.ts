@@ -81,7 +81,7 @@ interface BookmarkUserList {
 }
 // GET /api/v1/users/me/bookmarks/recruiting-posts
 interface BookmarkPostList {
-  next_cursor: "string";
+  next_cursor: string;
   posts: (Omit<Post, "is_bookmarked"> & { bookmark_id: string })[];
 }
 
