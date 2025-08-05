@@ -148,6 +148,13 @@ interface CommentList {
   })[];
 }
 
+/* --------------- 북마크 --------------- */
+// GET /api/v1/users/me/bookmarks/profiles
+interface BookmarkUserList {
+  next_cursor: string;
+  profiles: (Omit<UserProfile, "is_bookmarked"> & { bookmark_id: string })[];
+}
+
 /* --------------- 공통 --------------- */
 //GET /api/v1/common/master-data
 interface MasterData {
