@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, type ComponentPropsWithoutRef } from "react";
 import clsx from "clsx";
 
-interface BookmarkButtonProps {
+interface BookmarkButtonProps extends ComponentPropsWithoutRef<"button"> {
   userId: string;
   isBookmarked: boolean;
   size?: "sm" | "md" | "lg";
@@ -9,35 +9,11 @@ interface BookmarkButtonProps {
 }
 
 export default function BookmarkButton({
-  userId,
   isBookmarked,
   size = "md",
   className = "",
 }: BookmarkButtonProps) {
   const [bookmarked, setBookmarked] = useState(isBookmarked);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // 북마크 토글 함수 (비동기 요청 가정)
-  const toggleBookmark = async () => {
-    if (isLoading) return;
-
-    try {
-      setIsLoading(true);
-      // 실제 API 연결 시 이 부분만 교체
-      if (bookmarked) {
-        console.log(`DELETE 북마크: ${userId}`);
-        // await api.delete(...)
-      } else {
-        console.log(`POST 북마크: ${userId}`);
-        // await api.post(...)
-      }
-      setBookmarked((prev) => !prev);
-    } catch (e) {
-      console.error("북마크 처리 중 에러", e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   // 크기에 따라 클래스 지정
   const sizeClass = {
@@ -49,14 +25,12 @@ export default function BookmarkButton({
   return (
     <button
       type="button"
-      disabled={isLoading} // 로딩 중 클릭 방지
-      onClick={toggleBookmark}
+      onClick={() => setBookmarked((prev) => !prev)}
       className={clsx(
-        "flex items-center gap-1 rounded-full transition-colors text-[var(--color-primary)] hover:text-[var(--color-primary-thick)] hover:opacity-80 disabled:opacity-50",
+        "flex items-center gap-1 rounded-full transition-colors text-primary hover:text-primary-thick hover:opacity-80 disabled:opacity-50",
         sizeClass,
         className
       )}
-      aria-label="북마크 추가"
     >
       {/* 아이콘 직접 렌더링 */}
       <svg
