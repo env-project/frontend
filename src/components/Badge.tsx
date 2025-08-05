@@ -2,13 +2,15 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import clsx from "clsx";
 import Text from "@/components/text/Text";
 
-type BadgeColor = "primary";
+type BadgeColor = "primary" | "secondary";
+type BadgeSize = "sm" | "md" | "lg";
 
 // 뱃지 컴포넌트 prop 타입 정의
 interface BadgeProps extends ComponentPropsWithoutRef<"span"> {
   label?: string;
   children?: ReactNode;
   color?: BadgeColor;
+  size?: BadgeSize;
   textVariant?: "label" | "mainText" | "subText" | "tooltip";
 }
 
@@ -16,25 +18,33 @@ export default function Badge({
   label,
   children,
   color = "primary", // 기본 색상: primary
+  size = "md", // 기본 사이즈: md
   textVariant = "label", // 기본 텍스트 스타일: label
   className = "",
   ...rest
 }: BadgeProps) {
   const colorMap = {
-    primary: "bg-[var(--color-primary-soft)] text-[var(--color-text-primary)]",
-  };
+    primary: "bg-primary-soft color-text-primary",
+    secondary: "bg-secondary-soft color-text-primary",
+  } satisfies Record<BadgeColor, string>;
+  const sizeMap = {
+    sm: "px-2 py-0.5 text-xs",
+    md: "px-3 py-1 text-sm",
+    lg: "px-4 py-1.5 text-base",
+  } satisfies Record<BadgeSize, string>;
 
   return (
     <span
       className={clsx(
-        "inline-block px-3 py-1 rounded-full transition-colors",
+        "inline-block rounded-full transition-colors",
         colorMap[color],
+        sizeMap[size],
         className
       )}
       {...rest}
     >
       <Text variant={textVariant} className="whitespace-nowrap">
-        {label ?? children}
+        {label || children}
       </Text>
     </span>
   );
