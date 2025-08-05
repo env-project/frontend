@@ -82,12 +82,12 @@ interface ExperienceLevel {
 
 /* --------------- 구인/구직 --------------- */
 // GET /api/v1/recruiting-posts
-export interface PostList {
+interface PostList {
   next_cursor: string;
   posts: Post[];
 }
 
-export interface Post {
+interface Post {
   id: string;
   title: string;
   author: Author;
@@ -99,27 +99,26 @@ export interface Post {
   comments_count: number;
   is_closed: boolean;
 }
-
-export interface Author {
+interface Author {
   user_id: string;
   nickname: string;
   image_url?: string;
 }
-export interface Orientation {
+interface Orientation {
   id: string;
   name: string;
 }
 
-export interface RecruitmentType {
+interface RecruitmentType {
   id: string;
   name: string;
 }
-export interface PostType {
+interface PostType {
   name: string;
 }
 
 //GET /api/v1/recruiting-posts/{post_id}
-export interface PostDetail extends Post {
+interface PostDetail extends Post {
   content: string;
   band_name: string;
   band_composition: string;
