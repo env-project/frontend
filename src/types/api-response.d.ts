@@ -92,8 +92,8 @@ interface Post {
   title: string;
   author: Author;
   is_bookmarked: boolean;
-  post_type: PostType;
-  regions: PostType[];
+  post_type: Pick<PostType, "name">;
+  regions: Pick<Region, "name">[];
   created_at: Date;
   views_count: number;
   comments_count: number;
@@ -114,6 +114,7 @@ interface RecruitmentType {
   name: string;
 }
 interface PostType {
+  id: string;
   name: string;
 }
 
@@ -138,10 +139,23 @@ interface PostDetail extends Post {
   comments: Comment[];
 }
 
+/* --------------- 구인/구직 --------------- */
 //GET /api/v1/comments
 interface CommentList {
   next_cursor: string;
   comments: (Pick<Comment, "id" | "content" | "created_at"> & {
     post: Pick<Post, "id" | "title">;
   })[];
+}
+
+/* --------------- 공통 --------------- */
+//GET /api/v1/common/master-data
+interface MasterData {
+  regions: Region[];
+  positions: Position[];
+  genres: Genre[];
+  experience_levels: ExperienceLevel[];
+  orientations: Orientation[];
+  recruiting_post_types: PostType[];
+  recruitment_types: RecruitmentType[];
 }
