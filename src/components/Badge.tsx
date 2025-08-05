@@ -28,9 +28,9 @@ export default function Badge({
     secondary: "bg-secondary-soft color-text-primary",
   } satisfies Record<BadgeColor, string>;
   const sizeMap = {
-    sm: "px-2 py-0.5 text-xs",
-    md: "px-3 py-1 text-sm",
-    lg: "px-4 py-1.5 text-base",
+    sm: "px-2 py-0.5",
+    md: "px-3 py-1",
+    lg: "px-4 py-1.5",
   } satisfies Record<BadgeSize, string>;
 
   return (
