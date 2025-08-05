@@ -55,7 +55,7 @@ interface PostDetail extends Post {
   comments: Comment[];
 }
 
-/* --------------- 구인/구직 --------------- */
+/* --------------- 댓글 --------------- */
 //GET /api/v1/comments
 interface CommentList {
   next_cursor: string;
