@@ -29,6 +29,34 @@ interface UserProfile {
   positions: PositionAndLevel[];
 }
 
+// GET /api/v1/profiles/{user_id}
+interface UserProfileDetail {
+  nickname: string;
+  image_url: string;
+  is_bookmarked: true;
+  regions: Region[];
+  positions: PositionAndLevel[];
+  genres: Genre[];
+  recent_posts: RecentPost[];
+  recent_comments: RecentComment[];
+}
+
+export interface RecentComment {
+  id: string;
+  content: string;
+  post: Post;
+  created_at: Date;
+}
+
+export interface Post {
+  id: string;
+  title: string;
+}
+
+export interface RecentPost extends Post {
+  created_at: Date;
+}
+
 interface PositionAndLevel {
   position: Position;
   experience_level: ExperienceLevel;
