@@ -39,14 +39,20 @@ interface UserProfileDetail {
   positions: PositionAndLevel[];
   genres: Genre[];
   recent_posts: Pick<Post, "id" | "title" | "created_at">[];
-  recent_comments: Comment[];
+  recent_comments: (Pick<Comment, "id" | "content" | "created_at"> & {
+    post: Pick<Post, "id" | "title">;
+  })[];
 }
 
 export interface Comment {
   id: string;
+  author: {
+    user_id: string;
+    nickname: string;
+  };
   content: string;
-  post: Pick<Post, "id" | "title">;
-  created_at: Date;
+  is_owner: boolean;
+  children: Comment[];
 }
 
 interface PositionAndLevel {
@@ -97,8 +103,38 @@ export interface Post {
 export interface Author {
   user_id: string;
   nickname: string;
+  image_url?: string;
+}
+export interface Orientation {
+  id: string;
+  name: string;
 }
 
+export interface RecruitmentType {
+  id: string;
+  name: string;
+}
 export interface PostType {
   name: string;
+}
+
+//GET /api/v1/recruiting-posts/{post_id}
+export interface PostDetail extends Post {
+  content: string;
+  band_name: string;
+  band_composition: string;
+  activity_time: string;
+  orientation: Orientation;
+  contact_info: string;
+  application_method: string;
+  practice_frequency_time: string;
+  recruitment_type: RecruitmentType;
+  other_conditions: string;
+  genres: Genre[];
+  positions: {
+    position: Position;
+    desired_experience_level: ExperienceLevel;
+  }[];
+  is_owner: boolean;
+  comments: Comment[];
 }
