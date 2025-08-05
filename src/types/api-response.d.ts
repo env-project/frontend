@@ -37,23 +37,20 @@ interface UserProfileDetail {
   regions: Region[];
   positions: PositionAndLevel[];
   genres: Genre[];
-  recent_posts: RecentPost[];
-  recent_comments: RecentComment[];
+  recent_posts: Post[];
+  recent_comments: Comment[];
 }
 
-export interface RecentComment {
+export interface Comment {
   id: string;
   content: string;
-  post: Post;
+  post: Pick<Post, "id" | "title">;
   created_at: Date;
 }
 
 export interface Post {
   id: string;
   title: string;
-}
-
-export interface RecentPost extends Post {
   created_at: Date;
 }
 
