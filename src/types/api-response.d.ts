@@ -49,13 +49,13 @@ interface PostDetail extends Post {
   band_name: string;
   band_composition: string;
   activity_time: string;
-  orientation: Orientation;
+
   contact_info: string;
   application_method: string;
   practice_frequency_time: string;
   recruitment_type: RecruitmentType;
   other_conditions: string;
-  genres: Genre[];
+
   is_owner: boolean;
   comments: Comment[];
 }
@@ -129,6 +129,8 @@ interface Post {
     position: Position;
     desired_experience_level: ExperienceLevel;
   }[];
+  orientation: Orientation;
+  genres: Genre[];
 }
 interface Author {
   user_id: string;
