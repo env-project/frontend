@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import Text from "@/components/text/Text";
 import Button from "@/components/Button";
 import clsx from "clsx";
