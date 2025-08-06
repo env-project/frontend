@@ -12,7 +12,7 @@ export default function Text({
   ...rest
 }: TextProps) {
   const baseClass = {
-    mainText: "font-normal text-sm sm:text-base",
+    mainText: "font-normal  sm:text-base text-sm",
     subText: "font-normal text-xs sm:text-sm",
     label: "font-medium text-xs",
     tooltip: "font-normal text-[11px]",
