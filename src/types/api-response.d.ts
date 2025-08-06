@@ -119,7 +119,6 @@ interface Post {
   title: string;
   author: Author;
   is_bookmarked: boolean;
-  post_type: PostType;
   regions: Region[];
   created_at: Date;
   views_count: number;
