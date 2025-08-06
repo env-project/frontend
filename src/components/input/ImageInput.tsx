@@ -9,6 +9,10 @@ interface ImageInputProps {
   onChange?: (file: File | null) => void;
 }
 
+/**
+ * ref 중복 문제로 인해서 useForm의 register 함수로 등록 불가능.
+ * 대신 useFrom의 setValue 함수를 onChange prop으로 등록하고 watch로 값 감시.
+ */
 export default function ImageInput({ className, onChange }: ImageInputProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState("");
