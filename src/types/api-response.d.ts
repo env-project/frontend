@@ -56,10 +56,6 @@ interface PostDetail extends Post {
   recruitment_type: RecruitmentType;
   other_conditions: string;
   genres: Genre[];
-  positions: {
-    position: Position;
-    desired_experience_level: ExperienceLevel;
-  }[];
   is_owner: boolean;
   comments: Comment[];
 }
@@ -129,6 +125,10 @@ interface Post {
   views_count: number;
   comments_count: number;
   is_closed: boolean;
+  positions: {
+    position: Position;
+    desired_experience_level: ExperienceLevel;
+  }[];
 }
 interface Author {
   user_id: string;
