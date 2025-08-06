@@ -1,8 +1,9 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type ComponentPropsWithRef } from "react";
 import Text from "@/components/text/Text";
 import Button from "@/components/Button";
+import clsx from "clsx";
 
-export default function ImageInput() {
+export default function ImageInput({ className, ...rest }: ComponentPropsWithRef<"input">) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
@@ -37,7 +38,10 @@ export default function ImageInput() {
     <Preview preview={preview} setPreview={setPreview} />
   ) : (
     <div
-      className="flex flex-col justify-center items-center border-2 border-dotted size-96 border-gray-600 rounded-xl bg-bg-primary transition-colors hover:bg-bg-secondary"
+      className={clsx(
+        "flex flex-col justify-center items-center border-2 border-dotted size-96 border-gray-600 rounded-xl bg-bg-primary transition-colors hover:bg-bg-secondary",
+        className
+      )}
       onClick={handleClick}
     >
       <div className="flex flex-col justify-center items-center">
@@ -63,6 +67,7 @@ export default function ImageInput() {
         className="hidden"
         ref={inputRef}
         onChange={handleChange}
+        {...rest}
       />
     </div>
   );
