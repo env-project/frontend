@@ -9,7 +9,7 @@ export default function HeroBanner() {
     <div className="relative w-full aspect-[16/6] overflow-hidden bg-black">
       {/* 배경 이미지 */}
       <img
-        src="/images/banner.jpg"
+        src="src/assets/images/banner.jpg"
         alt="Band on Stage"
         className="absolute inset-0 w-full h-full object-cover"
       />
