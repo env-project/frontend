@@ -33,7 +33,7 @@ export default function ImageInput({ className, onChange }: ImageInputProps) {
   };
 
   return (
-    <div className={clsx("w-96", className)}>
+    <div className={clsx("w-[90%] max-w-96", className)}>
       {previewUrl ? (
         <div className="flex flex-col items-center space-y-1">
           <img src={previewUrl} alt="preview" className="w-full object-contain rounded-xl" />
@@ -49,7 +49,7 @@ export default function ImageInput({ className, onChange }: ImageInputProps) {
           </Button>
         </div>
       ) : (
-        <label className="flex flex-col justify-center items-center cursor-pointer border-2 border-dotted size-96 border-gray-600 rounded-xl bg-bg-primary transition-colors hover:bg-bg-secondary">
+        <label className="flex flex-col justify-center items-center cursor-pointer border-2 border-dotted aspect-square border-gray-600 rounded-xl bg-bg-primary transition-colors hover:bg-bg-secondary">
           {error ? (
             <Text variant="subText" className="text-error">
               {error}
