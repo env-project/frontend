@@ -5,6 +5,8 @@ import clsx from "clsx";
 import { useDropzone } from "react-dropzone";
 
 interface ImageInputProps {
+  id?: string;
+  explanation?: string;
   className?: string;
   onChange?: (file: File | null) => void;
 }
@@ -13,7 +15,7 @@ interface ImageInputProps {
  * ref 중복 문제로 인해서 useForm의 register 함수로 등록 불가능.
  * 대신 useFrom의 setValue 함수를 onChange prop으로 등록하고 watch로 값 감시.
  */
-export default function ImageInput({ className, onChange }: ImageInputProps) {
+export default function ImageInput({ id, className, onChange, explanation }: ImageInputProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState("");
 
@@ -79,14 +81,14 @@ export default function ImageInput({ className, onChange }: ImageInputProps) {
           ) : (
             <>
               <Text variant="subText" className="text-center">
-                대표사진을 업로드해주세요.
+                {explanation ? explanation : "대표사진을 업로드해주세요."}
               </Text>
               <Text variant="tooltip" className="text-center">
                 JPG, PNG / 5MB 이하
               </Text>
             </>
           )}
-          <input {...getInputProps()} className="hidden" />
+          <input {...getInputProps()} className="hidden" id={id} />
         </div>
       )}
     </div>
