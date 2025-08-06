@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Text from "@/components/text/Text";
 import Button from "@/components/Button";
 import clsx from "clsx";
+import { useDropzone } from "react-dropzone";
 
 interface ImageInputProps {
   className?: string;
@@ -32,6 +33,17 @@ export default function ImageInput({ className, onChange }: ImageInputProps) {
     onChange?.(file);
   };
 
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: {
+      "image/jpeg": [],
+      "image/png": [],
+    },
+    maxFiles: 1,
+    onDrop: (acceptedFiles) => {
+      handleFile(acceptedFiles[0] ?? null);
+    },
+  });
+
   return (
     <div className={clsx("w-[90%] max-w-96", className)}>
       {previewUrl ? (
@@ -49,7 +61,10 @@ export default function ImageInput({ className, onChange }: ImageInputProps) {
           </Button>
         </div>
       ) : (
-        <label className="flex flex-col justify-center items-center cursor-pointer border-2 border-dotted aspect-square border-gray-600 rounded-xl bg-bg-primary transition-colors hover:bg-bg-secondary">
+        <div
+          {...getRootProps()}
+          className="flex flex-col justify-center items-center cursor-pointer border-2 border-dotted aspect-square border-gray-600 rounded-xl bg-bg-primary transition-colors hover:bg-bg-secondary"
+        >
           {error ? (
             <Text variant="subText" className="text-error">
               {error}
@@ -64,13 +79,8 @@ export default function ImageInput({ className, onChange }: ImageInputProps) {
               </Text>
             </>
           )}
-          <input
-            type="file"
-            accept="image/png, image/jpeg"
-            className="hidden"
-            onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
-          />
-        </label>
+          <input {...getInputProps()} className="hidden" />
+        </div>
       )}
     </div>
   );
