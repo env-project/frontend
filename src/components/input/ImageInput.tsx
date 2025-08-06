@@ -33,7 +33,7 @@ export default function ImageInput({ className, onChange }: ImageInputProps) {
     onChange?.(file);
   };
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
       "image/jpeg": [],
       "image/png": [],
@@ -63,7 +63,10 @@ export default function ImageInput({ className, onChange }: ImageInputProps) {
       ) : (
         <div
           {...getRootProps()}
-          className="flex flex-col justify-center items-center cursor-pointer border-2 border-dotted aspect-square border-gray-600 rounded-xl bg-bg-primary transition-colors hover:bg-bg-secondary"
+          className={clsx(
+            "flex flex-col justify-center items-center cursor-pointer border-2 border-dotted aspect-square border-neutral-600 rounded-xl bg-bg-primary transition-colors hover:bg-primary-soft",
+            isDragActive ? "bg-primary-soft" : ""
+          )}
         >
           {error ? (
             <Text variant="subText" className="text-error">
