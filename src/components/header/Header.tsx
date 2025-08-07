@@ -1,11 +1,17 @@
 import Text from "@/components/text/Text";
 import { Link } from "react-router-dom";
-import ToggleBtn from "@/components/button/ToggleBtn";
+import ToggleBtn from "@/components/toggleButton/ToggleBtn";
 import { useState } from "react";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  //1. 다크 모드 상태를 관리하는 state
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
+  //2. 토글 버튼 클릭 시 상태를 변경하는 함수
+  const handleToggle = () => {
+    setIsDarkMode((prev) => !prev);
+  };
   return (
     <header
       className={`relative flex justify-between items-center w-full h-[52px] md:h-[60px] px-5 pr-2 py-3 md:py-0  ${menuOpen ? "shadow-lg" : ""}`}
@@ -34,7 +40,7 @@ export default function Header() {
       </div>
 
       {/* Dark Mode Toggle btn */}
-      <ToggleBtn className="items-center justify-center hidden md:flex" />
+      <ToggleBtn isDarkMode={isDarkMode} onToggle={handleToggle} />
 
       {/* burger menu */}
       <button
@@ -73,12 +79,6 @@ export default function Header() {
       {/* Dropdown menu */}
       {menuOpen && (
         <div className="absolute flex flex-col w-[40%] bg-white  right-0 top-full  text-left p-5 md:hidden rounded-bl-xl gap-4 shadow-xl">
-          <div className="flex gap-5 ">
-            <Text variant="label" className="flex cursor-pointer text-text-primary">
-              다크 모드
-            </Text>
-            <ToggleBtn />
-          </div>
           <Link to="#">
             <Text variant="label" className="flex cursor-pointer text-text-primary">
               Profile List
