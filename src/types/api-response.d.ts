@@ -23,6 +23,7 @@ interface BaseUserProfileDetail {
   regions: Region[];
   positions: PositionAndLevel[];
   genres: Genre[];
+  email: string;
 }
 interface PublicUserProfileDetail extends BaseUserProfileDetail {
   is_public: true;
@@ -158,6 +159,8 @@ interface UserProfile {
   is_bookmarked: boolean;
   regions: Region[];
   positions: PositionAndLevel[];
+  email: string;
+  genres: Genre[];
 }
 
 export interface Comment {
