@@ -1,5 +1,5 @@
 import type { Post } from "@/types/api-response";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import H3 from "./text/H3";
 import Text from "./text/Text";
@@ -8,6 +8,34 @@ import Badge from "./Badge";
 interface RecruitmentCardProps {
   postData: Post;
 }
+
+const getTimeDiff = (time: Date) => {
+  const current = new Date();
+  const diffMs = current.getTime() - time.getTime();
+
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+  const month = 30 * day;
+  const year = 365 * day;
+
+  if (diffMs < hour) {
+    const minutes = Math.floor(diffMs / minute);
+    return `${minutes}분 전`;
+  } else if (diffMs < day) {
+    const hours = Math.floor(diffMs / hour);
+    return `${hours}시간 전`;
+  } else if (diffMs < month) {
+    const days = Math.floor(diffMs / day);
+    return `${days}일 전`;
+  } else if (diffMs < year) {
+    const months = Math.floor(diffMs / month);
+    return `${months}달 전`;
+  } else {
+    const years = Math.floor(diffMs / year);
+    return `${years}년 전`;
+  }
+};
 
 export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
   const {
@@ -27,6 +55,11 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
   } = postData;
 
   const [isBookmarked, setIsBookmarked] = useState(isInitialBookmarked);
+  const [timeDiff, setTimeDiff] = useState("");
+
+  useEffect(() => {
+    setTimeDiff(getTimeDiff(createdAt));
+  }, [createdAt, setTimeDiff]);
 
   return (
     <Link
@@ -37,7 +70,7 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
       <div className="flex justify-end w-full">
         <Text variant="subText">{author.nickname}</Text>
         <Text variant="subText">·</Text>
-        <Text variant="subText">{`${createdAt.getMonth()}/${createdAt.getDate()}`}</Text>
+        <Text variant="subText">{`${timeDiff}`}</Text>
       </div>
       <div className="flex justify-between w-full">
         <div className="flex flex-col space-y-0.5 flex-1">
