@@ -1,3 +1,10 @@
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export const cn = (...inputs: ClassValue[]) => {
+  return twMerge(clsx(inputs));
+};
+
 export const getTimeDiff = (time: Date) => {
   const current = new Date();
   const diffMs = current.getTime() - time.getTime();
