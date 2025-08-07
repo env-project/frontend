@@ -41,31 +41,41 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
   return (
     <Link
       to="#"
-      className="flex flex-col items-start space-y-1 p-5 bg-bg-secondary text-text-primary transition-shadow rounded-xl w-96 hover:shadow-lg hover:shadow-primary-thick"
+      className="flex flex-col items-start p-5 bg-bg-secondary text-text-primary transition-shadow rounded-xl w-full max-w-96 hover:shadow-lg hover:shadow-primary-thick"
     >
       <div className="flex w-full justify-between items-center">
         <H3 className="truncate w-full">{title}</H3>
         <BookmarkButton isBookmarked={isBookmarked} size="sm" userId={id} />
       </div>
 
-      <div className="flex justify-end w-full">
-        <Text variant="subText">{author.nickname}</Text>
-        <Text variant="subText">·</Text>
-        <Text variant="subText">{`${timeDiff}`}</Text>
+      <div className="flex justify-between items-center w-full mt-2 mb-3">
+        {isClosed ? (
+          <Badge size="sm">마감</Badge>
+        ) : (
+          <Badge size="sm" color="secondary">
+            모집중
+          </Badge>
+        )}
+        <div>
+          <Text variant="subText">{author.nickname}</Text>
+          <Text variant="subText">·</Text>
+          <Text variant="subText">{`${timeDiff}`}</Text>
+        </div>
       </div>
-      <div className="flex justify-between w-full">
+
+      <div className="flex flex-col justify-between w-full sm:flex-row">
         <div className="flex flex-col space-y-0.5 flex-1">
           <div className="flex items-center space-x-1">
-            <Text variant="mainText">모집포지션</Text>
-            {positions.map((e, i) => (
+            <Text variant="mainText">포지션</Text>
+            {positions.slice(0, 3).map((e, i) => (
               <Badge size="sm" key={i}>
                 {e.position.name}
               </Badge>
             ))}
           </div>
           <div className="flex items-center space-x-1">
-            <Text variant="mainText">활동지역</Text>
-            {regions.map((region, i) => (
+            <Text variant="mainText">지역</Text>
+            {regions.slice(0, 3).map((region, i) => (
               <Badge size="sm" key={i}>
                 {region.name}
               </Badge>
@@ -73,7 +83,7 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
           </div>
           <div className="flex items-center space-x-1">
             <Text variant="mainText">선호장르</Text>
-            {genres.map((genre, i) => (
+            {genres.slice(0, 3).map((genre, i) => (
               <Badge size="sm" key={i}>
                 {genre.name}
               </Badge>
@@ -85,13 +95,6 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
           </div>
         </div>
         <div className="flex flex-col justify-end items-end">
-          {isClosed ? (
-            <Badge size="md">마감</Badge>
-          ) : (
-            <Badge size="md" color="secondary">
-              모집중
-            </Badge>
-          )}
           <div className="flex space-x-1 justify-center items-center">
             <EyeIcon />
             <Text variant="subText">{viewsCount}</Text>
