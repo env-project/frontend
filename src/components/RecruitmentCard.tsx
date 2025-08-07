@@ -23,6 +23,7 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
     positions,
     genres,
     orientation,
+    bookmarks_count,
   } = postData;
 
   const [isBookmarked, setIsBookmarked] = useState(isInitialBookmarked);
@@ -80,6 +81,7 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
           <div className="flex space-x-1">
             <Text variant="subText">{`눈: ${viewsCount}`}</Text>
             <Text variant="subText">{`댓: ${commentsCount}`}</Text>
+            <Text variant="subText">{`추: ${bookmarks_count}`}</Text>
           </div>
         </div>
       </div>
