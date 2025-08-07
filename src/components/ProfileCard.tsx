@@ -3,8 +3,8 @@ import H2 from "@/components/text/H2";
 import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
 import BookmarkBtn from "@/components/BookmarkBtn";
-import type { UserProfile } from "@/types/api-response";
 import defalutImage from "@/assets/images/user-default-image.png";
+import type { UserProfile } from "@/types/api-res-profile";
 
 interface ProfileCardProps {
   profile: UserProfile;
