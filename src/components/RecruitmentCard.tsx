@@ -6,6 +6,9 @@ import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
 import { getTimeDiff } from "@/libs/utils";
 import BookmarkButton from "@/components/BookmarkBtn";
+import EyeIcon from "@/components/icons/EyeIcon";
+import CommentIcon from "@/components/icons/CommentIcon";
+import BookmarkIcon from "@/components/icons/BookmarkIcon";
 
 interface RecruitmentCardProps {
   postData: Post;
@@ -89,10 +92,13 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
               모집중
             </Badge>
           )}
-          <div className="flex space-x-1">
-            <Text variant="subText">{`눈: ${viewsCount}`}</Text>
-            <Text variant="subText">{`댓: ${commentsCount}`}</Text>
-            <Text variant="subText">{`추: ${bookmarks_count}`}</Text>
+          <div className="flex space-x-1 justify-center items-center">
+            <EyeIcon />
+            <Text variant="subText">{viewsCount}</Text>
+            <CommentIcon />
+            <Text variant="subText">{commentsCount}</Text>
+            <BookmarkIcon />
+            <Text variant="subText">{bookmarks_count}</Text>
           </div>
         </div>
       </div>
