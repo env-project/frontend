@@ -48,7 +48,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
           <Text variant="label">포지션</Text>
           <Badge label={positionName} color="primary" size="sm" />
         </div>
-        S{/* 경력 */}
+        {/* 경력 */}
         <div className="flex items-center gap-1">
           <Text variant="label">경력</Text>
           <Text variant="label">{experienceName}</Text>
