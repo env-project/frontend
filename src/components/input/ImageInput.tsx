@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Text from "@/components/text/Text";
 import Button from "@/components/Button";
-import clsx from "clsx";
 import { useDropzone } from "react-dropzone";
+import { cn } from "@/libs/utils";
 
 interface ImageInputProps {
   id?: string;
@@ -51,7 +51,7 @@ export default function ImageInput({ id, className, onChange, explanation }: Ima
   });
 
   return (
-    <div className={clsx("w-[90%] max-w-96", className)}>
+    <div className={cn("w-[90%] max-w-96", className)}>
       {previewUrl ? (
         <div className="flex flex-col items-center space-y-1">
           <img src={previewUrl} alt="preview" className="w-full object-contain rounded-xl" />
@@ -69,7 +69,7 @@ export default function ImageInput({ id, className, onChange, explanation }: Ima
       ) : (
         <div
           {...getRootProps()}
-          className={clsx(
+          className={cn(
             "flex flex-col justify-center items-center cursor-pointer border-2 border-dotted aspect-square border-neutral-600 rounded-xl bg-bg-primary transition-colors hover:bg-primary-soft",
             isDragActive ? "bg-primary-soft" : ""
           )}

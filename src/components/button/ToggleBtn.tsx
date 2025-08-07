@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from "@/libs/utils";
 import { useState } from "react";
 
 interface ToggleBtnProps {
@@ -17,7 +17,7 @@ export default function ToggleBtn({ onToggle, defaultOn = false, className }: To
   };
 
   return (
-    <button onClick={handleClick} className={clsx("cursor-pointer", className)} aria-pressed={isOn}>
+    <button onClick={handleClick} className={cn("cursor-pointer", className)} aria-pressed={isOn}>
       <svg xmlns="http://www.w3.org/2000/svg" width="64" height="24" viewBox="0 0 64 24">
         <rect
           width="64"

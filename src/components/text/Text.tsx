@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
-import clsx from "clsx";
+import { cn } from "@/libs/utils";
 interface TextProps extends ComponentPropsWithoutRef<"span"> {
   variant?: "mainText" | "subText" | "label" | "tooltip" | "button";
   children: ReactNode;
@@ -20,7 +20,7 @@ export default function Text({
   }[variant];
 
   return (
-    <span className={clsx(baseClass, className)} {...rest}>
+    <span className={cn(baseClass, className)} {...rest}>
       {children}
     </span>
   );

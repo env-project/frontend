@@ -1,8 +1,8 @@
 "use client";
 
-import clsx from "clsx";
 import H1 from "./text/H1";
 import Text from "./text/Text";
+import { cn } from "@/libs/utils";
 
 export default function HeroBanner() {
   return (
@@ -19,7 +19,7 @@ export default function HeroBanner() {
 
       {/* 텍스트 콘텐츠 */}
       <div
-        className={clsx(
+        className={cn(
           "relative z-10",
           "w-full h-full",
           "flex flex-col items-center justify-center text-center",
