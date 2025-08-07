@@ -27,7 +27,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
   return (
     <div
       className={clsx(
-        "relative w-75 rounded-xl bg-bg-secondary px-4 pt-2 pb-5",
+        "relative w-80 rounded-xl bg-bg-secondary px-4 pt-2 pb-5",
         "shadow-sm border border-gray-300",
         "hover:shadow-lg hover:shadow-primary-thick",
         "transition-all duration-300 ease-in-out"
