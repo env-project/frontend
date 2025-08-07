@@ -1,10 +1,10 @@
-import clsx from "clsx";
 import H2 from "@/components/text/H2";
 import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
 import BookmarkBtn from "@/components/BookmarkBtn";
 import type { UserProfile } from "@/types/api-response";
 import defalutImage from "@/assets/images/user-default-image.png";
+import { cn } from "@/libs/utils";
 
 interface ProfileCardProps {
   profile: UserProfile;
@@ -26,7 +26,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
 
   return (
     <div
-      className={clsx(
+      className={cn(
         "relative w-80 rounded-xl bg-bg-secondary px-4 pt-2 pb-5",
         "shadow-sm border border-gray-300",
         "hover:shadow-lg hover:shadow-primary-thick",

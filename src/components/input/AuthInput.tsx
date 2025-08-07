@@ -1,8 +1,8 @@
 import { useState, type ComponentPropsWithoutRef } from "react";
-import clsx from "clsx";
 import { IoEyeSharp } from "react-icons/io5";
 import { FaEyeSlash } from "react-icons/fa";
 import Text from "@/components/text/Text";
+import { cn } from "@/libs/utils";
 
 interface InputProps extends ComponentPropsWithoutRef<"input"> {
   type?: "text" | "password" | "email" | "number";
@@ -27,7 +27,7 @@ export default function AuthInput({
   return (
     <div className="flex flex-col gap-1 py-4">
       <div
-        className={clsx(
+        className={cn(
           "flex bg-bg-secondary text-text-primary w-[325px]  md:w-[500px] p-3 rounded-lg ",
           error && "border border-error"
         )}
@@ -35,7 +35,7 @@ export default function AuthInput({
         <input
           type={currentType}
           placeholder={placeholder}
-          className={clsx(
+          className={cn(
             "focus:outline-none w-full border-none bg-transparent placeholder-text-primary",
             className
           )}

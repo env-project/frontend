@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from "@/libs/utils";
 import type { ComponentProps, ReactNode } from "react";
 
 interface ButtonProps extends ComponentProps<"button"> {
@@ -17,7 +17,7 @@ interface ButtonProps extends ComponentProps<"button"> {
 
 const getVariantClasses = (variant: ButtonProps["variant"], color: ButtonProps["color"]) => {
   if (variant === "outline") {
-    return clsx("border border-1 bg-bg-primary", {
+    return cn("border border-1 bg-bg-primary", {
       "border-primary": color === "primary",
       "border-primary-thick": color === "primary-thick",
       "border-primary-soft": color === "primary-soft",
@@ -29,7 +29,7 @@ const getVariantClasses = (variant: ButtonProps["variant"], color: ButtonProps["
     });
   }
 
-  return clsx({
+  return cn({
     "bg-primary": color === "primary",
     "bg-primary-thick": color === "primary-thick",
     "bg-primary-soft": color === "primary-soft",
@@ -50,7 +50,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
-      className={clsx(
+      className={cn(
         "px-5 py-2 rounded-xl transition-all active:scale-95 hover:cursor-pointer hover:scale-105 focus:outline-none",
         getVariantClasses(variant, color),
         className

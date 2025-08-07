@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
-import clsx from "clsx";
 import Text from "@/components/text/Text";
+import { cn } from "@/libs/utils";
 
 type BadgeColor = "primary" | "secondary";
 type BadgeSize = "sm" | "md" | "lg";
@@ -35,7 +35,7 @@ export default function Badge({
 
   return (
     <span
-      className={clsx(
+      className={cn(
         "inline-block rounded-full transition-colors",
         colorMap[color],
         sizeMap[size],

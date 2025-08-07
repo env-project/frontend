@@ -1,5 +1,5 @@
 import { useState, type ComponentPropsWithoutRef } from "react";
-import clsx from "clsx";
+import { cn } from "@/libs/utils";
 
 interface BookmarkButtonProps extends ComponentPropsWithoutRef<"button"> {
   userId: string;
@@ -26,7 +26,7 @@ export default function BookmarkButton({
     <button
       type="button"
       onClick={() => setBookmarked((prev) => !prev)}
-      className={clsx(
+      className={cn(
         "flex items-center gap-1 rounded-full transition-colors text-primary hover:text-primary-thick hover:opacity-80 disabled:opacity-50",
         sizeClass,
         className
