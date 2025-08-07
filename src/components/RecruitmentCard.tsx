@@ -1,10 +1,11 @@
 import type { Post } from "@/types/api-response";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import H3 from "./text/H3";
-import Text from "./text/Text";
-import Badge from "./Badge";
+import H3 from "@/components/text/H3";
+import Text from "@/components/text/Text";
+import Badge from "@/components/Badge";
 import { getTimeDiff } from "@/libs/utils";
+import BookmarkButton from "@/components/BookmarkBtn";
 
 interface RecruitmentCardProps {
   postData: Post;
@@ -27,7 +28,7 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
     bookmarks_count,
   } = postData;
 
-  const [isBookmarked, setIsBookmarked] = useState(isInitialBookmarked);
+  const [isBookmarked] = useState(isInitialBookmarked);
   const [timeDiff, setTimeDiff] = useState("");
 
   useEffect(() => {
@@ -37,9 +38,13 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
   return (
     <Link
       to="#"
-      className="flex flex-col items-start space-y-1 p-5 bg-bg-secondary text-text-primary rounded-xl w-96"
+      className="flex flex-col items-start space-y-1 p-5 bg-bg-secondary text-text-primary transition-shadow rounded-xl w-96 hover:shadow-lg hover:shadow-primary-thick"
     >
-      <H3 className="truncate w-full">{title}</H3>
+      <div className="flex w-full justify-between items-center">
+        <H3 className="truncate w-full">{title}</H3>
+        <BookmarkButton isBookmarked={isBookmarked} size="sm" userId={id} />
+      </div>
+
       <div className="flex justify-end w-full">
         <Text variant="subText">{author.nickname}</Text>
         <Text variant="subText">·</Text>
