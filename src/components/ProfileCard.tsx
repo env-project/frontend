@@ -4,13 +4,22 @@ import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
 import BookmarkBtn from "@/components/BookmarkBtn";
 import type { UserProfile } from "@/types/api-response";
+import defalutImage from "@/assets/images/user-default-image.png";
 
 interface ProfileCardProps {
   profile: UserProfile;
 }
 
 export default function ProfileCard({ profile }: ProfileCardProps) {
-  const { user_id, nickname, image_url, is_bookmarked, positions, genres, email } = profile;
+  const {
+    user_id: userId,
+    nickname,
+    image_url: imageUrl,
+    is_bookmarked: isBookmarked,
+    positions,
+    genres,
+    email,
+  } = profile;
   const firstPosition = positions[0];
   const positionName = firstPosition?.position.name ?? "포지션 없음";
   const experienceName = firstPosition?.experience_level.name ?? "미정";
@@ -18,28 +27,31 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
   return (
     <div
       className={clsx(
-        "relative w-75 rounded-xl bg-bg-secondary px-4 pt-16 pb-5 ",
+        "relative w-75 rounded-xl bg-bg-secondary px-4 pt-2 pb-5",
         "shadow-sm border border-gray-300",
-        "hover:shadow-lg hover:shadow-primary-thick"
+        "hover:shadow-lg hover:shadow-primary-thick",
+        "transition-all duration-300 ease-in-out"
       )}
     >
-      {/* 프로필 이미지 (좌측 상단) */}
-      <div className="absolute top-4 left-4 w-12 h-12 rounded-full overflow-hidden border border-gray-300">
-        <img
-          src={image_url}
-          alt={`${nickname}님의 프로필 사진`}
-          className="w-full h-full object-cover"
-        />
-      </div>
+      <div className="flex items-center justify-between gap-2">
+        {/* 좌측: 프로필 이미지 */}
+        <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-300 shrink-0">
+          <img
+            src={imageUrl || defalutImage}
+            alt={`${nickname}님의 프로필 사진`}
+            className="w-full h-full object-cover"
+          />
+        </div>
 
-      {/* 북마크 버튼 (우측 상단) */}
-      <div className="absolute top-4 right-4">
-        <BookmarkBtn userId={user_id} isBookmarked={is_bookmarked} />
-      </div>
+        {/* 중앙: 닉네임 */}
+        <div className="flex-1 text-center">
+          <H2 className="text-base">{nickname}</H2>
+        </div>
 
-      {/* 이름 (중앙 상단) */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2">
-        <H2 className="text-base text-center">{nickname}</H2>
+        {/* 우측: 북마크 버튼 */}
+        <div className="shrink-0">
+          <BookmarkBtn userId={userId} isBookmarked={isBookmarked} />
+        </div>
       </div>
 
       <div className="flex items-center gap-4 mt-4 text-left">
