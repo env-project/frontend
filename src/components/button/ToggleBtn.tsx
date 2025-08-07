@@ -26,9 +26,17 @@ export default function ToggleBtn({ onToggle, defaultOn = false, className }: To
         aria-pressed={isOn}
       >
         {/* 모바일 버전 토글 */}
-        <span className="flex p-1 rounded-full border-1 text-neutral-400 border-neutral-400 md:hidden hover:bg-bg-secondary">
-          {isOn ? <MdSunny size={"14px"} /> : <TbMoonFilled size={"14px"} />}
+        <span
+          className={clsx(
+            "transition-colors duration-300 ease-in-out flex p-1 border rounded-full   border-neutral-400 md:hidden ",
+            isOn
+              ? "text-neutral-200  hover:bg-neutral-400 "
+              : "text-neutral-400 hover:bg-bg-secondary hover:text-text-primary"
+          )}
+        >
+          {isOn ? <TbMoonFilled size={"16px"} /> : <MdSunny size={"16px"} />}
         </span>
+
         {/* pc버젼 토글 */}
         <span className="hidden md:flex">
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="24" viewBox="0 0 64 24">
@@ -36,7 +44,7 @@ export default function ToggleBtn({ onToggle, defaultOn = false, className }: To
               width="54"
               height="24"
               rx="12"
-              className={`transition-colors duration-300 ease-in-out ${isOn ? "fill-primary-thick" : "fill-neutral-400"}`}
+              className={`transition-colors duration-300 ease-in-out ${isOn ? "fill-bg-on-dark" : "fill-neutral-400"}`}
             />
             <circle
               cx={isOn ? "41" : "13"}
