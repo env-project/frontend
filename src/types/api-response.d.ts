@@ -123,6 +123,7 @@ interface Post {
   created_at: Date;
   views_count: number;
   comments_count: number;
+  bookmarks_count: number;
   is_closed: boolean;
   positions: {
     position: Position;
