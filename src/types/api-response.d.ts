@@ -55,7 +55,6 @@ interface PostDetail extends Post {
   practice_frequency_time: string;
   recruitment_type: RecruitmentType;
   other_conditions: string;
-
   is_owner: boolean;
   comments: Comment[];
 }
@@ -131,6 +130,7 @@ interface Post {
   }[];
   orientation: Orientation;
   genres: Genre[];
+
 }
 interface Author {
   user_id: string;
