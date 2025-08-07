@@ -1,4 +1,3 @@
-import type { Post } from "@/types/api-response";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import H3 from "@/components/text/H3";
@@ -9,6 +8,7 @@ import BookmarkButton from "@/components/BookmarkBtn";
 import EyeIcon from "@/components/icons/EyeIcon";
 import CommentIcon from "@/components/icons/CommentIcon";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
+import type { Post } from "@/types/api-res-recruitment";
 
 interface RecruitmentCardProps {
   postData: Post;
