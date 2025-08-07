@@ -50,7 +50,11 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
 
       <div className="flex justify-between items-center w-full mt-2 mb-3">
         {isClosed ? (
-          <Badge size="sm">마감</Badge>
+          <Badge size="sm" className="bg-primary-thick">
+            <Text variant="label" className="text-text-on-dark">
+              마감
+            </Text>
+          </Badge>
         ) : (
           <Badge size="sm" color="secondary">
             모집중
