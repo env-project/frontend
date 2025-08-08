@@ -1,7 +1,7 @@
 import { cn } from "@/libs/utils";
 import type { ComponentProps, ReactNode } from "react";
 
-export interface ButtonProps extends ComponentProps<"button"> {
+interface ButtonProps extends ComponentProps<"button"> {
   variant?: "default" | "outline";
   color?:
     | "primary"

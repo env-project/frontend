@@ -7,8 +7,6 @@ import {
   type ReactElement,
 } from "react";
 import { cn } from "@/libs/utils";
-import Button from "./Button";
-import type { ButtonProps } from "./Button";
 
 /* --------------------
    Context
@@ -29,22 +27,22 @@ function useModalContext() {
 /* --------------------
    1. Trigger
 -------------------- */
-interface ModalTriggerProps extends ButtonProps {
+interface ModalTriggerProps {
   children: ReactNode;
 }
 
 function ModalTrigger({ children, ...rest }: ModalTriggerProps) {
   const { toggle } = useModalContext();
   return (
-    <Button
-      onClick={(e) => {
+    <div
+      onClick={() => {
         toggle();
-        rest.onClick?.(e);
       }}
       {...rest}
+      className="hover:cursor-pointer"
     >
       {children}
-    </Button>
+    </div>
   );
 }
 
