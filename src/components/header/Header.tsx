@@ -1,34 +1,38 @@
 import Text from "@/components/text/Text";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import DarkModeToggle from "../darkMode/DarkModeToggle";
+import DarkModeToggle from "@/components/darkMode/DarkModeToggle";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isLogined, setIsLogined] = useState<boolean>(true);
+  const [isLogined, setIsLogined] = useState<boolean>(false);
 
-  //1. 토글 버튼 클릭 시 상태를 변경하는 함수
+  // 토글 버튼 클릭 시 상태를 변경하는 함수
   const handleToggle = () => {
     setIsDarkMode((prev) => !prev);
+  };
+  // 로그인 상태 관리 함수
+  const handleLogined = () => {
+    setIsLogined((prev) => !prev);
   };
 
   return (
     <header
-      className={`relative flex justify-between items-center w-full h-[52px] sm:h-[60px] px-5 pr-2 py-3 sm:py-0  ${menuOpen ? "shadow-lg" : ""}`}
+      className={`relative flex justify-between items-center w-full h-[52px] sm:h-[80px] px-4 sm:px-6 sm:py-0 ${menuOpen ? "shadow-lg" : ""}`}
     >
       {/* Main Logo */}
       <Link to="/">
-        <img src="/logo.png" alt="logo" className="w-[70px] " />
+        <img src="/logo.png" alt="logo" className="w-[70px] md:w-[80px] ml-2" />
       </Link>
 
       {/* Nav Link */}
       <div className="items-center justify-around hidden gap-16 sm:flex ">
         <Link
           to="#"
-          className="transition-transform duration-200 hover:-translate-y-0.5 hover:underline hover:decoration-1 underline-offset-4"
+          className="transition-transform duration-200 hover:-translate-y-0.5 hover:underline hover:decoration-1 underline-offset-4 "
         >
-          <Text variant="subText" className="font-semibold ">
+          <Text variant="subText" className="sm:text-lg">
             Profile List
           </Text>
         </Link>
@@ -36,7 +40,7 @@ export default function Header() {
           to="#"
           className="transition-transform duration-200 hover:-translate-y-0.5 hover:underline hover:decoration-1 underline-offset-4"
         >
-          <Text variant="subText" className="font-semibold">
+          <Text variant="subText" className="sm:text-lg">
             Find People
           </Text>
         </Link>
@@ -45,7 +49,7 @@ export default function Header() {
         </Link> */}
       </div>
 
-      <div className="flex items-center gap-4 ">
+      <div className="flex items-center gap-8 ">
         {/* Dark Mode Toggle btn */}
         <DarkModeToggle isDarkMode={isDarkMode} onToggle={handleToggle} />
 
@@ -72,15 +76,20 @@ export default function Header() {
           <div className="items-center justify-end hidden gap-1 sm:flex">
             <Link
               to="#"
-              className="rounded-md px-5 h-[38px] flex items-center border-1 justify-center bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary  hover:border-primary-thick"
+              className="flex items-center justify-center px-6 py-2 rounded-md border-1 bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary hover:border-primary-thick"
             >
-              <Text variant="subText">myPage</Text>
+              <Text variant="subText" className="sm:text-lg">
+                myPage
+              </Text>
             </Link>
             <Link
               to="#"
-              className="rounded-md px-5 h-[38px] flex items-center border border-transparent  justify-center  bg-white hover:text-text-primary hover:border-1  hover:border-primary-thick "
+              className="flex items-center justify-center px-6 py-2 bg-white border border-transparent rounded-md hover:text-text-primary hover:border-1 hover:border-primary-thick "
+              onClick={handleLogined}
             >
-              <Text variant="subText">Logout</Text>
+              <Text variant="subText" className="sm:text-lg">
+                Logout
+              </Text>
             </Link>
           </div>
         ) : (
@@ -88,15 +97,19 @@ export default function Header() {
           <div className="items-center justify-end hidden gap-1 sm:flex">
             <Link
               to="#"
-              className="rounded-md px-5 h-[38px] flex items-center border border-transparent  justify-center  bg-white hover:text-text-primary hover:border-1  hover:border-primary-thick "
+              className="flex items-center justify-center px-6 py-2 bg-white border border-transparent rounded-md hover:text-text-primary hover:border-1 hover:border-primary-thick "
             >
-              <Text variant="subText">로그인</Text>
+              <Text variant="subText" className="sm:text-lg">
+                로그인
+              </Text>
             </Link>
             <Link
               to="#"
-              className="rounded-md px-5  h-[38px] flex items-center border-1 justify-center bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary  hover:border-primary-thick"
+              className="flex items-center justify-center px-6 py-2 rounded-md border-1 bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary hover:border-primary-thick"
             >
-              <Text variant="subText">회원가입</Text>
+              <Text variant="subText" className="sm:text-lg">
+                회원가입
+              </Text>
             </Link>
           </div>
         )}
@@ -104,17 +117,63 @@ export default function Header() {
 
       {/* Dropdown menu */}
       {menuOpen && (
-        <div className="absolute flex flex-col w-[40%] bg-white  right-0 top-full  text-left p-5 sm:hidden rounded-bl-xl gap-4 shadow-xl">
-          <Link to="#">
-            <Text variant="label" className="flex cursor-pointer text-text-primary">
-              Profile List
-            </Text>
-          </Link>
-          <Link to="#">
-            <Text variant="label" className="flex cursor-pointer text-text-primary">
-              People List
-            </Text>
-          </Link>
+        <div className="absolute flex flex-col w-[40%] bg-white  right-0 top-full  text-left p-5 sm:hidden rounded-bl-xl gap-2 shadow-xl">
+          <div className="flex flex-col gap-3 mb-4">
+            <Link to="#" onClick={() => setMenuOpen(false)}>
+              <Text variant="label" className="flex cursor-pointer text-text-primary">
+                Profile List
+              </Text>
+            </Link>
+            <Link to="#" onClick={() => setMenuOpen(false)}>
+              <Text variant="label" className="flex cursor-pointer text-text-primary">
+                People List
+              </Text>
+            </Link>
+          </div>
+
+          {/* 로그인 상태 */}
+          {isLogined && (
+            <>
+              <Link
+                to="#"
+                className="flex items-center justify-center px-6 py-2 rounded-md border-1 bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary hover:border-primary-thick"
+              >
+                <Text variant="subText" className="sm:text-lg">
+                  myPage
+                </Text>
+              </Link>
+              <Link
+                to="#"
+                className="flex items-center justify-center px-6 py-2 bg-white border border-transparent rounded-md hover:text-text-primary hover:border-1 hover:border-primary-thick "
+                onClick={handleLogined}
+              >
+                <Text variant="subText" className="sm:text-lg">
+                  Logout
+                </Text>
+              </Link>
+            </>
+          )}
+          {/* 비로그인상태 */}
+          {!isLogined && (
+            <>
+              <Link
+                to="#"
+                className="flex items-center justify-center px-6 py-2 bg-white border border-transparent rounded-md hover:text-text-primary hover:border-1 hover:border-primary-thick "
+              >
+                <Text variant="subText" className="sm:text-lg">
+                  로그인
+                </Text>
+              </Link>
+              <Link
+                to="#"
+                className="flex items-center justify-center px-6 py-2 rounded-md border-1 bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary hover:border-primary-thick"
+              >
+                <Text variant="subText" className="sm:text-lg">
+                  회원가입
+                </Text>
+              </Link>
+            </>
+          )}
         </div>
       )}
     </header>
