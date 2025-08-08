@@ -1,177 +1,97 @@
-import Text from "@/components/text/Text";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import DarkModeToggle from "@/components/darkMode/DarkModeToggle";
 
-export default function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isLogined, setIsLogined] = useState<boolean>(false);
+//LinkButton 컴포넌트는 링크로 연결된 버튼의 역할
+import LinkButton from "@/components/header/LinkButton";
+import BurgerIcon from "@/components/icons/BurgerIcon";
+import NavigationLink from "@/components/header/NavigationLink";
 
-  // 토글 버튼 클릭 시 상태를 변경하는 함수
-  const handleToggle = () => {
+// Header 컴포넌트
+export default function Header() {
+  const [burgerOpen, setBurgerOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+
+  // 버거버튼 클릭 시 상태 변경
+  const BurgerBtn = useCallback(() => {
+    setBurgerOpen((prev) => !prev);
+  }, []);
+
+  // 다크모드 클릭 시 상태 변경
+  const toggleDarkMode = useCallback(() => {
     setIsDarkMode((prev) => !prev);
-  };
-  // 로그인 상태 관리 함수
-  const handleLogined = () => {
-    setIsLogined((prev) => !prev);
-  };
+  }, []);
+
+  // 로그인 클릭 시 상태 변경
+  const toggleLogin = useCallback(() => {
+    setIsLogin((prev) => !prev);
+  }, []);
 
   return (
     <header
-      className={`relative flex justify-between items-center w-full h-[52px] sm:h-[80px] px-4 sm:px-6 sm:py-0 ${menuOpen ? "shadow-lg" : ""}`}
+      className={`relative flex justify-between items-center w-full h-[52px] sm:h-[80px] px-4 sm:px-6 sm:py-0 ${burgerOpen ? "shadow-lg" : ""} sm:shadow-none`}
     >
-      {/* Main Logo */}
+      {/* 메인 로고 */}
       <Link to="/">
         <img src="/logo.png" alt="logo" className="w-[70px] md:w-[80px] ml-2" />
       </Link>
 
-      {/* Nav Link */}
-      <div className="items-center justify-around hidden gap-16 sm:flex ">
-        <Link
-          to="#"
-          className="transition-transform duration-200 hover:-translate-y-0.5 hover:underline hover:decoration-1 underline-offset-4 "
-        >
-          <Text variant="subText" className="sm:text-lg">
-            Profile List
-          </Text>
-        </Link>
-        <Link
-          to="#"
-          className="transition-transform duration-200 hover:-translate-y-0.5 hover:underline hover:decoration-1 underline-offset-4"
-        >
-          <Text variant="subText" className="sm:text-lg">
-            Find People
-          </Text>
-        </Link>
-        {/* <Link to="#" className="transition-transform duration-200 hover:-translate-y-0.5">
-          <Text variant="subText">Support</Text>
-        </Link> */}
+      {/* 데스크톱 네비게이션 링크 (PC에서만 보임) */}
+      <div className="items-center justify-around hidden gap-16 sm:flex">
+        <NavigationLink title="Profile List" to="#" />
+        <NavigationLink title="Find People" to="#" />
       </div>
 
       <div className="flex items-center gap-8 ">
-        {/* Dark Mode Toggle btn */}
-        <DarkModeToggle isDarkMode={isDarkMode} onToggle={handleToggle} />
+        {/* 다크 모드 토글 버튼( PC / 모바일 둘 다) */}
+        <DarkModeToggle isDarkMode={isDarkMode} onToggle={toggleDarkMode} />
 
-        {/* burger menu */}
-        <button
-          onClick={() => {
-            setMenuOpen((prev) => !prev);
-          }}
-          className="flex items-center justify-end sm:hidden"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="28"
-            height="28"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path d="M3 18V16H21V18H3ZM3 13V11H21V13H3ZM3 8V6H21V8H3Z" fill="#49454F" />
-          </svg>
+        {/* 햄버거 버튼 (모바일에서만 보임) */}
+        <button onClick={BurgerBtn} className="flex items-center justify-end sm:hidden">
+          <BurgerIcon />
         </button>
 
-        {!isLogined ? (
-          // {/* 로그인 상태- myPage, logout 버튼 */}
+        {/* 데스크톱 인증 버튼 (PC에서만 보임) */}
+        {isLogin ? (
           <div className="items-center justify-end hidden gap-1 sm:flex">
-            <Link
-              to="#"
-              className="flex items-center justify-center px-6 py-2 rounded-md border-1 bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary hover:border-primary-thick"
-            >
-              <Text variant="subText" className="sm:text-lg">
-                myPage
-              </Text>
-            </Link>
-            <Link
-              to="#"
-              className="flex items-center justify-center px-6 py-2 bg-white border border-transparent rounded-md hover:text-text-primary hover:border-1 hover:border-primary-thick "
-              onClick={handleLogined}
-            >
-              <Text variant="subText" className="sm:text-lg">
-                Logout
-              </Text>
-            </Link>
+            <LinkButton title="myPage" to="#" type="primary" />
+            <LinkButton title="Logout" to="#" type="secondary" onClick={toggleLogin} />
           </div>
         ) : (
-          // {/* 비로그인상태- login, signup btn */}
           <div className="items-center justify-end hidden gap-1 sm:flex">
-            <Link
-              to="#"
-              className="flex items-center justify-center px-6 py-2 bg-white border border-transparent rounded-md hover:text-text-primary hover:border-1 hover:border-primary-thick "
-            >
-              <Text variant="subText" className="sm:text-lg">
-                로그인
-              </Text>
-            </Link>
-            <Link
-              to="#"
-              className="flex items-center justify-center px-6 py-2 rounded-md border-1 bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary hover:border-primary-thick"
-            >
-              <Text variant="subText" className="sm:text-lg">
-                회원가입
-              </Text>
-            </Link>
+            <LinkButton title="로그인" to="#" type="secondary" />
+            <LinkButton title="회원가입" to="#" type="primary" />
           </div>
         )}
       </div>
 
-      {/* Dropdown menu */}
-      {menuOpen && (
-        <div className="absolute flex flex-col w-[40%] bg-white  right-0 top-full  text-left p-5 sm:hidden rounded-bl-xl gap-2 shadow-xl">
-          <div className="flex flex-col gap-3 mb-4">
-            <Link to="#" onClick={() => setMenuOpen(false)}>
-              <Text variant="label" className="flex cursor-pointer text-text-primary">
-                Profile List
-              </Text>
-            </Link>
-            <Link to="#" onClick={() => setMenuOpen(false)}>
-              <Text variant="label" className="flex cursor-pointer text-text-primary">
-                People List
-              </Text>
-            </Link>
+      {/* 모바일 드롭다운 메뉴 (모바일에서만 보임) */}
+      {burgerOpen && (
+        <div className="absolute flex flex-col w-[40%] bg-white right-0 top-full text-left p-5 sm:hidden rounded-bl-xl gap-2 shadow-xl">
+          <div className="flex flex-col gap-4 my-4">
+            <NavigationLink title="Profile List" to="#" onClick={BurgerBtn} />
+            <NavigationLink title="People List" to="#" onClick={BurgerBtn} />
           </div>
 
-          {/* 로그인 상태 */}
-          {isLogined && (
+          {/* 로그인 상태에 따라 보여주는 버튼 달리함*/}
+          {isLogin ? (
             <>
-              <Link
+              <LinkButton title="myPage" to="#" type="primary" onClick={BurgerBtn} />
+              <LinkButton
+                title="Logout"
                 to="#"
-                className="flex items-center justify-center px-6 py-2 rounded-md border-1 bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary hover:border-primary-thick"
-              >
-                <Text variant="subText" className="sm:text-lg">
-                  myPage
-                </Text>
-              </Link>
-              <Link
-                to="#"
-                className="flex items-center justify-center px-6 py-2 bg-white border border-transparent rounded-md hover:text-text-primary hover:border-1 hover:border-primary-thick "
-                onClick={handleLogined}
-              >
-                <Text variant="subText" className="sm:text-lg">
-                  Logout
-                </Text>
-              </Link>
+                type="secondary"
+                onClick={() => {
+                  toggleLogin();
+                  BurgerBtn();
+                }}
+              />
             </>
-          )}
-          {/* 비로그인상태 */}
-          {!isLogined && (
+          ) : (
             <>
-              <Link
-                to="#"
-                className="flex items-center justify-center px-6 py-2 bg-white border border-transparent rounded-md hover:text-text-primary hover:border-1 hover:border-primary-thick "
-              >
-                <Text variant="subText" className="sm:text-lg">
-                  로그인
-                </Text>
-              </Link>
-              <Link
-                to="#"
-                className="flex items-center justify-center px-6 py-2 rounded-md border-1 bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary hover:border-primary-thick"
-              >
-                <Text variant="subText" className="sm:text-lg">
-                  회원가입
-                </Text>
-              </Link>
+              <LinkButton title="로그인" to="#" type="secondary" onClick={BurgerBtn} />
+              <LinkButton title="회원가입" to="#" type="primary" onClick={BurgerBtn} />
             </>
           )}
         </div>
