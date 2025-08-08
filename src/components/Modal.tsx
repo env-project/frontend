@@ -51,8 +51,20 @@ interface ModalContentProps extends ComponentProps<"div"> {
   children: ReactNode;
 }
 
-function ModalContent({ children, className, ...props }: ModalContentProps) {
+function ModalContent({ children, className, ...rest }: ModalContentProps) {
   const { isOpen, close } = useModalContext();
+  const [show, setShow] = useState(false);
+
+  // 모달 열릴 때 mount
+  useEffect(() => {
+    if (isOpen) {
+      setShow(true);
+    } else {
+      // 닫힘 애니메이션 시간만큼 지연 후 언마운트
+      const timer = setTimeout(() => setShow(false), 200); // 200ms = transition duration
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   // ESC 키 닫기
   useEffect(() => {
@@ -64,28 +76,30 @@ function ModalContent({ children, className, ...props }: ModalContentProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, close]);
 
-  if (!isOpen) return null;
+  if (!show) return null;
 
   return (
     <>
       {/* Overlay */}
-      <div className="fixed inset-0 bg-bg-on-dark/50 z-40" onClick={close} />
+      <div
+        className={cn(
+          "fixed inset-0 bg-bg-on-dark/50 z-40 transition-opacity duration-200",
+          isOpen ? "opacity-100" : "opacity-0"
+        )}
+        onClick={close}
+      />
 
       {/* Modal */}
       <div
         className={cn(
-          "fixed z-50 flex flex-col min-w-64 border-primary-soft bg-bg-primary border-2 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg",
+          "fixed z-50 flex flex-col min-w-64 border-primary-soft bg-bg-primary border-2 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg transition-all duration-200 transform",
+          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95",
           className
         )}
-        {...props}
+        {...rest}
       >
         <div className="w-full flex items-center justify-end p-2">
-          <H3
-            className=" text-text-primary hover:cursor-pointer p-1"
-            onClick={() => {
-              close();
-            }}
-          >
+          <H3 className="text-text-primary hover:cursor-pointer p-1" onClick={close}>
             X
           </H3>
         </div>
