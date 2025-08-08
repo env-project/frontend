@@ -31,12 +31,18 @@ function formatDate(dateInput: Date | string): string {
 }
 
 export default function CommentCard({ comment }: CommentCardProps) {
-  const time = formatTime(comment.created_at);
-  const date = formatDate(comment.created_at);
+  const {
+    content,
+    created_at: createdAt,
+    post: { id: postId, title: postTitle },
+  } = comment;
+
+  const time = formatTime(createdAt);
+  const date = formatDate(createdAt);
 
   return (
     <Link
-      to={`/recruiting-posts/${comment.post.id}`}
+      to={`/recruiting-posts/${postId}`}
       className={clsx(
         "relative block rounded-xl p-4",
         "border-2 bg-bg-primary border-primary-soft",
@@ -50,15 +56,18 @@ export default function CommentCard({ comment }: CommentCardProps) {
       </Text>
 
       {/* 댓글 본문 */}
-      <H3 className="text-sm mb-2 line-clamp-2 text-text-primary">{comment.content}</H3>
+      <H3 className="text-sm mb-2 line-clamp-2 text-text-primary">{content}</H3>
 
       {/* 연결된 게시글 제목 */}
       <Text variant="subText" className="text-text-primary">
-        게시글: {comment.post.title}
+        게시글: {postTitle}
       </Text>
 
       {/* 작성일 우측 하단 표시 */}
-      <Text variant="tooltip" className="absolute bottom-2 right-4 text-xs text-gray-400">
+      <Text
+        variant="tooltip"
+        className="absolute bottom-2 right-4 text-xs text-text-primary opacity-50"
+      >
         {date}
       </Text>
     </Link>
