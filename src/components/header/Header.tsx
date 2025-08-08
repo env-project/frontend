@@ -1,14 +1,20 @@
 import Text from "@/components/text/Text";
 import { Link } from "react-router-dom";
-import ToggleBtn from "@/components/button/ToggleBtn";
 import { useState } from "react";
+import DarkModeToggle from "../darkMode/DarkModeToggle";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  //1. 토글 버튼 클릭 시 상태를 변경하는 함수
+  const handleToggle = () => {
+    setIsDarkMode((prev) => !prev);
+  };
 
   return (
     <header
-      className={`relative flex justify-between items-center w-full h-[52px] md:h-[60px] px-5 pr-2 py-3 md:py-0  ${menuOpen ? "shadow-lg" : ""}`}
+      className={`relative flex justify-between items-center w-full h-[52px] sm:h-[60px] px-5 pr-2 py-3 sm:py-0  ${menuOpen ? "shadow-lg" : ""}`}
     >
       {/* Main Logo */}
       <Link to="/">
@@ -16,69 +22,68 @@ export default function Header() {
       </Link>
 
       {/* Nav Link */}
-      <div className="items-center justify-around hidden gap-8 md:flex ">
+      <div className="items-center justify-around hidden gap-16 sm:flex ">
         <Link
           to="#"
-          className="transition-transform duration-200 hover:-translate-y-0.5 hover:underline underline-offset-4"
+          className="transition-transform duration-200 hover:-translate-y-0.5 hover:underline hover:decoration-1 underline-offset-4"
         >
           <Text variant="subText" className="text-xs ">
             Profile List
           </Text>
         </Link>
-        <Link to="#" className="transition-transform duration-200 hover:-translate-y-0.5">
+        <Link
+          to="#"
+          className="transition-transform duration-200 hover:-translate-y-0.5 hover:underline hover:decoration-1 underline-offset-4"
+        >
           <Text variant="subText">Find People</Text>
         </Link>
-        <Link to="#" className="transition-transform duration-200 hover:-translate-y-0.5">
+        {/* <Link to="#" className="transition-transform duration-200 hover:-translate-y-0.5">
           <Text variant="subText">Support</Text>
-        </Link>
+        </Link> */}
       </div>
 
-      {/* Dark Mode Toggle btn */}
-      <ToggleBtn className="items-center justify-center hidden md:flex" />
+      <div className="flex items-center gap-4 ">
+        {/* Dark Mode Toggle btn */}
+        <DarkModeToggle isDarkMode={isDarkMode} onToggle={handleToggle} />
 
-      {/* burger menu */}
-      <button
-        onClick={() => {
-          setMenuOpen((prev) => !prev);
-        }}
-        className="flex items-center justify-end md:hidden"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="28"
-          height="28"
-          viewBox="0 0 24 24"
-          fill="none"
+        {/* burger menu */}
+        <button
+          onClick={() => {
+            setMenuOpen((prev) => !prev);
+          }}
+          className="flex items-center justify-end sm:hidden"
         >
-          <path d="M3 18V16H21V18H3ZM3 13V11H21V13H3ZM3 8V6H21V8H3Z" fill="#49454F" />
-        </svg>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path d="M3 18V16H21V18H3ZM3 13V11H21V13H3ZM3 8V6H21V8H3Z" fill="#49454F" />
+          </svg>
+        </button>
 
-      {/* login, signup btn */}
-      <div className="items-center justify-end hidden gap-1 md:flex">
-        <Link
-          to="#"
-          className="rounded-md px-5 hover:px-[19.5px] h-[38px] flex items-center justify-center hover:border-1  bg-white hover:text-text-primary hover:border-primary-thick "
-        >
-          <Text variant="subText">로그인</Text>
-        </Link>
-        <Link
-          to="#"
-          className="rounded-md px-5 hover:px-[19.5px] h-[38px] flex items-center justify-center bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary hover:border-1 hover:border-primary-thick"
-        >
-          <Text variant="subText">회원가입</Text>
-        </Link>
+        {/* 비로그인상태- login, signup btn */}
+        <div className="items-center justify-end hidden gap-1 sm:flex">
+          <Link
+            to="#"
+            className="rounded-md px-5 h-[38px] flex items-center border border-transparent  justify-center  bg-white hover:text-text-primary hover:border-1  hover:border-primary-thick "
+          >
+            <Text variant="subText">로그인</Text>
+          </Link>
+          <Link
+            to="#"
+            className="rounded-md px-5  h-[38px] flex items-center border-1 justify-center bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary  hover:border-primary-thick"
+          >
+            <Text variant="subText">회원가입</Text>
+          </Link>
+        </div>
       </div>
 
       {/* Dropdown menu */}
       {menuOpen && (
-        <div className="absolute flex flex-col w-[40%] bg-white  right-0 top-full  text-left p-5 md:hidden rounded-bl-xl gap-4 shadow-xl">
-          <div className="flex gap-5 ">
-            <Text variant="label" className="flex cursor-pointer text-text-primary">
-              다크 모드
-            </Text>
-            <ToggleBtn />
-          </div>
+        <div className="absolute flex flex-col w-[40%] bg-white  right-0 top-full  text-left p-5 sm:hidden rounded-bl-xl gap-4 shadow-xl">
           <Link to="#">
             <Text variant="label" className="flex cursor-pointer text-text-primary">
               Profile List
