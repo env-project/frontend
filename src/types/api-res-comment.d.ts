@@ -16,4 +16,5 @@ export interface Comment {
   content: string;
   is_owner: boolean;
   children: Comment[];
+  created_at: string;
 }
