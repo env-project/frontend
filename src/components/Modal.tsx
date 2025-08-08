@@ -93,18 +93,20 @@ function ModalContent({ children, className, ...rest }: ModalContentProps) {
       {/* Modal */}
       <div
         className={cn(
-          "fixed z-50 flex flex-col min-w-64 border-primary-soft bg-bg-primary border-2 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg transition-all duration-200 transform",
+          "fixed z-50 p-2 pt-8 flex flex-col min-w-64 border-primary-soft bg-bg-primary border-2 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg transition-all duration-200 transform",
           isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95",
           className
         )}
         {...rest}
       >
-        <div className="w-full flex items-center justify-end p-2">
-          <H3 className="text-text-primary hover:cursor-pointer p-1" onClick={close}>
-            <HiOutlineX />
-          </H3>
-        </div>
-        <div className="w-full p-4">{children}</div>
+        <H3
+          className="text-text-primary hover:cursor-pointer fixed top-1.5 right-1.5"
+          onClick={close}
+        >
+          <HiOutlineX />
+        </H3>
+
+        {children}
       </div>
     </>
   );
