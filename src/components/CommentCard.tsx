@@ -8,7 +8,7 @@ interface CommentCardProps {
   comment: CommentList["comments"][number];
 }
 
-// 오전/오후 00:00 포맷
+// "오전/오후 00:00" 형태의 시간 포맷 변환
 function formatTime(dateInput: Date | string): string {
   const date = new Date(dateInput);
   const hours = date.getHours();
@@ -20,7 +20,7 @@ function formatTime(dateInput: Date | string): string {
   return `${period} ${hour12}:${formattedMinutes}`;
 }
 
-// 2025년 08월 08일 포맷
+// "YYYY년 MM월 DD일" 형태의 날짜 포맷 변환
 function formatDate(dateInput: Date | string): string {
   const date = new Date(dateInput);
   const year = date.getFullYear();
