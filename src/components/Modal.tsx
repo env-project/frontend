@@ -32,7 +32,7 @@ function useModalContext() {
 /* --------------------
    1. Trigger
 -------------------- */
-interface ModalTriggerProps {
+interface ModalTriggerProps extends ComponentProps<"div"> {
   children: ReactNode;
 }
 
@@ -116,7 +116,7 @@ function ModalContent({ children, className, ...rest }: ModalContentProps) {
    3. ModalClose
 -------------------- */
 
-interface ModalCloseProps {
+interface ModalCloseProps extends ComponentProps<"div"> {
   children: ReactNode;
 }
 
