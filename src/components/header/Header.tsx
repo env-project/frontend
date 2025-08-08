@@ -6,6 +6,7 @@ import DarkModeToggle from "../darkMode/DarkModeToggle";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isLogined, setIsLogined] = useState<boolean>(true);
 
   //1. 토글 버튼 클릭 시 상태를 변경하는 함수
   const handleToggle = () => {
@@ -27,7 +28,7 @@ export default function Header() {
           to="#"
           className="transition-transform duration-200 hover:-translate-y-0.5 hover:underline hover:decoration-1 underline-offset-4"
         >
-          <Text variant="subText" className="text-xs ">
+          <Text variant="subText" className="font-semibold ">
             Profile List
           </Text>
         </Link>
@@ -35,7 +36,9 @@ export default function Header() {
           to="#"
           className="transition-transform duration-200 hover:-translate-y-0.5 hover:underline hover:decoration-1 underline-offset-4"
         >
-          <Text variant="subText">Find People</Text>
+          <Text variant="subText" className="font-semibold">
+            Find People
+          </Text>
         </Link>
         {/* <Link to="#" className="transition-transform duration-200 hover:-translate-y-0.5">
           <Text variant="subText">Support</Text>
@@ -64,21 +67,39 @@ export default function Header() {
           </svg>
         </button>
 
-        {/* 비로그인상태- login, signup btn */}
-        <div className="items-center justify-end hidden gap-1 sm:flex">
-          <Link
-            to="#"
-            className="rounded-md px-5 h-[38px] flex items-center border border-transparent  justify-center  bg-white hover:text-text-primary hover:border-1  hover:border-primary-thick "
-          >
-            <Text variant="subText">로그인</Text>
-          </Link>
-          <Link
-            to="#"
-            className="rounded-md px-5  h-[38px] flex items-center border-1 justify-center bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary  hover:border-primary-thick"
-          >
-            <Text variant="subText">회원가입</Text>
-          </Link>
-        </div>
+        {!isLogined ? (
+          // {/* 로그인 상태- myPage, logout 버튼 */}
+          <div className="items-center justify-end hidden gap-1 sm:flex">
+            <Link
+              to="#"
+              className="rounded-md px-5 h-[38px] flex items-center border-1 justify-center bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary  hover:border-primary-thick"
+            >
+              <Text variant="subText">myPage</Text>
+            </Link>
+            <Link
+              to="#"
+              className="rounded-md px-5 h-[38px] flex items-center border border-transparent  justify-center  bg-white hover:text-text-primary hover:border-1  hover:border-primary-thick "
+            >
+              <Text variant="subText">Logout</Text>
+            </Link>
+          </div>
+        ) : (
+          // {/* 비로그인상태- login, signup btn */}
+          <div className="items-center justify-end hidden gap-1 sm:flex">
+            <Link
+              to="#"
+              className="rounded-md px-5 h-[38px] flex items-center border border-transparent  justify-center  bg-white hover:text-text-primary hover:border-1  hover:border-primary-thick "
+            >
+              <Text variant="subText">로그인</Text>
+            </Link>
+            <Link
+              to="#"
+              className="rounded-md px-5  h-[38px] flex items-center border-1 justify-center bg-primary-thick text-text-on-dark hover:bg-white hover:text-text-primary  hover:border-primary-thick"
+            >
+              <Text variant="subText">회원가입</Text>
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Dropdown menu */}
