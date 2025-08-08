@@ -27,7 +27,7 @@ interface Post {
   author: Author;
   is_bookmarked: boolean;
   regions: Region[];
-  created_at: Date;
+  created_at: string;
   views_count: number;
   comments_count: number;
   bookmarks_count: number;
