@@ -5,10 +5,9 @@ import {
   type ReactNode,
   type ComponentProps,
   type ReactElement,
+  useEffect,
 } from "react";
 import { cn } from "@/libs/utils";
-import Button from "./Button";
-import Text from "./text/Text";
 import H3 from "./text/H3";
 
 /* --------------------
@@ -16,6 +15,8 @@ import H3 from "./text/H3";
 -------------------- */
 interface ModalContextValue {
   isOpen: boolean;
+  open: () => void;
+  close: () => void;
   toggle: () => void;
 }
 
@@ -35,15 +36,9 @@ interface ModalTriggerProps {
 }
 
 function ModalTrigger({ children, ...rest }: ModalTriggerProps) {
-  const { toggle } = useModalContext();
+  const { open } = useModalContext();
   return (
-    <div
-      onClick={() => {
-        toggle();
-      }}
-      {...rest}
-      className="hover:cursor-pointer"
-    >
+    <div onClick={open} {...rest} className="hover:cursor-pointer">
       {children}
     </div>
   );
@@ -57,31 +52,46 @@ interface ModalContentProps extends ComponentProps<"div"> {
 }
 
 function ModalContent({ children, className, ...props }: ModalContentProps) {
-  const { isOpen, toggle } = useModalContext();
+  const { isOpen, close } = useModalContext();
+
+  // ESC 키 닫기
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, close]);
 
   if (!isOpen) return null;
 
   return (
-    <div
-      className={cn(
-        isOpen ? "visible" : "hidden",
-        "flex flex-col  min-w-64 border-primary-soft bg-bg-primary border-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-        className
-      )}
-      {...props}
-    >
-      <div className="w-full flex items-center justify-end">
-        <H3
-          className=" text-text-primary hover:cursor-pointer p-1"
-          onClick={() => {
-            toggle();
-          }}
-        >
-          X
-        </H3>
+    <>
+      {/* Overlay */}
+      <div className="fixed inset-0 bg-bg-primary/50 z-40" onClick={close} />
+
+      {/* Modal */}
+      <div
+        className={cn(
+          "fixed z-50 flex flex-col min-w-64 border-primary-soft bg-bg-primary border-2 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg",
+          className
+        )}
+        {...props}
+      >
+        <div className="w-full flex items-center justify-end p-2">
+          <H3
+            className=" text-text-primary hover:cursor-pointer p-1"
+            onClick={() => {
+              close();
+            }}
+          >
+            X
+          </H3>
+        </div>
+        <div className="w-full p-4">{children}</div>
       </div>
-      <div className="w-full p-2">{children}</div>
-    </div>
+    </>
   );
 }
 
@@ -95,10 +105,24 @@ interface ModalProps {
 function Modal({ children }: ModalProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const open = () => setIsOpen(true);
+  const close = () => setIsOpen(false);
   const toggle = () => setIsOpen((prev) => !prev);
 
+  // 스크롤 방지
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   return (
-    <ModalContext.Provider value={{ isOpen, toggle }}>
+    <ModalContext.Provider value={{ isOpen, open, close, toggle }}>
       <div>{children}</div>
     </ModalContext.Provider>
   );
