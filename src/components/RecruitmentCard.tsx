@@ -35,7 +35,7 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
   const [timeDiff, setTimeDiff] = useState("");
 
   useEffect(() => {
-    setTimeDiff(getTimeDiff(createdAt));
+    setTimeDiff(getTimeDiff(new Date(createdAt)));
   }, [createdAt, setTimeDiff]);
 
   return (
