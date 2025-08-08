@@ -1,20 +1,18 @@
+import { useState, useCallback, type FC } from "react";
 import { Link } from "react-router-dom";
-import { useCallback, useState } from "react";
 import DarkModeToggle from "@/components/darkMode/DarkModeToggle";
 
-//LinkButton 컴포넌트는 링크로 연결된 버튼의 역할
 import LinkButton from "@/components/header/LinkButton";
-import BurgerIcon from "@/components/icons/BurgerIcon";
+import HamburgerIcon from "@/components/icons/BurgerIcon";
 import NavigationLink from "@/components/header/NavigationLink";
 
-// Header 컴포넌트
-export default function Header() {
-  const [burgerOpen, setBurgerOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+const Header: FC = () => {
+  const [isBurgerOpen, setBurgerOpen] = useState<boolean>(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   // 버거버튼 클릭 시 상태 변경
-  const BurgerBtn = useCallback(() => {
+  const toggleBurger = useCallback(() => {
     setBurgerOpen((prev) => !prev);
   }, []);
 
@@ -30,7 +28,7 @@ export default function Header() {
 
   return (
     <header
-      className={`relative flex justify-between items-center w-full h-[52px] sm:h-[80px] px-4 sm:px-6 sm:py-0 ${burgerOpen ? "shadow-lg" : ""} sm:shadow-none`}
+      className={`relative flex justify-between items-center w-full h-[52px] sm:h-[80px] px-4 sm:px-6 sm:py-0 ${isBurgerOpen ? "shadow-lg" : ""} sm:shadow-none`}
     >
       {/* 메인 로고 */}
       <Link to="/">
@@ -44,12 +42,17 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-8 ">
-        {/* 다크 모드 토글 버튼( PC / 모바일 둘 다) */}
+        {/* 다크 모드 토글 버튼 */}
         <DarkModeToggle isDarkMode={isDarkMode} onToggle={toggleDarkMode} />
 
-        {/* 햄버거 버튼 (모바일에서만 보임) */}
-        <button onClick={BurgerBtn} className="flex items-center justify-end sm:hidden">
-          <BurgerIcon />
+        {/* 햄버거 메뉴 버튼 (모바일에서만 보임) */}
+        <button
+          onClick={toggleBurger}
+          className="flex items-center justify-end sm:hidden"
+          aria-expanded={isBurgerOpen}
+          aria-controls="mobile-menu"
+        >
+          <HamburgerIcon />
         </button>
 
         {/* 데스크톱 인증 버튼 (PC에서만 보임) */}
@@ -67,35 +70,35 @@ export default function Header() {
       </div>
 
       {/* 모바일 드롭다운 메뉴 (모바일에서만 보임) */}
-      {burgerOpen && (
+      {isBurgerOpen && (
         <div className="absolute flex flex-col w-[40%] bg-white right-0 top-full text-left p-5 sm:hidden rounded-bl-xl gap-2 shadow-xl">
           <div className="flex flex-col gap-4 my-4">
-            <NavigationLink title="Profile List" to="#" onClick={BurgerBtn} />
-            <NavigationLink title="People List" to="#" onClick={BurgerBtn} />
+            <NavigationLink title="Profile List" to="#" onClick={toggleBurger} />
+            <NavigationLink title="People List" to="#" onClick={toggleBurger} />
           </div>
-
-          {/* 로그인 상태에 따라 보여주는 버튼 달리함*/}
           {isLogin ? (
             <>
-              <LinkButton title="myPage" to="#" type="primary" onClick={BurgerBtn} />
+              <LinkButton title="myPage" to="#" type="primary" onClick={toggleBurger} />
               <LinkButton
                 title="Logout"
                 to="#"
                 type="secondary"
                 onClick={() => {
                   toggleLogin();
-                  BurgerBtn();
+                  toggleBurger();
                 }}
               />
             </>
           ) : (
             <>
-              <LinkButton title="로그인" to="#" type="secondary" onClick={BurgerBtn} />
-              <LinkButton title="회원가입" to="#" type="primary" onClick={BurgerBtn} />
+              <LinkButton title="로그인" to="#" type="secondary" onClick={toggleBurger} />
+              <LinkButton title="회원가입" to="#" type="primary" onClick={toggleBurger} />
             </>
           )}
         </div>
       )}
     </header>
   );
-}
+};
+
+export default Header;
