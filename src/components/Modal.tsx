@@ -69,7 +69,7 @@ function ModalContent({ children, className, ...props }: ModalContentProps) {
   return (
     <>
       {/* Overlay */}
-      <div className="fixed inset-0 bg-bg-primary/50 z-40" onClick={close} />
+      <div className="fixed inset-0 bg-bg-on-dark/50 z-40" onClick={close} />
 
       {/* Modal */}
       <div
