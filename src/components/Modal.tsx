@@ -113,7 +113,24 @@ function ModalContent({ children, className, ...rest }: ModalContentProps) {
 }
 
 /* --------------------
-   3. Wrapper
+   3. ModalClose
+-------------------- */
+
+interface ModalCloseProps {
+  children: ReactNode;
+}
+
+function ModalClose({ children, ...rest }: ModalCloseProps) {
+  const { close } = useModalContext();
+  return (
+    <div onClick={close} {...rest} className="hover:cursor-pointer">
+      {children}
+    </div>
+  );
+}
+
+/* --------------------
+   4. Wrapper
 -------------------- */
 interface ModalProps {
   children: [ReactElement<typeof ModalTrigger>, ReactElement<typeof ModalContent>];
@@ -145,4 +162,4 @@ function Modal({ children }: ModalProps) {
   );
 }
 
-export { Modal, ModalContent, ModalTrigger };
+export { Modal, ModalContent, ModalTrigger, ModalClose };
