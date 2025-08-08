@@ -9,6 +9,7 @@ import {
 } from "react";
 import { cn } from "@/libs/utils";
 import H3 from "./text/H3";
+import { HiOutlineX } from "react-icons/hi";
 
 /* --------------------
    Context
@@ -100,7 +101,7 @@ function ModalContent({ children, className, ...rest }: ModalContentProps) {
       >
         <div className="w-full flex items-center justify-end p-2">
           <H3 className="text-text-primary hover:cursor-pointer p-1" onClick={close}>
-            X
+            <HiOutlineX />
           </H3>
         </div>
         <div className="w-full p-4">{children}</div>
