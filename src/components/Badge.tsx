@@ -2,7 +2,14 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import Text from "@/components/text/Text";
 import { cn } from "@/libs/utils";
 
-type BadgeColor = "primary" | "secondary";
+type BadgeColor =
+  | "primary"
+  | "secondary"
+  | "error"
+  | "primaryThick"
+  | "primarySoft"
+  | "secondaryThick"
+  | "secondarySoft";
 type BadgeSize = "sm" | "md" | "lg";
 
 // 뱃지 컴포넌트 prop 타입 정의
@@ -24,8 +31,13 @@ export default function Badge({
   ...rest
 }: BadgeProps) {
   const colorMap = {
-    primary: "bg-primary-soft color-text-primary",
-    secondary: "bg-secondary-soft color-text-primary",
+    primary: "bg-primary color-text-primary",
+    secondary: "bg-secondary color-text-primary",
+    error: "bg-error color-text-primary",
+    primaryThick: "bg-primary-thick color-text-primary",
+    primarySoft: "bg-primary-soft color-text-primary",
+    secondaryThick: "bg-secondary-thick color-text-primary",
+    secondarySoft: "bg-secondary-soft color-text-primary",
   } satisfies Record<BadgeColor, string>;
   const sizeMap = {
     sm: "px-2 py-0.5",
