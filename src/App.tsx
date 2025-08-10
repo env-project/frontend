@@ -1,11 +1,28 @@
 import { Routes, Route } from "react-router";
 import "@/index.css";
-import Test from "@/components/Test";
+import RootLayout from "@/components/layout/RootLayout";
+import Home from "@/pages/Home";
+import Login from "@/pages/auth/Login";
+import SignUp from "@/pages/auth/SignUp";
+import RecruitmentList from "@/pages/recruitment-post/RecruitmentList";
+import ProfileList from "@/pages/profile/ProfileList";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Test />} />
+      <Route element={<RootLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/sign-up" element={<SignUp />} />
+
+        <Route path="/recruitment-post">
+          <Route index element={<RecruitmentList />} />
+        </Route>
+
+        <Route path="profile">
+          <Route index element={<ProfileList />} />
+        </Route>
+      </Route>
     </Routes>
   );
 }
