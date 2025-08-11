@@ -5,6 +5,7 @@ import DarkModeToggle from "@/components/darkMode/DarkModeToggle";
 import HamburgerIcon from "@/components/icons/BurgerIcon";
 import NavigationLink from "@/components/header/NavigationLink";
 import Button from "@/components/Button";
+import Text from "../text/Text";
 
 const Header: FC = () => {
   const [isBurgerOpen, setBurgerOpen] = useState<boolean>(false);
@@ -59,21 +60,27 @@ const Header: FC = () => {
         {isLogin ? (
           <div className="items-center justify-end hidden gap-1 sm:flex">
             <Link to="#">
-              <Button variant="link-primary">myPage</Button>
+              <Button variant="link-primary">
+                <Text variant="mainText">MyPage</Text>
+              </Button>
             </Link>
             <Link to="#">
               <Button variant="link-secondary" onClick={toggleLogin}>
-                Logout
+                <Text variant="mainText">Logout</Text>
               </Button>
             </Link>
           </div>
         ) : (
           <div className="items-center justify-end hidden gap-1 sm:flex">
             <Link to="#">
-              <Button variant="link-secondary">로그인</Button>
+              <Button variant="link-secondary">
+                <Text variant="mainText">로그인</Text>
+              </Button>
             </Link>
             <Link to="#">
-              <Button variant="link-primary">회원가입</Button>
+              <Button variant="link-primary">
+                <Text variant="mainText">회원가입</Text>
+              </Button>
             </Link>
           </div>
         )}
@@ -90,7 +97,7 @@ const Header: FC = () => {
             <>
               <Link to="#">
                 <Button variant="link-primary" onClick={toggleBurger}>
-                  myPage
+                  <Text variant="button">MyPage</Text>
                 </Button>
               </Link>
               <Link to="#">
@@ -101,7 +108,7 @@ const Header: FC = () => {
                     toggleBurger();
                   }}
                 >
-                  Logout
+                  <Text variant="button">Logout</Text>
                 </Button>
               </Link>
             </>
@@ -109,12 +116,12 @@ const Header: FC = () => {
             <>
               <Link to="#">
                 <Button variant="link-secondary" onClick={toggleBurger}>
-                  로그인
+                  <Text variant="button">로그인</Text>
                 </Button>
               </Link>
               <Link to="#">
                 <Button variant="link-primary" onClick={toggleBurger}>
-                  회원가입
+                  <Text variant="button">회원가입</Text>
                 </Button>
               </Link>
             </>
