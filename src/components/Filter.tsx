@@ -1,4 +1,6 @@
 import { BsFillFunnelFill } from "react-icons/bs";
+import Badge from "@/components/Badge";
+import Text from "@/components/text/Text";
 
 //마스터 데이터 실제론 api로 받기
 const MASTER_DATA: MasterData = {
@@ -61,18 +63,23 @@ const MASTER_DATA: MasterData = {
   recruiting_post_types: [],
 };
 
-interface FilterProps {}
+interface FilterProps {
+  filterType: "profileFilter" | "recruitmentPostFilter";
+}
 
-export default function Filter({}: FilterProps) {
+export default function Filter({ filterType }: FilterProps) {
   //마스터 데이터 실제론 api로 받기
   const {
     regions,
     positions,
     genres,
-    experience_levels: experienceLevel,
+    experience_levels: experienceLevels,
     orientations,
     recruitment_types: recruitmentTypes,
   } = MASTER_DATA;
+
+  const orders = ["최신순", "댓글순", "인기순"];
+  const bookmarks = ["전부", "북마크만"];
 
   return (
     <div className="flex flex-col border-2 border-neutral-600 rounded-xl max-w-sm p-2">
@@ -80,6 +87,52 @@ export default function Filter({}: FilterProps) {
         <BsFillFunnelFill size={24} />
         <input className="rounded-full bg-bg-on-dark text-text-on-dark px-3 py-0.5 focus:outline-none flex-1" />
       </div>
+      <div className="flex flex-col space-y-2">
+        <FilterSection title={"순서"} data={orders} />
+        <FilterSection title={"북마크"} data={bookmarks} />
+        <FilterSection title={"지역"} data={regions} />
+        <FilterSection title={"선호 장르"} data={genres} />
+        <FilterSection title={"포지션"} data={positions} />
+        <FilterSection
+          title={filterType === "recruitmentPostFilter" ? "요구 경력" : "경력"}
+          data={experienceLevels}
+        />
+        <FilterSection title={"지향"} data={orientations} />
+        {filterType === "recruitmentPostFilter" ? (
+          <FilterSection title={"밴드 타입"} data={recruitmentTypes} />
+        ) : null}
+      </div>
     </div>
+  );
+}
+
+interface FilterSectionProps {
+  title: string;
+  data:
+    | {
+        id: string;
+        name: string;
+      }[]
+    | string[];
+}
+
+function FilterSection({ title, data }: FilterSectionProps) {
+  return (
+    <section className="flex flex-col items-start space-y-1">
+      <Text variant="mainText">{title}</Text>
+      <div className="flex flex-wrap items-start justify-start gap-0.5">
+        {data.map((data, i) => (
+          <Badge
+            color="primarySoft"
+            size="sm"
+            textVariant="label"
+            key={typeof data === "string" ? i : data.id}
+            className="cursor-pointer hover:bg-primary"
+          >
+            {typeof data === "string" ? data : data.name}
+          </Badge>
+        ))}
+      </div>
+    </section>
   );
 }
