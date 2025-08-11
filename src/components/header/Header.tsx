@@ -2,9 +2,10 @@ import { useState, useCallback, type FC } from "react";
 import { Link } from "react-router-dom";
 import DarkModeToggle from "@/components/darkMode/DarkModeToggle";
 
-import LinkButton from "@/components/header/LinkButton";
 import HamburgerIcon from "@/components/icons/BurgerIcon";
 import NavigationLink from "@/components/header/NavigationLink";
+import Button from "@/components/Button";
+import Text from "@/components/text/Text";
 
 const Header: FC = () => {
   const [isBurgerOpen, setBurgerOpen] = useState<boolean>(false);
@@ -58,13 +59,29 @@ const Header: FC = () => {
         {/* 데스크톱 인증 버튼 (PC에서만 보임) */}
         {isLogin ? (
           <div className="items-center justify-end hidden gap-1 sm:flex">
-            <LinkButton title="myPage" to="#" type="primary" />
-            <LinkButton title="Logout" to="#" type="secondary" onClick={toggleLogin} />
+            <Link to="#">
+              <Button variant="link-primary">
+                <Text variant="mainText">MyPage</Text>
+              </Button>
+            </Link>
+            <Link to="#">
+              <Button variant="link-secondary" onClick={toggleLogin}>
+                <Text variant="mainText">Logout</Text>
+              </Button>
+            </Link>
           </div>
         ) : (
           <div className="items-center justify-end hidden gap-1 sm:flex">
-            <LinkButton title="로그인" to="#" type="secondary" />
-            <LinkButton title="회원가입" to="#" type="primary" />
+            <Link to="#">
+              <Button variant="link-secondary" className="w-full">
+                <Text variant="mainText">로그인</Text>
+              </Button>
+            </Link>
+            <Link to="#">
+              <Button variant="link-primary" className="w-full">
+                <Text variant="mainText">회원가입</Text>
+              </Button>
+            </Link>
           </div>
         )}
       </div>
@@ -73,26 +90,41 @@ const Header: FC = () => {
       {isBurgerOpen && (
         <div className="absolute flex flex-col w-[40%] bg-white right-0 top-full text-left p-5 sm:hidden rounded-bl-xl gap-2 shadow-xl">
           <div className="flex flex-col gap-4 my-4">
-            <NavigationLink title="Profile List" to="#" onClick={toggleBurger} />
-            <NavigationLink title="People List" to="#" onClick={toggleBurger} />
+            <NavigationLink to="#" title="Profile List" onClick={toggleBurger} />
+            <NavigationLink to="#" title="People List" onClick={toggleBurger} />
           </div>
           {isLogin ? (
             <>
-              <LinkButton title="myPage" to="#" type="primary" onClick={toggleBurger} />
-              <LinkButton
-                title="Logout"
-                to="#"
-                type="secondary"
-                onClick={() => {
-                  toggleLogin();
-                  toggleBurger();
-                }}
-              />
+              <Link to="#">
+                <Button variant="link-primary" className="w-full" onClick={toggleBurger}>
+                  <Text variant="button">MyPage</Text>
+                </Button>
+              </Link>
+              <Link to="#">
+                <Button
+                  variant="link-secondary"
+                  className="w-full"
+                  onClick={() => {
+                    toggleLogin();
+                    toggleBurger();
+                  }}
+                >
+                  <Text variant="button">Logout</Text>
+                </Button>
+              </Link>
             </>
           ) : (
             <>
-              <LinkButton title="로그인" to="#" type="secondary" onClick={toggleBurger} />
-              <LinkButton title="회원가입" to="#" type="primary" onClick={toggleBurger} />
+              <Link to="#">
+                <Button variant="link-secondary" className="w-full" onClick={toggleBurger}>
+                  <Text variant="button">로그인</Text>
+                </Button>
+              </Link>
+              <Link to="#">
+                <Button variant="link-primary" className="w-full" onClick={toggleBurger}>
+                  <Text variant="button">회원가입</Text>
+                </Button>
+              </Link>
             </>
           )}
         </div>
