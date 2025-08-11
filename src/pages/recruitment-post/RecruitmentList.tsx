@@ -1,3 +1,10 @@
+import Filter from "@/components/Filter";
+
 export default function RecruitmentList() {
-  return <div>RecruitmentList</div>;
+  return (
+    <div>
+      <Filter />
+      RecruitmentList
+    </div>
+  );
 }
