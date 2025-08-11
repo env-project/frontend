@@ -2,7 +2,7 @@ import { cn } from "@/libs/utils";
 import type { ComponentProps, ReactNode } from "react";
 
 interface ButtonProps extends ComponentProps<"button"> {
-  variant?: "default" | "outline";
+  variant?: "default" | "outline" | "link-primary" | "link-secondary";
   color?:
     | "primary"
     | "primary-thick"
@@ -30,6 +30,18 @@ const getVariantClasses = (variant: ButtonProps["variant"], color: ButtonProps["
       "border-neutral-600": color === "neutral",
       "border-neutral-300": color === "neutral-soft",
     });
+  }
+
+  if (variant === "link-primary") {
+    return cn(
+      "bg-primary-thick text-text-on-dark border-transparent hover:bg-white hover:border-1 hover:text-text-primary hover:border-primary-thick"
+    );
+  }
+
+  if (variant === "link-secondary") {
+    return cn(
+      "bg-white border border-transparent hover:text-text-primary hover:border-1 hover:border-primary-thick"
+    );
   }
 
   return cn({
