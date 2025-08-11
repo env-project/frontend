@@ -36,3 +36,13 @@ body {
   font-weight: 400;
   font-style: normal;
 }
+
+@keyframes sk-breath {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
