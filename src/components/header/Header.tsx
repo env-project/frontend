@@ -5,7 +5,7 @@ import DarkModeToggle from "@/components/darkMode/DarkModeToggle";
 import HamburgerIcon from "@/components/icons/BurgerIcon";
 import NavigationLink from "@/components/header/NavigationLink";
 import Button from "@/components/Button";
-import Text from "../text/Text";
+import Text from "@/components/text/Text";
 
 const Header: FC = () => {
   const [isBurgerOpen, setBurgerOpen] = useState<boolean>(false);
