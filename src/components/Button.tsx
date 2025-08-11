@@ -34,16 +34,15 @@ const getVariantClasses = (variant: ButtonProps["variant"], color: ButtonProps["
 
   if (variant === "link-primary") {
     return cn(
-      "bg-primary-thick text-text-on-dark border-transparent hover:bg-white hover:border-1 hover:text-text-primary hover:border-primary-thick"
+      "bg-primary-thick text-text-on-dark border border-transparent hover:bg-white hover:border hover:text-text-primary hover:border-primary-thick"
     );
   }
 
   if (variant === "link-secondary") {
     return cn(
-      "bg-white border border-transparent hover:text-text-primary hover:border-1 hover:border-primary-thick"
+      "bg-white border border-transparent hover:text-text-primary hover:border hover:border-primary-thick"
     );
   }
-
   return cn({
     "bg-primary": color === "primary",
     "bg-primary-thick": color === "primary-thick",
