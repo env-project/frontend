@@ -73,12 +73,12 @@ const Header: FC = () => {
         ) : (
           <div className="items-center justify-end hidden gap-1 sm:flex">
             <Link to="#">
-              <Button variant="link-secondary">
+              <Button variant="link-secondary" className="w-full">
                 <Text variant="mainText">로그인</Text>
               </Button>
             </Link>
             <Link to="#">
-              <Button variant="link-primary">
+              <Button variant="link-primary" className="w-full">
                 <Text variant="mainText">회원가입</Text>
               </Button>
             </Link>
@@ -96,13 +96,14 @@ const Header: FC = () => {
           {isLogin ? (
             <>
               <Link to="#">
-                <Button variant="link-primary" onClick={toggleBurger}>
+                <Button variant="link-primary" className="w-full" onClick={toggleBurger}>
                   <Text variant="button">MyPage</Text>
                 </Button>
               </Link>
               <Link to="#">
                 <Button
                   variant="link-secondary"
+                  className="w-full"
                   onClick={() => {
                     toggleLogin();
                     toggleBurger();
@@ -115,12 +116,12 @@ const Header: FC = () => {
           ) : (
             <>
               <Link to="#">
-                <Button variant="link-secondary" onClick={toggleBurger}>
+                <Button variant="link-secondary" className="w-full" onClick={toggleBurger}>
                   <Text variant="button">로그인</Text>
                 </Button>
               </Link>
               <Link to="#">
-                <Button variant="link-primary" onClick={toggleBurger}>
+                <Button variant="link-primary" className="w-full" onClick={toggleBurger}>
                   <Text variant="button">회원가입</Text>
                 </Button>
               </Link>
