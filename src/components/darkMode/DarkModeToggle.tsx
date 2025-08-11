@@ -18,13 +18,17 @@ export default function DarkModeToggle({ isDarkMode, onToggle, className }: Dark
     >
       <span
         className={clsx(
-          "transition-colors duration-300 ease-in-out flex p-1 border rounded-full border-neutral-400",
+          "transition-colors duration-300 ease-in-out flex p-1 border rounded-full border-neutral-400 sm:p-2",
           isDarkMode
             ? "text-neutral-200  hover:bg-neutral-400 "
             : "text-neutral-400 hover:bg-bg-secondary hover:text-text-primary"
         )}
       >
-        {isDarkMode ? <TbMoonFilled size={"16px"} /> : <MdSunny size={"16px"} />}
+        {isDarkMode ? (
+          <TbMoonFilled size={"16px"} className="sm:w-6 sm:h-6" />
+        ) : (
+          <MdSunny size={"16px"} className="sm:w-6 sm:h-6" />
+        )}
       </span>
     </button>
   );
