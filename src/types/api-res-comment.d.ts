@@ -1,4 +1,7 @@
 /* --------------- 댓글 --------------- */
+
+import type { Post } from "@/types/api-res-recruitment";
+
 //GET /api/v1/comments
 interface CommentList {
   next_cursor: string;
@@ -7,12 +10,13 @@ interface CommentList {
 
 export interface Comment {
   id: string;
+  content: string;
+  created_at: string;
+  post: Pick<Post, "id" | "title">;
+  children: Comment[];
+  is_owner: boolean;
   author: {
     user_id: string;
     nickname: string;
   };
-  content: string;
-  is_owner: boolean;
-  children: Comment[];
-  created_at: string;
 }
