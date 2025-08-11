@@ -71,9 +71,9 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
         <div className="flex flex-col space-y-0.5 flex-1">
           <div className="flex items-center space-x-1">
             <Text variant="mainText">포지션</Text>
-            {positions.slice(0, 3).map((e, i) => (
+            {positions.slice(0, 3).map(({ position_name: positionName }, i) => (
               <Badge size="sm" key={i}>
-                {e.position.name}
+                {positionName}
               </Badge>
             ))}
           </div>
