@@ -2,9 +2,7 @@
 //GET /api/v1/comments
 interface CommentList {
   next_cursor: string;
-  comments: (Pick<Comment, "id" | "content" | "created_at"> & {
-    post: Pick<Post, "id" | "title">;
-  })[];
+  comments: Comment[];
 }
 
 export interface Comment {
