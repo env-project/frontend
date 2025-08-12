@@ -196,7 +196,10 @@ function FilterSection({ title, data, queryKey, mode = "multi" }: FilterSectionP
                 e.preventDefault();
                 toggleValue(item.id);
               }}
-              className={cn("cursor-pointer ", isSelected(item.id) ? "" : "hover:bg-primary")}
+              className={cn(
+                "cursor-pointer ",
+                isSelected(item.id) ? "text-text-on-dark" : "hover:bg-primary"
+              )}
             >
               {item.name}
             </Badge>
