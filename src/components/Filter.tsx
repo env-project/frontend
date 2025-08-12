@@ -68,6 +68,7 @@ const MASTER_DATA: MasterData = {
   recruiting_post_types: [],
 };
 
+const NICKNAME_QUERY_KEY = "nickname";
 const SEARCH_QUERY_KEY = "search_query";
 const MOBILE_SIZE_PX = 640;
 
@@ -105,7 +106,8 @@ export default function Filter({
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    searchParams.set(SEARCH_QUERY_KEY, e.target.value);
+    const queryKey = filterType === "profileFilter" ? NICKNAME_QUERY_KEY : SEARCH_QUERY_KEY;
+    searchParams.set(queryKey, e.target.value);
     setSearchParams(searchParams);
   };
 
