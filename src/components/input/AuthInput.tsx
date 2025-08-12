@@ -25,10 +25,10 @@ export default function AuthInput({
   }
 
   return (
-    <div className="flex flex-col gap-1 py-4">
+    <div className="flex flex-col gap-1">
       <div
         className={cn(
-          "flex bg-bg-secondary text-text-primary w-[325px]  md:w-[500px] p-3 rounded-lg ",
+          "flex bg-bg-secondary text-text-primary p-3 rounded-lg ",
           error && "border border-error"
         )}
       >
@@ -48,7 +48,7 @@ export default function AuthInput({
         )}
       </div>
       {error && (
-        <Text variant="label" className="text-error text-xs px-2">
+        <Text variant="label" className="px-2 text-xs text-error">
           {error}
         </Text>
       )}
