@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 
 type Mode = "multi" | "single";
 
-export function useSelectQuery(key: string, mode: Mode = "multi") {
+function useSelectQuery(key: string, mode: Mode = "multi") {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const selectedValues = searchParams.get(key)?.split(",").filter(Boolean) ?? [];
@@ -40,3 +40,5 @@ export function useSelectQuery(key: string, mode: Mode = "multi") {
 
   return { selectedValues, isSelected, toggleValue };
 }
+
+export default useSelectQuery;
