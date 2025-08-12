@@ -6,6 +6,7 @@ import { cn } from "@/libs/utils";
 import useSelectQuery from "@/hooks/useSelectQuery";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import { useEffect, useState } from "react";
+import type { MasterData } from "@/types/api-res-common";
 
 //마스터 데이터 실제론 api로 받기
 const MASTER_DATA: MasterData = {

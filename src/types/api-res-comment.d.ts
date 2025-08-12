@@ -1,9 +1,8 @@
+import { Post } from "@/types/api-res-recruitment";
+
 /* --------------- 댓글 --------------- */
-
-import type { Post } from "@/types/api-res-recruitment";
-
 //GET /api/v1/comments
-interface CommentList {
+export interface CommentList {
   next_cursor: string;
   comments: Comment[];
 }
@@ -18,5 +17,6 @@ export interface Comment {
   author: {
     user_id: string;
     nickname: string;
+    image_url?: string;
   };
 }

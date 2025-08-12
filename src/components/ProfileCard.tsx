@@ -6,7 +6,6 @@ import defalutImage from "@/assets/images/user-default-image.png";
 import type { UserProfile } from "@/types/api-res-profile";
 import { cn } from "@/libs/utils";
 
-
 interface ProfileCardProps {
   profile: UserProfile;
 }
