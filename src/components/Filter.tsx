@@ -107,14 +107,14 @@ export default function Filter({ filterType }: FilterProps) {
   return (
     <div className="flex flex-col border-2 border-neutral-600 rounded-xl max-w-sm p-2">
       <div className="flex items-center justify-between space-x-1.5 px-1">
-        <BsFillFunnelFill size={24} />
+        <BsFillFunnelFill size={24} className="cursor-pointer sm:cursor-default flex-shrink-0" />
         <input
           onChange={handleInputChange}
-          className="rounded-full bg-bg-on-dark text-text-on-dark px-3 py-0.5 focus:outline-none flex-1"
+          className="rounded-full bg-bg-on-dark text-text-on-dark px-3 py-0.5 focus:outline-none flex-1 min-w-0"
         />
         <BsArrowCounterclockwise
           size={24}
-          className="cursor-pointer"
+          className="cursor-pointer flex-shrink-0"
           onClick={handleInitializeClick}
         />
       </div>
