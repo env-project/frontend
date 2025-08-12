@@ -3,7 +3,7 @@ import Badge from "@/components/Badge";
 import Text from "@/components/text/Text";
 import { useSearchParams } from "react-router";
 import { cn } from "@/libs/utils";
-import { useMultiSelectQuery } from "@/hooks/useMultiSelectQuery";
+import { useSelectQuery } from "@/hooks/useSelectQuery";
 
 //마스터 데이터 실제론 api로 받기
 const MASTER_DATA: MasterData = {
@@ -98,8 +98,8 @@ export default function Filter({ filterType }: FilterProps) {
         <input className="rounded-full bg-bg-on-dark text-text-on-dark px-3 py-0.5 focus:outline-none flex-1" />
       </div>
       <div className="flex flex-col space-y-2">
-        <FilterSection queryKey="sort_by" title={"순서"} data={orders} />
-        <FilterSection queryKey="bookmark" title={"북마크"} data={bookmarks} />
+        <FilterSection queryKey="sort_by" title={"순서"} data={orders} mode="single" />
+        <FilterSection queryKey="bookmark" title={"북마크"} data={bookmarks} mode="single" />
         <FilterSection queryKey="region_ids" title={"지역"} data={regions} />
         <FilterSection queryKey="genre_ids" title={"선호 장르"} data={genres} />
         <FilterSection queryKey="positions_id" title={"포지션"} data={positions} />
@@ -121,9 +121,11 @@ interface FilterSectionProps {
     name: string;
   }[];
   queryKey: string;
+  mode?: "multi" | "single";
 }
-function FilterSection({ title, data, queryKey }: FilterSectionProps) {
-  const { isSelected, toggleValue } = useMultiSelectQuery(queryKey);
+function FilterSection({ title, data, queryKey, mode = "multi" }: FilterSectionProps) {
+  const { isSelected, toggleValue } = useSelectQuery(queryKey, mode);
+
   return (
     <section className="flex flex-col items-start space-y-1">
       <Text variant="mainText">{title}</Text>
