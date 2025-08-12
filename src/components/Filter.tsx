@@ -1,4 +1,4 @@
-import { BsFillFunnelFill } from "react-icons/bs";
+import { BsFillFunnelFill, BsArrowCounterclockwise } from "react-icons/bs";
 import Badge from "@/components/Badge";
 import Text from "@/components/text/Text";
 import { useSearchParams } from "react-router";
@@ -100,6 +100,10 @@ export default function Filter({ filterType }: FilterProps) {
     setSearchParams(searchParams);
   };
 
+  const handleInitializeClick = () => {
+    setSearchParams("");
+  };
+
   return (
     <div className="flex flex-col border-2 border-neutral-600 rounded-xl max-w-sm p-2">
       <div className="flex items-center justify-between space-x-1.5 px-1">
@@ -107,6 +111,11 @@ export default function Filter({ filterType }: FilterProps) {
         <input
           onChange={handleInputChange}
           className="rounded-full bg-bg-on-dark text-text-on-dark px-3 py-0.5 focus:outline-none flex-1"
+        />
+        <BsArrowCounterclockwise
+          size={24}
+          className="cursor-pointer"
+          onClick={handleInitializeClick}
         />
       </div>
       <div className="flex flex-col space-y-2">
