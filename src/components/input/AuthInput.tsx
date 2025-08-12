@@ -25,7 +25,7 @@ export default function AuthInput({
   }
 
   return (
-    <div className="flex flex-col gap-1 ">
+    <div className={cn("flex flex-col gap-1")}>
       <div
         className={cn(
           "flex bg-bg-secondary text-text-primary p-3 rounded-lg ",
