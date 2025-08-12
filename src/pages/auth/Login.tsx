@@ -3,14 +3,26 @@ import AuthInput from "@/components/input/AuthInput";
 import Text from "@/components/text/Text";
 import { FcGoogle } from "react-icons/fc";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { Link } from "react-router";
-import type { FC } from "react";
+import { Link, useNavigate } from "react-router";
+import { useState, type FC } from "react";
 
 const LogIn: FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const handleLogin = (): void => {
+    if (email === "test@test.com" && password === "1234") {
+      alert("로그인 성공");
+      navigate("/");
+    } else {
+      alert("로그인 실패");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-0">
       <div className="w-full max-w-[585px] flex flex-col gap-16 p-6 sm:px-8 py-16 sm:border-hidden sm:shadow-2xl sm:rounded-3xl">
-        <Link to="/" className="hover:cursor-pointer sm:hidden">
+        <Link to="/" className=" sm:hidden">
           <Text variant="mainText" className="flex items-center gap-2 font-semibold">
             <FaArrowLeftLong />
             로그인
@@ -23,11 +35,25 @@ const LogIn: FC = () => {
         </Text>
         <div className="flex flex-col gap-8 ">
           <div className="flex flex-col gap-2">
-            <AuthInput type="email" placeholder="이메일을 입력해주세요" />
-            <AuthInput type="password" placeholder="비밀번호를 입력해주세요" />
+            <AuthInput
+              type="email"
+              placeholder="이메일을 입력해주세요"
+              onInput={(e) => setEmail(e.currentTarget.value)}
+              value={email}
+            />
+            <AuthInput
+              type="password"
+              placeholder="비밀번호를 입력해주세요"
+              onInput={(e) => setPassword(e.currentTarget.value)}
+              value={password}
+            />
           </div>
           <div className="flex flex-col gap-2">
-            <Button variant="default" className="p-3 bg-primary-thick hover:scale-100">
+            <Button
+              variant="default"
+              className="p-3 bg-primary-thick hover:scale-100"
+              onClick={handleLogin}
+            >
               <Text className="text-base font-semibold text-text-on-dark">로그인</Text>
             </Button>
             <Button variant="default" className="p-3 bg-bg-secondary hover:scale-100">
