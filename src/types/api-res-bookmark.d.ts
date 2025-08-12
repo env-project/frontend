@@ -18,8 +18,3 @@ interface UserProfile {
   regions: Region[];
   positions: PositionAndLevel[];
 }
-
-interface Region {
-  id: string;
-  name: string;
-}

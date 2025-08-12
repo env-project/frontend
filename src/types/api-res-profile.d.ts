@@ -59,18 +59,3 @@ interface PositionAndLevel {
   position: Position;
   experience_level: ExperienceLevel;
 }
-
-interface Region {
-  id: string;
-  name: string;
-}
-
-interface Genre {
-  id: string;
-  name: string;
-}
-
-interface ExperienceLevel {
-  id: string;
-  name: string;
-}

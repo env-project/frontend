@@ -25,7 +25,11 @@ interface PostDetail extends Post {
 interface Post {
   id: string;
   title: string;
-  author: Author;
+  author: {
+    user_id: string;
+    nickname: string;
+    image_url?: string;
+  };
 
   is_closed: boolean;
   is_owner: boolean;
@@ -46,40 +50,4 @@ interface Post {
     experience_level_id: ExperienceLevel["id"];
     experience_level_name: ExperienceLevel["name"];
   }[];
-}
-
-interface Author {
-  user_id: string;
-  nickname: string;
-  image_url?: string;
-}
-
-interface Orientation {
-  id: string;
-  name: string;
-}
-
-interface RecruitmentType {
-  id: string;
-  name: string;
-}
-
-interface Position {
-  id: string;
-  name: string;
-}
-
-interface Region {
-  id: string;
-  name: string;
-}
-
-interface Genre {
-  id: string;
-  name: string;
-}
-
-interface ExperienceLevel {
-  id: string;
-  name: string;
 }
