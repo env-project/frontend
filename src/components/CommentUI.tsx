@@ -5,7 +5,7 @@ import Badge from "@/components/Badge";
 import { BsArrowReturnRight } from "react-icons/bs";
 interface CommentUIProps {
   comment: Comment;
-  isChild: boolean;
+  isChild?: boolean;
 }
 
 export default function CommentUI({ comment, isChild = false }: CommentUIProps) {
