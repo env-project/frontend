@@ -3,7 +3,9 @@ import Badge from "@/components/Badge";
 import Text from "@/components/text/Text";
 import { useSearchParams } from "react-router";
 import { cn } from "@/libs/utils";
-import { useSelectQuery } from "@/hooks/useSelectQuery";
+import useSelectQuery from "@/hooks/useSelectQuery";
+import useWindowWidth from "@/hooks/useWindowWidth";
+import { useEffect, useState } from "react";
 
 //마스터 데이터 실제론 api로 받기
 const MASTER_DATA: MasterData = {
@@ -67,12 +69,14 @@ const MASTER_DATA: MasterData = {
 };
 
 const SEARCH_QUERY_KEY = "search_query";
+const MOBILE_SIZE_PX = 640;
 
 interface FilterProps {
   filterType: "profileFilter" | "recruitmentPostFilter";
+  breakPointPX?: number; //접었다 폈다 가능하게 하는 px(기본값은 640(tailwind의 sm 사이즈))
 }
 
-export default function Filter({ filterType }: FilterProps) {
+export default function Filter({ filterType, breakPointPX = MOBILE_SIZE_PX }: FilterProps) {
   //마스터 데이터 실제론 api로 받기
   const {
     regions,
@@ -104,10 +108,33 @@ export default function Filter({ filterType }: FilterProps) {
     setSearchParams("");
   };
 
+  const windowWidth = useWindowWidth();
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleFilterClick: React.MouseEventHandler<SVGElement> = (e) => {
+    e.preventDefault();
+    if (windowWidth >= breakPointPX) return;
+
+    setIsVisible(!isVisible);
+  };
+
+  useEffect(() => {
+    if (windowWidth >= breakPointPX) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  }, [windowWidth, breakPointPX]);
+
   return (
     <div className="flex flex-col border-2 border-neutral-600 rounded-xl max-w-sm p-2">
       <div className="flex items-center justify-between space-x-1.5 px-1">
-        <BsFillFunnelFill size={24} className="cursor-pointer sm:cursor-default flex-shrink-0" />
+        <BsFillFunnelFill
+          onClick={handleFilterClick}
+          size={24}
+          className="cursor-pointer sm:cursor-default flex-shrink-0"
+        />
         <input
           onChange={handleInputChange}
           className="rounded-full bg-bg-on-dark text-text-on-dark px-3 py-0.5 focus:outline-none flex-1 min-w-0"
@@ -118,7 +145,7 @@ export default function Filter({ filterType }: FilterProps) {
           onClick={handleInitializeClick}
         />
       </div>
-      <div className="flex flex-col space-y-2">
+      <div className={cn("flex flex-col space-y-2", isVisible ? "visible" : "hidden")}>
         <FilterSection queryKey="sort_by" title={"순서"} data={orders} mode="single" />
         <FilterSection queryKey="bookmark" title={"북마크"} data={bookmarks} mode="single" />
         <FilterSection queryKey="region_ids" title={"지역"} data={regions} />
