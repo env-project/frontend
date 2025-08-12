@@ -9,12 +9,3 @@ interface BookmarkPostList {
   next_cursor: string;
   posts: (Omit<Post, "is_bookmarked"> & { bookmark_id: string })[];
 }
-
-interface UserProfile {
-  user_id: string;
-  nickname: string;
-  image_url: string;
-  is_bookmarked: boolean;
-  regions: Region[];
-  positions: PositionAndLevel[];
-}
