@@ -1,12 +1,21 @@
+import {
+  RecruitmentType,
+  Region,
+  Genre,
+  Position,
+  ExperienceLevel,
+  Orientation,
+} from "@/types/api-res-common";
+
 /* --------------- 구인/구직 --------------- */
 // GET /api/v1/recruiting-posts
-interface PostList {
+export interface PostList {
   next_cursor: string;
   posts: Post[];
 }
 
 //GET /api/v1/recruiting-posts/{post_id}
-interface PostDetail extends Post {
+export interface PostDetail extends Post {
   content: string;
 
   band_name?: string;
@@ -22,7 +31,7 @@ interface PostDetail extends Post {
   recruitment_type: RecruitmentType;
 }
 
-interface Post {
+export interface Post {
   id: string;
   title: string;
   author: {

@@ -1,6 +1,9 @@
+import { Genre, Region, Position, ExperienceLevel } from "@/types/api-res-common";
+import { Post } from "@/types/api-res-recruitment";
+
 /* --------------- 프로필 --------------- */
 // GET /api/v1/users/me
-interface MyUserInfo {
+export interface MyUserInfo {
   id: string;
   email: string;
   nickname: string;
@@ -8,14 +11,14 @@ interface MyUserInfo {
 }
 
 // GET /api/v1/profiles
-interface UserList {
+export interface UserList {
   next_cursor: string;
   profiles: UserProfile[];
 }
 
 // GET /api/v1/profiles/{user_id}
-type UserProfileDetail = PublicUserProfileDetail | PrivateUserProfileDetail;
-interface BaseUserProfileDetail {
+export type UserProfileDetail = PublicUserProfileDetail | PrivateUserProfileDetail;
+export interface BaseUserProfileDetail {
   nickname: string;
   image_url: string;
   is_bookmarked: boolean;
@@ -24,19 +27,19 @@ interface BaseUserProfileDetail {
   positions: PositionAndLevel[];
   genres: Genre[];
 }
-interface PublicUserProfileDetail extends BaseUserProfileDetail {
+export interface PublicUserProfileDetail extends BaseUserProfileDetail {
   is_public: true;
   recent_posts: Pick<Post, "id" | "title" | "created_at">[];
   recent_comments: (Pick<Comment, "id" | "content" | "created_at"> & {
     post: Pick<Post, "id" | "title">;
   })[];
 }
-interface PrivateUserProfileDetail extends BaseUserProfileDetail {
+export interface PrivateUserProfileDetail extends BaseUserProfileDetail {
   is_public: false;
   // `recent_posts`와 `recent_comments` 없음
 }
 
-interface MyProfile {
+export interface MyProfile {
   image_url: string;
   is_public: boolean;
   regions: Region[];
@@ -44,7 +47,7 @@ interface MyProfile {
   genres: Genre[];
 }
 
-interface UserProfile {
+export interface UserProfile {
   user_id: string;
   nickname: string;
   image_url: string;
@@ -55,7 +58,7 @@ interface UserProfile {
   email: string;
 }
 
-interface PositionAndLevel {
+export interface PositionAndLevel {
   position: Position;
   experience_level: ExperienceLevel;
 }

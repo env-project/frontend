@@ -1,6 +1,6 @@
 /* --------------- 공통 --------------- */
 //GET /api/v1/common/master-data
-interface MasterData {
+export interface MasterData {
   regions: Region[];
   positions: Position[];
   genres: Genre[];
@@ -10,27 +10,27 @@ interface MasterData {
   recruitment_types: RecruitmentType[];
 }
 
-interface Orientation {
+export interface Orientation {
   id: string;
   name: string;
 }
 
-interface RecruitmentType {
+export interface RecruitmentType {
   id: string;
   name: string;
 }
 
-interface PostType {
+export interface PostType {
   id: string;
   name: string;
 }
 
-interface Position {
+export interface Position {
   id: string;
   name: string;
 }
 
-interface Genre {
+export interface Genre {
   id: string;
   name: string;
 }

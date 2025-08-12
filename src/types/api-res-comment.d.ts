@@ -1,12 +1,13 @@
-/* --------------- 댓글 --------------- */
+import { Post } from "@/types/api-res-recruitment";
 
+/* --------------- 댓글 --------------- */
 //GET /api/v1/comments
-interface CommentList {
+export interface CommentList {
   next_cursor: string;
   comments: Comment[];
 }
 
-interface Comment {
+export interface Comment {
   id: string;
   content: string;
   created_at: string;
