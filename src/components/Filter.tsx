@@ -74,9 +74,14 @@ const MOBILE_SIZE_PX = 640;
 interface FilterProps {
   filterType: "profileFilter" | "recruitmentPostFilter";
   breakPointPX?: number; //접었다 폈다 가능하게 하는 px(기본값은 640(tailwind의 sm 사이즈))
+  className?: string;
 }
 
-export default function Filter({ filterType, breakPointPX = MOBILE_SIZE_PX }: FilterProps) {
+export default function Filter({
+  filterType,
+  breakPointPX = MOBILE_SIZE_PX,
+  className = "",
+}: FilterProps) {
   //마스터 데이터 실제론 api로 받기
   const {
     regions,
@@ -128,7 +133,9 @@ export default function Filter({ filterType, breakPointPX = MOBILE_SIZE_PX }: Fi
   }, [windowWidth, breakPointPX]);
 
   return (
-    <div className="flex flex-col border-2 border-neutral-600 rounded-xl max-w-sm p-2">
+    <div
+      className={cn("flex flex-col border-2 border-neutral-600 rounded-xl max-w-sm p-2", className)}
+    >
       <div className="flex items-center justify-between space-x-1.5 px-1">
         <BsFillFunnelFill
           onClick={handleFilterClick}
