@@ -1,3 +1,5 @@
+import type { Comment } from "@/types/api-res-comment";
+
 /* --------------- 프로필 --------------- */
 // GET /api/v1/users/me
 interface MyUserInfo {
@@ -53,17 +55,6 @@ interface UserProfile {
   positions: PositionAndLevel[];
   genres: Genre[];
   email: string;
-}
-
-export interface Comment {
-  id: string;
-  author: {
-    user_id: string;
-    nickname: string;
-  };
-  content: string;
-  is_owner: boolean;
-  children: Comment[];
 }
 
 interface PositionAndLevel {

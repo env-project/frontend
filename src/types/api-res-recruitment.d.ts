@@ -64,17 +64,6 @@ interface RecruitmentType {
   name: string;
 }
 
-export interface Comment {
-  id: string;
-  author: {
-    user_id: string;
-    nickname: string;
-  };
-  content: string;
-  is_owner: boolean;
-  children: Comment[];
-}
-
 interface Position {
   id: string;
   name: string;

@@ -8,7 +8,7 @@ interface CommentList {
   comments: Comment[];
 }
 
-export interface Comment {
+interface Comment {
   id: string;
   content: string;
   created_at: string;
@@ -18,5 +18,6 @@ export interface Comment {
   author: {
     user_id: string;
     nickname: string;
+    image_url?: string;
   };
 }
