@@ -7,15 +7,30 @@ import { Link, useNavigate } from "react-router";
 import { useState, type FC } from "react";
 
 const LogIn: FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [emailError, setEmailError] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string>("");
   const navigate = useNavigate();
+
   const handleLogin = (): void => {
     if (email === "test@test.com" && password === "1234") {
       alert("로그인 성공");
+      setEmailError("");
+      setPasswordError("");
       navigate("/");
     } else {
-      alert("로그인 실패");
+      // 로그인 실패 시 에러 메시지 설정
+      if (email !== "test@test.com") {
+        setEmailError("이메일이 올바르지 않습니다.");
+        setPasswordError("");
+      } else if (password !== "1234") {
+        setEmailError("");
+        setPasswordError("비밀번호가 올바르지 않습니다.");
+      } else {
+        setEmailError("로그인 실패");
+        setPasswordError("로그인 실패");
+      }
     }
   };
 
@@ -39,6 +54,7 @@ const LogIn: FC = () => {
               type="email"
               placeholder="이메일을 입력해주세요"
               onInput={(e) => setEmail(e.currentTarget.value)}
+              error={emailError}
               value={email}
             />
             <AuthInput
@@ -46,6 +62,7 @@ const LogIn: FC = () => {
               placeholder="비밀번호를 입력해주세요"
               onInput={(e) => setPassword(e.currentTarget.value)}
               value={password}
+              error={passwordError}
             />
           </div>
           <div className="flex flex-col gap-2">
