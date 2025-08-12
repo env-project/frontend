@@ -4,38 +4,13 @@ import Text from "@/components/text/Text";
 import { FcGoogle } from "react-icons/fc";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Link } from "react-router";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import type { FC } from "react";
 
-const logInSchema = z.object({
-  email: z.string().email({ message: "유효한 이메일 주소를 입력해주세요" }),
-  password: z.string().min(8, "비밀번호는 최소 8자리 입력해주세요"),
-});
-
-type TLogInSchema = z.infer<typeof logInSchema>;
-
-const LogIn = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<TLogInSchema>({ resolver: zodResolver(logInSchema) });
-
-  const onSubmit = async (data: TLogInSchema) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    reset();
-  };
-
+const LogIn: FC = () => {
   return (
-    <form
-      noValidate
-      className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-0 "
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-0">
       <div className="w-full max-w-[585px] flex flex-col gap-16 p-6 sm:px-8 py-16 sm:border-hidden sm:shadow-2xl sm:rounded-3xl">
-        <Link to="/" className=" sm:hidden">
+        <Link to="/" className="hover:cursor-pointer sm:hidden">
           <Text variant="mainText" className="flex items-center gap-2 font-semibold">
             <FaArrowLeftLong />
             로그인
@@ -48,24 +23,12 @@ const LogIn = () => {
         </Text>
         <div className="flex flex-col gap-8 ">
           <div className="flex flex-col gap-2">
-            <AuthInput {...register("email")} type="email" placeholder="이메일을 입력해주세요" />
-            {errors.email && <p className="text-red-500">{`${errors.email.message}`}</p>}
-            <AuthInput
-              {...register("password")}
-              type="password"
-              placeholder="비밀번호를 입력해주세요"
-            />
-            {errors.password && <p className="text-red-500">{`${errors.password.message}`}</p>}
+            <AuthInput type="email" placeholder="이메일을 입력해주세요" />
+            <AuthInput type="password" placeholder="비밀번호를 입력해주세요" />
           </div>
           <div className="flex flex-col gap-2">
-            <Button
-              variant="default"
-              className="p-3 bg-primary-thick hover:scale-100 disabled:bg-error"
-              disabled={isSubmitting}
-            >
-              <Text className="text-base font-semibold text-text-on-dark ">
-                {isSubmitting ? "좀멘 기다리소" : "로그인"}
-              </Text>
+            <Button variant="default" className="p-3 bg-primary-thick hover:scale-100">
+              <Text className="text-base font-semibold text-text-on-dark">로그인</Text>
             </Button>
             <Button variant="default" className="p-3 bg-bg-secondary hover:scale-100">
               <FcGoogle size={24} />
@@ -77,7 +40,7 @@ const LogIn = () => {
           <Text variant="mainText">아직 회원이 아니신가요? 회원가입</Text>
         </Link>
       </div>
-    </form>
+    </div>
   );
 };
 
