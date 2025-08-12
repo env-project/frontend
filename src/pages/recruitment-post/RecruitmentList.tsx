@@ -4,7 +4,6 @@ export default function RecruitmentList() {
   return (
     <div className="p-4 gap-2 flex flex-col">
       <Filter filterType="recruitmentPostFilter" />
-      <Filter filterType="profileFilter" />
       RecruitmentList
     </div>
   );

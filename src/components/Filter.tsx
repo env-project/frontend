@@ -1,6 +1,8 @@
 import { BsFillFunnelFill } from "react-icons/bs";
 import Badge from "@/components/Badge";
 import Text from "@/components/text/Text";
+import { useSearchParams } from "react-router";
+import { cn } from "@/libs/utils";
 
 //마스터 데이터 실제론 api로 받기
 const MASTER_DATA: MasterData = {
@@ -75,11 +77,18 @@ export default function Filter({ filterType }: FilterProps) {
     genres,
     experience_levels: experienceLevels,
     orientations,
-    recruitment_types: recruitmentTypes,
   } = MASTER_DATA;
 
-  const orders = ["최신순", "댓글순", "인기순"];
-  const bookmarks = ["전부", "북마크만"];
+  const orders = [
+    { id: "latest", name: "최신순" },
+    { id: "commnets", name: "댓글순" },
+    { id: "views", name: "인기순" },
+    { id: "boomark", name: "북마크순" },
+  ];
+  const bookmarks = [
+    { id: "all", name: "전부" },
+    { id: "bookmark", name: "북마크만" },
+  ];
 
   return (
     <div className="flex flex-col border-2 border-neutral-600 rounded-xl max-w-sm p-2">
@@ -88,19 +97,17 @@ export default function Filter({ filterType }: FilterProps) {
         <input className="rounded-full bg-bg-on-dark text-text-on-dark px-3 py-0.5 focus:outline-none flex-1" />
       </div>
       <div className="flex flex-col space-y-2">
-        <FilterSection title={"순서"} data={orders} />
-        <FilterSection title={"북마크"} data={bookmarks} />
-        <FilterSection title={"지역"} data={regions} />
-        <FilterSection title={"선호 장르"} data={genres} />
-        <FilterSection title={"포지션"} data={positions} />
+        <FilterSection queryKey="sort_by" title={"순서"} data={orders} />
+        <FilterSection queryKey="bookmark" title={"북마크"} data={bookmarks} />
+        <FilterSection queryKey="region_ids" title={"지역"} data={regions} />
+        <FilterSection queryKey="genre_ids" title={"선호 장르"} data={genres} />
+        <FilterSection queryKey="positions_id" title={"포지션"} data={positions} />
         <FilterSection
+          queryKey="experience_level_ids"
           title={filterType === "recruitmentPostFilter" ? "요구 경력" : "경력"}
           data={experienceLevels}
         />
-        <FilterSection title={"지향"} data={orientations} />
-        {filterType === "recruitmentPostFilter" ? (
-          <FilterSection title={"밴드 타입"} data={recruitmentTypes} />
-        ) : null}
+        <FilterSection queryKey="orientation_ids" title={"지향"} data={orientations} />
       </div>
     </div>
   );
@@ -108,30 +115,62 @@ export default function Filter({ filterType }: FilterProps) {
 
 interface FilterSectionProps {
   title: string;
-  data:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | string[];
+  data: {
+    id: string;
+    name: string;
+  }[];
+  queryKey: string;
 }
+function FilterSection({ title, data, queryKey }: FilterSectionProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
 
-function FilterSection({ title, data }: FilterSectionProps) {
+  /** 특정 queryKey에 대해 값(id)을 토글하는 함수 */
+  const toggleQueryParam = (key: string, value: string) => {
+    const currentValues = searchParams.get(key)?.split(",").filter(Boolean) ?? [];
+
+    let updatedValues: string[];
+    if (currentValues.includes(value)) {
+      updatedValues = currentValues.filter((v) => v !== value); // 제거
+    } else {
+      updatedValues = [...currentValues, value]; // 추가
+    }
+
+    if (updatedValues.length > 0) {
+      searchParams.set(key, updatedValues.join(","));
+    } else {
+      searchParams.delete(key);
+    }
+
+    setSearchParams(searchParams);
+  };
+
   return (
     <section className="flex flex-col items-start space-y-1">
       <Text variant="mainText">{title}</Text>
       <div className="flex flex-wrap items-start justify-start gap-0.5">
-        {data.map((data, i) => (
-          <Badge
-            color="primarySoft"
-            size="sm"
-            textVariant="label"
-            key={typeof data === "string" ? i : data.id}
-            className="cursor-pointer hover:bg-primary"
-          >
-            {typeof data === "string" ? data : data.name}
-          </Badge>
-        ))}
+        {data.map((item) => {
+          const selectedValues = searchParams.get(queryKey)?.split(",").filter(Boolean) ?? [];
+          const isSelected = selectedValues.includes(item.id);
+
+          return (
+            <Badge
+              color={isSelected ? "primary" : "primarySoft"}
+              size="sm"
+              textVariant="label"
+              key={item.id}
+              onClick={(e) => {
+                e.preventDefault();
+                toggleQueryParam(queryKey, item.id);
+              }}
+              className={cn(
+                "cursor-pointer ",
+                isSelected ? " hover:bg-primary-soft" : "hover:bg-primary"
+              )}
+            >
+              {item.name}
+            </Badge>
+          );
+        })}
       </div>
     </section>
   );
