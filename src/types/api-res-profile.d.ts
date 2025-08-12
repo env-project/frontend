@@ -1,5 +1,3 @@
-import type { Comment } from "@/types/api-res-comment";
-
 /* --------------- 프로필 --------------- */
 // GET /api/v1/users/me
 interface MyUserInfo {

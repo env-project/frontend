@@ -1,7 +1,5 @@
 /* --------------- 댓글 --------------- */
 
-import type { Post } from "@/types/api-res-recruitment";
-
 //GET /api/v1/comments
 interface CommentList {
   next_cursor: string;
