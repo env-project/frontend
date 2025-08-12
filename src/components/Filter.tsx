@@ -3,6 +3,7 @@ import Badge from "@/components/Badge";
 import Text from "@/components/text/Text";
 import { useSearchParams } from "react-router";
 import { cn } from "@/libs/utils";
+import { useMultiSelectQuery } from "@/hooks/useMultiSelectQuery";
 
 //마스터 데이터 실제론 api로 받기
 const MASTER_DATA: MasterData = {
@@ -122,49 +123,25 @@ interface FilterSectionProps {
   queryKey: string;
 }
 function FilterSection({ title, data, queryKey }: FilterSectionProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  /** 특정 queryKey에 대해 값(id)을 토글하는 함수 */
-  const toggleQueryParam = (key: string, value: string) => {
-    const currentValues = searchParams.get(key)?.split(",").filter(Boolean) ?? [];
-
-    let updatedValues: string[];
-    if (currentValues.includes(value)) {
-      updatedValues = currentValues.filter((v) => v !== value); // 제거
-    } else {
-      updatedValues = [...currentValues, value]; // 추가
-    }
-
-    if (updatedValues.length > 0) {
-      searchParams.set(key, updatedValues.join(","));
-    } else {
-      searchParams.delete(key);
-    }
-
-    setSearchParams(searchParams);
-  };
-
+  const { isSelected, toggleValue } = useMultiSelectQuery(queryKey);
   return (
     <section className="flex flex-col items-start space-y-1">
       <Text variant="mainText">{title}</Text>
       <div className="flex flex-wrap items-start justify-start gap-0.5">
         {data.map((item) => {
-          const selectedValues = searchParams.get(queryKey)?.split(",").filter(Boolean) ?? [];
-          const isSelected = selectedValues.includes(item.id);
-
           return (
             <Badge
-              color={isSelected ? "primary" : "primarySoft"}
+              color={isSelected(item.id) ? "primary" : "primarySoft"}
               size="sm"
               textVariant="label"
               key={item.id}
               onClick={(e) => {
                 e.preventDefault();
-                toggleQueryParam(queryKey, item.id);
+                toggleValue(item.id);
               }}
               className={cn(
                 "cursor-pointer ",
-                isSelected ? " hover:bg-primary-soft" : "hover:bg-primary"
+                isSelected(item.id) ? " hover:bg-primary-soft" : "hover:bg-primary"
               )}
             >
               {item.name}
