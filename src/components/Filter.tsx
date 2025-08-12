@@ -66,6 +66,8 @@ const MASTER_DATA: MasterData = {
   recruiting_post_types: [],
 };
 
+const SEARCH_QUERY_KEY = "search_query";
+
 interface FilterProps {
   filterType: "profileFilter" | "recruitmentPostFilter";
 }
@@ -91,11 +93,21 @@ export default function Filter({ filterType }: FilterProps) {
     { id: "bookmark", name: "북마크만" },
   ];
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    searchParams.set(SEARCH_QUERY_KEY, e.target.value);
+    setSearchParams(searchParams);
+  };
+
   return (
     <div className="flex flex-col border-2 border-neutral-600 rounded-xl max-w-sm p-2">
       <div className="flex items-center justify-between space-x-1.5 px-1">
         <BsFillFunnelFill size={24} />
-        <input className="rounded-full bg-bg-on-dark text-text-on-dark px-3 py-0.5 focus:outline-none flex-1" />
+        <input
+          onChange={handleInputChange}
+          className="rounded-full bg-bg-on-dark text-text-on-dark px-3 py-0.5 focus:outline-none flex-1"
+        />
       </div>
       <div className="flex flex-col space-y-2">
         <FilterSection queryKey="sort_by" title={"순서"} data={orders} mode="single" />
