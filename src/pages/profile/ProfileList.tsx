@@ -26,8 +26,8 @@ function TwoColLayout({ children }: { children: React.ReactNode }) {
 }
 
 export default function ProfileList() {
-  const [sp] = useSearchParams();
-  const query = buildProfilesQueryFromSearchParams(sp);
+  const [searchParams] = useSearchParams();
+  const query = buildProfilesQueryFromSearchParams(searchParams);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfinite<UserProfile>({
       queryKey: ["profiles", query],
