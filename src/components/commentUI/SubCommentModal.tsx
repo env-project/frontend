@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const subCommentSchema = z.object({
-  subComment: z.string(),
+  subComment: z.string().min(1, { message: "최소 1글자 이상 입력해주세요." }),
 });
 
 interface SubCommentModalProps {
@@ -16,7 +16,11 @@ interface SubCommentModalProps {
 }
 
 export default function SubCommentModal({ parentCommentId }: SubCommentModalProps) {
-  const { register, handleSubmit } = useForm<z.infer<typeof subCommentSchema>>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof subCommentSchema>>({
     resolver: zodResolver(subCommentSchema),
   });
 
@@ -36,7 +40,7 @@ export default function SubCommentModal({ parentCommentId }: SubCommentModalProp
         <div className="flex flex-col p-2 space-y-5">
           <H3 className="text-text-primary">대댓글 내용을 작성해주세요</H3>
           <form className="flex flex-col w-full space-x-2" onSubmit={handleSubmit(onSubmit)}>
-            <Input {...register("subComment")} />
+            <Input {...register("subComment")} error={errors.subComment?.message} />
             <div className="flex  w-full justify-end space-x-2">
               <ModalClose>
                 <Button variant="outline" color="secondary-thick" type="button">
@@ -46,13 +50,11 @@ export default function SubCommentModal({ parentCommentId }: SubCommentModalProp
                 </Button>
               </ModalClose>
 
-              <ModalClose>
-                <Button variant="default" color="secondary-thick" type="submit">
-                  <Text variant="subText" className="text-text-on-dark">
-                    완료
-                  </Text>
-                </Button>
-              </ModalClose>
+              <Button variant="default" color="secondary-thick" type="submit">
+                <Text variant="subText" className="text-text-on-dark">
+                  완료
+                </Text>
+              </Button>
             </div>
           </form>
         </div>
