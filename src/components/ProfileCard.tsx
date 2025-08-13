@@ -1,10 +1,10 @@
-import H2 from "@/components/text/H2";
 import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
 import BookmarkBtn from "@/components/BookmarkBtn";
 import defaultImage from "@/assets/images/user-default-image.png";
 import type { UserProfile } from "@/types/api-res-profile";
 import { cn } from "@/libs/utils";
+import H3 from "./text/H3";
 
 interface ProfileCardProps {
   profile: UserProfile;
@@ -27,9 +27,9 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
   return (
     <div
       className={cn(
-        "relative w-75 rounded-xl bg-bg-secondary px-4 pt-2 pb-5",
+        "relative w-75 rounded-xl px-4 pt-2 pb-5",
         "shadow-sm border border-gray-300",
-        "hover:shadow-lg hover:shadow-primary-thick",
+        "hover:shadow-lg hover:shadow-primary-soft",
         "transition-all duration-300 ease-in-out"
       )}
     >
@@ -45,7 +45,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
 
         {/* 중앙: 닉네임 */}
         <div className="flex-1 text-center">
-          <H2 className="text-base">{nickname}</H2>
+          <H3 className="text-base">{nickname}</H3>
         </div>
 
         {/* 우측: 북마크 버튼 */}
@@ -57,19 +57,19 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
       <div className="flex items-center gap-4 mt-4 text-left">
         {/* 포지션 */}
         <div className="flex items-center gap-1">
-          <Text variant="label">포지션</Text>
+          <Text variant="label">포지션:</Text>
           <Badge label={positionName} color="primarySoft" size="sm" />
         </div>
         {/* 경력 */}
         <div className="flex items-center gap-1">
-          <Text variant="label">경력</Text>
+          <Text variant="label">경력:</Text>
           <Text variant="label">{experienceName}</Text>
         </div>
       </div>
 
       {/* 선호 장르 */}
       <div className="mt-3 text-left">
-        <Text variant="label">선호 장르</Text>
+        <Text variant="label">선호 장르:</Text>
         {genres.map((genre) => (
           <Badge key={genre.id} label={genre.name} color="primarySoft" size="sm" />
         ))}
