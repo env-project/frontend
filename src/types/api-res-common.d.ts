@@ -35,12 +35,12 @@ export interface Genre {
   name: string;
 }
 
-interface ExperienceLevel {
+export interface ExperienceLevel {
   id: string;
   name: string;
 }
 
-interface Region {
+export interface Region {
   id: string;
   name: string;
 }

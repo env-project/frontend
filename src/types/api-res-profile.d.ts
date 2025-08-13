@@ -18,14 +18,8 @@ export interface UserList {
 
 // GET /api/v1/profiles/{user_id}
 export type UserProfileDetail = PublicUserProfileDetail | PrivateUserProfileDetail;
-export interface BaseUserProfileDetail {
-  nickname: string;
-  image_url: string;
-  is_bookmarked: boolean;
+export interface BaseUserProfileDetail extends UserProfile {
   is_public: boolean;
-  regions: Region[];
-  positions: PositionAndLevel[];
-  genres: Genre[];
 }
 export interface PublicUserProfileDetail extends BaseUserProfileDetail {
   is_public: true;
