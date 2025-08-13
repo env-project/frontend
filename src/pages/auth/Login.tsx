@@ -48,14 +48,18 @@ const LogIn = () => {
         </Text>
         <div className="flex flex-col gap-8 ">
           <div className="flex flex-col gap-2">
-            <AuthInput {...register("email")} type="email" placeholder="이메일을 입력해주세요" />
-            {errors.email && <p className="text-red-500">{`${errors.email.message}`}</p>}
+            <AuthInput
+              {...register("email")}
+              type="email"
+              placeholder="이메일을 입력해주세요"
+              error={errors.email?.message}
+            />
             <AuthInput
               {...register("password")}
               type="password"
               placeholder="비밀번호를 입력해주세요"
+              error={errors.password?.message}
             />
-            {errors.password && <p className="text-red-500">{`${errors.password.message}`}</p>}
           </div>
           <div className="flex flex-col gap-2">
             <Button
