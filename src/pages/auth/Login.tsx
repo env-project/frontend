@@ -13,25 +13,19 @@ const LogIn: FC = () => {
   const [passwordError, setPasswordError] = useState<string>("");
   const navigate = useNavigate();
 
-  const handleLogin = (): void => {
-    if (email === "test@test.com" && password === "1234") {
-      alert("로그인 성공");
-      setEmailError("");
-      setPasswordError("");
-      navigate("/");
-    } else {
-      // 로그인 실패 시 에러 메시지 설정
-      if (email !== "test@test.com") {
-        setEmailError("이메일이 올바르지 않습니다.");
-        setPasswordError("");
-      } else if (password !== "1234") {
-        setEmailError("");
-        setPasswordError("비밀번호가 올바르지 않습니다.");
-      } else {
-        setEmailError("로그인 실패");
-        setPasswordError("로그인 실패");
-      }
-    }
+type TLogInSchema = z.infer<typeof logInSchema>;
+
+const LogIn = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<TLogInSchema>({ resolver: zodResolver(logInSchema) });
+
+  const onSubmit = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    reset();
   };
 
   return (
