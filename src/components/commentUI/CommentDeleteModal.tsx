@@ -10,7 +10,7 @@ interface CommentDeleteModalProps {
 export default function CommentDeleteModal({ commentId }: CommentDeleteModalProps) {
   //TODO: 실제 api 연결
   const handleDeleteClick = () => {
-    console.log(commentId);
+    console.log(`${commentId} 삭제`);
   };
 
   return (
