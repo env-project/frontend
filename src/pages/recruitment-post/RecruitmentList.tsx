@@ -27,7 +27,7 @@ const DUMMY_COMMENT_LIST: CommentList = {
           is_owner: false,
           author: {
             user_id: "user_002",
-            nickname: "대댓글 유저",
+            nickname: "김한주",
             image_url: "https://example.com/avatar2.png",
           },
         },
@@ -35,7 +35,7 @@ const DUMMY_COMMENT_LIST: CommentList = {
       is_owner: true,
       author: {
         user_id: "user_001",
-        nickname: "작성자",
+        nickname: "유다빈",
         image_url: "https://example.com/avatar1.png",
       },
     },
@@ -51,7 +51,7 @@ const DUMMY_COMMENT_LIST: CommentList = {
       is_owner: false,
       author: {
         user_id: "user_003",
-        nickname: "다른 유저",
+        nickname: "최웅희",
       },
     },
   ],
@@ -62,9 +62,9 @@ export default function RecruitmentList() {
     <div className="p-4 gap-2 flex flex-col">
       <Filter filterType="recruitmentPostFilter" />
       RecruitmentList
-      <div className="flex flex-col">
+      <div className="flex flex-col items-start space-y-0.5">
         {DUMMY_COMMENT_LIST.comments.map((comment) => (
-          <CommentUI comment={comment} />
+          <CommentUI comment={comment} key={comment.id} />
         ))}
       </div>
     </div>
