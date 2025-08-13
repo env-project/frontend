@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const positionItemSchema = z.object({
+const positionItemSchema = z.object({
   position_id: z.string(),
   experienced_level_id: z.string(),
 });
