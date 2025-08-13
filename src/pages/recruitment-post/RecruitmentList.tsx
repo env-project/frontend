@@ -1,6 +1,6 @@
 import Filter from "@/components/Filter";
 import type { CommentList } from "@/types/api-res-comment";
-import CommentUI from "@/components/CommentUI";
+import CommentUI from "@/components/commentUI/CommentUI";
 
 //실제론 api로 호출
 const DUMMY_COMMENT_LIST: CommentList = {
