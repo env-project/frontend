@@ -21,7 +21,7 @@ function App() {
           <Route path="/recruitment-post/new-post" element={<RecruitmentNewPost />} />
         </Route>
 
-        <Route path="profile">
+        <Route path="/profile">
           <Route index element={<ProfileList />} />
         </Route>
       </Route>

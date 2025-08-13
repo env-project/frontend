@@ -105,6 +105,7 @@ export default function Filter({
   ];
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const isProfile = filterType === "profileFilter"; // ✅ 추가
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const queryKey = filterType === "profileFilter" ? NICKNAME_QUERY_KEY : SEARCH_QUERY_KEY;
@@ -156,7 +157,10 @@ export default function Filter({
         />
       </div>
       <div className={cn("flex flex-col space-y-2", isVisible ? "visible" : "hidden")}>
-        <FilterSection queryKey="sort_by" title={"순서"} data={orders} mode="single" />
+        {/* 프로필 카드일 경우 순서, 지향은 숨김 */}
+        {!isProfile && (
+          <FilterSection queryKey="sort_by" title="순서" data={orders} mode="single" />
+        )}
         <FilterSection queryKey="bookmark" title={"북마크"} data={bookmarks} mode="single" />
         <FilterSection queryKey="region_ids" title={"지역"} data={regions} />
         <FilterSection queryKey="genre_ids" title={"선호 장르"} data={genres} />
@@ -166,7 +170,9 @@ export default function Filter({
           title={filterType === "recruitmentPostFilter" ? "요구 경력" : "경력"}
           data={experienceLevels}
         />
-        <FilterSection queryKey="orientation_ids" title={"지향"} data={orientations} />
+        {!isProfile && (
+          <FilterSection queryKey="orientation_ids" title="지향" data={orientations} />
+        )}
       </div>
     </div>
   );

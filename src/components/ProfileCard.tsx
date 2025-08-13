@@ -2,7 +2,7 @@ import H2 from "@/components/text/H2";
 import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
 import BookmarkBtn from "@/components/BookmarkBtn";
-import defalutImage from "@/assets/images/user-default-image.png";
+import defaultImage from "@/assets/images/user-default-image.png";
 import type { UserProfile } from "@/types/api-res-profile";
 import { cn } from "@/libs/utils";
 
@@ -20,14 +20,14 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
     genres,
     email,
   } = profile;
-  const firstPosition = positions[0];
+  const firstPosition = positions?.[0];
   const positionName = firstPosition?.position.name ?? "포지션 없음";
   const experienceName = firstPosition?.experience_level.name ?? "미정";
 
   return (
     <div
       className={cn(
-        "relative w-80 rounded-xl bg-bg-secondary px-4 pt-2 pb-5",
+        "relative w-75 rounded-xl bg-bg-secondary px-4 pt-2 pb-5",
         "shadow-sm border border-gray-300",
         "hover:shadow-lg hover:shadow-primary-thick",
         "transition-all duration-300 ease-in-out"
@@ -37,7 +37,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
         {/* 좌측: 프로필 이미지 */}
         <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-300 shrink-0">
           <img
-            src={imageUrl || defalutImage}
+            src={imageUrl || defaultImage}
             alt={`${nickname}님의 프로필 사진`}
             className="w-full h-full object-cover"
           />
@@ -58,7 +58,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
         {/* 포지션 */}
         <div className="flex items-center gap-1">
           <Text variant="label">포지션</Text>
-          <Badge label={positionName} color="primary" size="sm" />
+          <Badge label={positionName} color="primarySoft" size="sm" />
         </div>
         {/* 경력 */}
         <div className="flex items-center gap-1">
@@ -71,7 +71,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
       <div className="mt-3 text-left">
         <Text variant="label">선호 장르</Text>
         {genres.map((genre) => (
-          <Badge key={genre.id} label={genre.name} color="primary" size="sm" />
+          <Badge key={genre.id} label={genre.name} color="primarySoft" size="sm" />
         ))}
       </div>
 

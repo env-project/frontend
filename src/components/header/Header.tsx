@@ -29,7 +29,7 @@ const Header: FC = () => {
 
   return (
     <header
-      className={`relative flex justify-between items-center w-full h-[52px] sm:h-[80px] px-4 sm:px-6 sm:py-0 ${isBurgerOpen ? "shadow-lg" : ""} sm:shadow-none`}
+      className={`relative z-40 flex justify-between items-center w-full h-[52px] sm:h-[80px] px-4 sm:px-6 sm:py-0 ${isBurgerOpen ? "shadow-lg" : ""} sm:shadow-none`}
     >
       {/* 메인 로고 */}
       <Link to="/">
@@ -38,7 +38,7 @@ const Header: FC = () => {
 
       {/* 데스크톱 네비게이션 링크 (PC에서만 보임) */}
       <div className="items-center justify-around hidden gap-16 sm:flex">
-        <NavigationLink title="Profile List" to="#" />
+        <NavigationLink title="Profile List" to="/profile" />
         <NavigationLink title="Find People" to="#" />
       </div>
 
@@ -90,7 +90,7 @@ const Header: FC = () => {
       {isBurgerOpen && (
         <div className="absolute flex flex-col w-[40%] bg-white right-0 top-full text-left p-5 sm:hidden rounded-bl-xl gap-2 shadow-xl">
           <div className="flex flex-col gap-4 my-4">
-            <NavigationLink to="#" title="Profile List" onClick={toggleBurger} />
+            <NavigationLink to="/profile" title="Profile List" onClick={toggleBurger} />
             <NavigationLink to="#" title="People List" onClick={toggleBurger} />
           </div>
           {isLogin ? (
