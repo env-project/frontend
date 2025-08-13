@@ -5,6 +5,7 @@ import Badge from "@/components/Badge";
 import { BsArrowReturnRight } from "react-icons/bs";
 import CommentDeleteModal from "@/components/commentUI/CommentDeleteModal";
 import CommentFixModal from "@/components/commentUI/CommentFixModal";
+import SubCommentModal from "@/components/commentUI/SubCommentModal";
 
 interface CommentUIProps {
   comment: Comment;
@@ -44,9 +45,7 @@ export default function CommentUI({ comment, isChild = false }: CommentUIProps) 
               ) : null}
             </div>
             <div className="flex justify-center items-center space-x-0.5">
-              <Text variant="label" className="text-text-primary cursor-pointer hover:underline">
-                대댓글
-              </Text>
+              <SubCommentModal parentCommentId={id} />
               {isOwner ? (
                 <>
                   <CommentFixModal commentId={id} />
