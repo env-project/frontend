@@ -4,6 +4,7 @@ import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
 import { BsArrowReturnRight } from "react-icons/bs";
 import CommentDeleteModal from "@/components/commentUI/CommentDeleteModal";
+import CommentFixModal from "@/components/commentUI/CommentFixModal";
 
 interface CommentUIProps {
   comment: Comment;
@@ -48,12 +49,7 @@ export default function CommentUI({ comment, isChild = false }: CommentUIProps) 
               </Text>
               {isOwner ? (
                 <>
-                  <Text
-                    variant="label"
-                    className="text-text-primary cursor-pointer hover:underline"
-                  >
-                    수정
-                  </Text>
+                  <CommentFixModal commentId={id} />
                   <CommentDeleteModal commentId={id} />
                 </>
               ) : null}
