@@ -14,7 +14,7 @@ const recruitmentPostSchema = z.object({
   title: z.string().min(1, "1글자 이상").max(30, "30이하"),
   content: z.string().min(1),
 
-  imageUrl: z.string().optional(),
+  image: z.file().optional(),
   bandName: z.string().optional(),
   bandComposition: z.string().optional(),
   activityTime: z.string().optional(),
@@ -34,9 +34,14 @@ const recruitmentPostSchema = z.object({
 type TRecruitmentPostSchema = z.infer<typeof recruitmentPostSchema>;
 
 export default function RecruitmentNewPost() {
-  const { register } = useForm<TRecruitmentPostSchema>({
+  const { register, setValue } = useForm<TRecruitmentPostSchema>({
     resolver: zodResolver(recruitmentPostSchema),
   });
+
+  const onImageChange = (imageFile: File | null) => {
+    if (!imageFile) return;
+    setValue("image", imageFile);
+  };
 
   return (
     <div>
@@ -88,7 +93,7 @@ export default function RecruitmentNewPost() {
 
         <InputWithLabelContainer>
           <label htmlFor="image">대표 이미지</label>
-          <ImageInput id="image" />
+          <ImageInput id="image" onChange={onImageChange} />
         </InputWithLabelContainer>
 
         <InputWithLabelContainer>
