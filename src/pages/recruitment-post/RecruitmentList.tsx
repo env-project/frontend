@@ -28,7 +28,6 @@ const DUMMY_COMMENT_LIST: CommentList = {
           author: {
             user_id: "user_002",
             nickname: "김한주",
-            image_url: "https://example.com/avatar2.png",
           },
         },
       ],
@@ -36,7 +35,6 @@ const DUMMY_COMMENT_LIST: CommentList = {
       author: {
         user_id: "user_001",
         nickname: "유다빈",
-        image_url: "https://example.com/avatar1.png",
       },
     },
     {
