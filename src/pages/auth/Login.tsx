@@ -23,7 +23,7 @@ const LogIn = () => {
     reset,
   } = useForm<TLogInSchema>({ resolver: zodResolver(logInSchema) });
 
-  const onSubmit = async (data: TLogInSchema) => {
+  const onSubmit = async () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     reset();
   };
