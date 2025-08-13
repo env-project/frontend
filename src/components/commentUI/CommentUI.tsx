@@ -6,13 +6,15 @@ import { BsArrowReturnRight } from "react-icons/bs";
 import CommentDeleteModal from "@/components/commentUI/CommentDeleteModal";
 import CommentFixModal from "@/components/commentUI/CommentFixModal";
 import SubCommentModal from "@/components/commentUI/SubCommentModal";
+import { cn } from "@/libs/utils";
 
 interface CommentUIProps {
   comment: Comment;
   isChild?: boolean;
+  className?: string;
 }
 
-export default function CommentUI({ comment, isChild = false }: CommentUIProps) {
+export default function CommentUI({ comment, isChild = false, className = "" }: CommentUIProps) {
   const {
     author: { image_url: imageUrl, nickname },
     is_owner: isOwner,
@@ -23,7 +25,12 @@ export default function CommentUI({ comment, isChild = false }: CommentUIProps) 
 
   return (
     <>
-      <div className="flex justify-start items-center space-x-2 bg-neutral-200 rounded-xl p-2 min-w-sm">
+      <div
+        className={cn(
+          "flex justify-start items-center space-x-2 bg-neutral-200 rounded-xl p-2 ",
+          className
+        )}
+      >
         {isChild ? <BsArrowReturnRight /> : null}
         <img
           alt="profile-image"
@@ -60,7 +67,7 @@ export default function CommentUI({ comment, isChild = false }: CommentUIProps) 
         </div>
       </div>
       {children.map((child) => (
-        <CommentUI isChild={true} comment={child} key={child.id} />
+        <CommentUI isChild={true} comment={child} key={child.id} className={className} />
       ))}
     </>
   );
