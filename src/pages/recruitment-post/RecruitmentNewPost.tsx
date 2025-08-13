@@ -16,6 +16,7 @@ const recruitmentPostSchema = z.object({
   bandName: z.string().optional(),
   bandComposition: z.string().optional(),
   activityTime: z.string().optional(),
+  contactInfo: z.string().optional(),
   applicationMethod: z.string().optional(),
   practiceFrequencyTime: z.string().optional(),
   otherConditions: z.string().optional(),
@@ -56,6 +57,11 @@ export default function RecruitmentNewPost() {
         <InputWithLabelContainer>
           <label htmlFor="practice-frequency-time">활동 간격</label>
           <Input id="practice-frequency-time" className="w-full" />
+        </InputWithLabelContainer>
+
+        <InputWithLabelContainer>
+          <label htmlFor="contact-info">연락 방법</label>
+          <Input id="contact-info" className="w-full" />
         </InputWithLabelContainer>
 
         <InputWithLabelContainer>
