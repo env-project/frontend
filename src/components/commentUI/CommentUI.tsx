@@ -12,9 +12,15 @@ interface CommentUIProps {
   comment: Comment;
   isChild?: boolean;
   className?: string;
+  rootId?: string;
 }
 
-export default function CommentUI({ comment, isChild = false, className = "" }: CommentUIProps) {
+export default function CommentUI({
+  comment,
+  isChild = false,
+  className = "",
+  rootId = "",
+}: CommentUIProps) {
   const {
     author: { image_url: imageUrl, nickname },
     is_owner: isOwner,
@@ -52,7 +58,7 @@ export default function CommentUI({ comment, isChild = false, className = "" }: 
               ) : null}
             </div>
             <div className="flex justify-center items-center space-x-0.5">
-              <SubCommentModal parentCommentId={id} />
+              <SubCommentModal parentCommentId={rootId || id} />
               {isOwner ? (
                 <>
                   <CommentFixModal commentId={id} />
@@ -67,7 +73,13 @@ export default function CommentUI({ comment, isChild = false, className = "" }: 
         </div>
       </div>
       {children.map((child) => (
-        <CommentUI isChild={true} comment={child} key={child.id} className={className} />
+        <CommentUI
+          isChild={true}
+          comment={child}
+          key={child.id}
+          className={className}
+          rootId={id}
+        />
       ))}
     </>
   );
