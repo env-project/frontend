@@ -6,7 +6,7 @@ import type { JSX } from "react";
 
 export default function Footer(): JSX.Element {
   return (
-    <footer className="bg-bg-primary text-sm absolute bottom-0 w-full">
+    <footer className="bg-bg-primary text-sm w-full border-t mt-5">
       <div className="grid gap-8 md:grid-cols-2 px-10 py-6 w-full md:px-20">
         <div className="flex justify-center md:justify-normal gap-20 ">
           <AiOutlineFacebook size={28} />
