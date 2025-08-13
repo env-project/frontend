@@ -60,9 +60,9 @@ export default function RecruitmentList() {
     <div className="p-4 gap-2 flex flex-col">
       <Filter filterType="recruitmentPostFilter" />
       RecruitmentList
-      <div className="flex flex-col items-start space-y-0.5">
+      <div className="flex flex-col items-start max-w-sm w-full space-y-0.5">
         {DUMMY_COMMENT_LIST.comments.map((comment) => (
-          <CommentUI comment={comment} key={comment.id} />
+          <CommentUI comment={comment} key={comment.id} className="w-full" />
         ))}
       </div>
     </div>
