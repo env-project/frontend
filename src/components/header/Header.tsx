@@ -59,12 +59,12 @@ const Header: FC = () => {
         {/* 데스크톱 인증 버튼 (PC에서만 보임) */}
         {isLogin ? (
           <div className="items-center justify-end hidden gap-1 sm:flex">
-            <Link to="#">
+            <Link to="/my-page">
               <Button variant="link-primary">
                 <Text variant="mainText">MyPage</Text>
               </Button>
             </Link>
-            <Link to="#">
+            <Link to="/">
               <Button variant="link-secondary" onClick={toggleLogin}>
                 <Text variant="mainText">Logout</Text>
               </Button>
@@ -72,12 +72,12 @@ const Header: FC = () => {
           </div>
         ) : (
           <div className="items-center justify-end hidden gap-1 sm:flex">
-            <Link to="#">
+            <Link to="/login">
               <Button variant="link-secondary" className="w-full">
                 <Text variant="mainText">로그인</Text>
               </Button>
             </Link>
-            <Link to="#">
+            <Link to="/sign-up">
               <Button variant="link-primary" className="w-full">
                 <Text variant="mainText">회원가입</Text>
               </Button>
@@ -95,12 +95,12 @@ const Header: FC = () => {
           </div>
           {isLogin ? (
             <>
-              <Link to="#">
+              <Link to="/my-page">
                 <Button variant="link-primary" className="w-full" onClick={toggleBurger}>
                   <Text variant="button">MyPage</Text>
                 </Button>
               </Link>
-              <Link to="#">
+              <Link to="/">
                 <Button
                   variant="link-secondary"
                   className="w-full"
@@ -115,12 +115,12 @@ const Header: FC = () => {
             </>
           ) : (
             <>
-              <Link to="#">
+              <Link to="/login">
                 <Button variant="link-secondary" className="w-full" onClick={toggleBurger}>
                   <Text variant="button">로그인</Text>
                 </Button>
               </Link>
-              <Link to="#">
+              <Link to="/sign-up">
                 <Button variant="link-primary" className="w-full" onClick={toggleBurger}>
                   <Text variant="button">회원가입</Text>
                 </Button>
