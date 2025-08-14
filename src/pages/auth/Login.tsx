@@ -3,15 +3,15 @@ import AuthInput from "@/components/input/AuthInput";
 import Text from "@/components/text/Text";
 import { FcGoogle } from "react-icons/fc";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { Link, useNavigate } from "react-router";
-import { useState, type FC } from "react";
+import { Link } from "react-router";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const LogIn: FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [emailError, setEmailError] = useState<string>("");
-  const [passwordError, setPasswordError] = useState<string>("");
-  const navigate = useNavigate();
+const logInSchema = z.object({
+  email: z.string().email({ message: "유효한 이메일 주소를 입력해주세요" }),
+  password: z.string().min(8, "비밀번호는 최소 8자리 입력해주세요"),
+});
 
 type TLogInSchema = z.infer<typeof logInSchema>;
 
@@ -29,7 +29,11 @@ const LogIn = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-0">
+    <form
+      noValidate
+      className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-0 "
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className="w-full max-w-[585px] flex flex-col gap-16 p-6 sm:px-8 py-16 sm:border-hidden sm:shadow-2xl sm:rounded-3xl">
         <Link to="/" className=" sm:hidden">
           <Text variant="mainText" className="flex items-center gap-2 font-semibold">
@@ -51,13 +55,7 @@ const LogIn = () => {
               error={errors.email?.message}
             />
             <AuthInput
-              type="email"
-              placeholder="이메일을 입력해주세요"
-              onInput={(e) => setEmail(e.currentTarget.value)}
-              error={emailError}
-              value={email}
-            />
-            <AuthInput
+              {...register("password")}
               type="password"
               placeholder="비밀번호를 입력해주세요"
               error={errors.password?.message}
@@ -66,10 +64,12 @@ const LogIn = () => {
           <div className="flex flex-col gap-2">
             <Button
               variant="default"
-              className="p-3 bg-primary-thick hover:scale-100"
-              onClick={handleLogin}
+              className="p-3 bg-primary-thick hover:scale-100 disabled:bg-error"
+              disabled={isSubmitting}
             >
-              <Text className="text-base font-semibold text-text-on-dark">로그인</Text>
+              <Text className="text-base font-semibold text-text-on-dark ">
+                {isSubmitting ? "좀멘 기다리소" : "로그인"}
+              </Text>
             </Button>
             <Button variant="default" className="p-3 bg-bg-secondary hover:scale-100">
               <FcGoogle size={24} />
@@ -81,7 +81,7 @@ const LogIn = () => {
           <Text variant="mainText">아직 회원이 아니신가요? 회원가입</Text>
         </Link>
       </div>
-    </div>
+    </form>
   );
 };
 
