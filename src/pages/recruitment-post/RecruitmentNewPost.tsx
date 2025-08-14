@@ -151,36 +151,62 @@ export default function RecruitmentNewPost() {
 
         <InputWithLabelContainer>
           <label htmlFor="band-composition">밴드 구성</label>
-          <Input id="band-composition" className="w-full" {...register("bandComposition")} />
+          <Input
+            id="band-composition"
+            className="w-full placeholder:text-neutral-400"
+            {...register("bandComposition")}
+            placeholder="e.g. 남보컬 1명, 드럼 1명, 베이스 1명"
+          />
         </InputWithLabelContainer>
 
         <InputWithLabelContainer>
           <label htmlFor="activity-time">주 활동 시간</label>
-          <Input id="activity-time" className="w-full" {...register("activityTime")} />
+          <Input
+            id="activity-time"
+            className="w-full placeholder:text-neutral-400"
+            {...register("activityTime")}
+            placeholder="e.g. 토요일 오후 4시, 수요일 오후 8시"
+          />
         </InputWithLabelContainer>
 
         <InputWithLabelContainer>
           <label htmlFor="practice-frequency-time">활동 간격</label>
           <Input
-            id="practice-frequency-time"
-            className="w-full"
+            id="practice-frequency-time placeholder:text-neutral-400"
+            className="w-full placeholder:text-neutral-400"
             {...register("practiceFrequencyTime")}
+            placeholder="e.g. 격주"
           />
         </InputWithLabelContainer>
 
         <InputWithLabelContainer>
           <label htmlFor="contact-info">연락 방법</label>
-          <Input id="contact-info" className="w-full" {...register("contactInfo")} />
+          <Input
+            id="contact-info"
+            className="w-full placeholder:text-neutral-400"
+            {...register("contactInfo")}
+            placeholder="이메일, 오픈채팅링크 등"
+          />
         </InputWithLabelContainer>
 
         <InputWithLabelContainer>
           <label htmlFor="application-method">지원 방법</label>
-          <Input id="application-method" className="w-full" {...register("applicationMethod")} />
+          <Input
+            id="application-method"
+            className="w-full placeholder:text-neutral-400"
+            {...register("applicationMethod")}
+            placeholder="e.g. 연주 영상 이메일 첨부"
+          />
         </InputWithLabelContainer>
 
         <InputWithLabelContainer>
           <label htmlFor="other-conditions">기타 조건</label>
-          <Input id="other-conditions" className="w-full" {...register("otherConditions")} />
+          <Input
+            id="other-conditions"
+            className="w-full placeholder:text-neutral-400"
+            {...register("otherConditions")}
+            placeholder="e.g. 공연경험 필수"
+          />
         </InputWithLabelContainer>
 
         <PositionsInput
