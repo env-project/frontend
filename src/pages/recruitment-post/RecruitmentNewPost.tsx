@@ -1,10 +1,18 @@
 import z from "zod";
 import Input from "@/components/input/AuthInput";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import ImageInput from "@/components/input/ImageInput";
-import { useForm, type UseFormRegister } from "react-hook-form";
+import {
+  useFieldArray,
+  useForm,
+  type Control,
+  type FieldErrors,
+  type UseFormRegister,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { MasterData } from "@/types/api-res-common";
+import type { ExperienceLevel, MasterData, Position } from "@/types/api-res-common";
+import Button from "@/components/Button";
+import Text from "@/components/text/Text";
 
 //마스터 데이터 실제론 api로 받기
 const MASTER_DATA: MasterData = {
@@ -96,8 +104,17 @@ const recruitmentPostSchema = z.object({
 type TRecruitmentPostSchema = z.infer<typeof recruitmentPostSchema>;
 
 export default function RecruitmentNewPost() {
-  const { register, setValue, handleSubmit } = useForm<TRecruitmentPostSchema>({
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<TRecruitmentPostSchema>({
     resolver: zodResolver(recruitmentPostSchema),
+    defaultValues: {
+      positions: [],
+    },
   });
 
   const onImageChange = (imageFile: File | null) => {
@@ -108,6 +125,10 @@ export default function RecruitmentNewPost() {
   const onSubmit = (form: TRecruitmentPostSchema) => {
     console.log(form);
   };
+
+  useEffect(() => {
+    console.error(errors);
+  }, [errors]);
 
   return (
     <div>
@@ -160,6 +181,14 @@ export default function RecruitmentNewPost() {
           <Input id="other-conditions" className="w-full" {...register("otherConditions")} />
         </InputWithLabelContainer>
 
+        <PositionsInput
+          register={register}
+          errors={errors}
+          control={control}
+          positions={MASTER_DATA.positions}
+          experienceLevels={MASTER_DATA.experience_levels}
+        />
+
         <CheckboxInputs
           register={register}
           name="orientationId"
@@ -192,7 +221,7 @@ export default function RecruitmentNewPost() {
           />
         </InputWithLabelContainer>
 
-        <button type="submit">제출</button>
+        <Button type="submit">제출</Button>
       </form>
     </div>
   );
@@ -218,11 +247,106 @@ function CheckboxInputs({ data, register, name, type = "checkbox" }: CheckboxInp
   return (
     <div className="flex justify-start items-center flex-wrap gap-0.5">
       {data.map(({ name: label, id }) => (
-        <div>
+        <div key={id}>
           <label htmlFor={id + label}>{label}</label>
           <input value={id} type={type} {...register(name)} />
         </div>
       ))}
+    </div>
+  );
+}
+
+interface PositionsInputProps {
+  control: Control<TRecruitmentPostSchema>;
+  register: UseFormRegister<TRecruitmentPostSchema>;
+  errors?: FieldErrors<TRecruitmentPostSchema>;
+  positions: Position[];
+  experienceLevels: ExperienceLevel[];
+}
+
+function PositionsInput({
+  control,
+  register,
+  errors,
+  positions,
+  experienceLevels,
+}: PositionsInputProps) {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "positions",
+  });
+
+  return (
+    <div className="space-y-4">
+      <label>포지션 / 숙련도</label>
+
+      {fields.map((field, index) => {
+        const positionError = errors?.positions?.[index]?.position_id;
+        const experiencedLevelError = errors?.positions?.[index]?.experienced_level_id;
+
+        return (
+          <div key={field.id} className="space-y-2 border p-3 rounded">
+            {/* 포지션 선택 */}
+            <div>
+              <p className="font-medium">포지션 선택</p>
+              <div className="flex flex-wrap gap-4 mt-1">
+                {positions.map((position) => (
+                  <label key={position.id} className="flex items-center gap-1">
+                    <input
+                      type="radio"
+                      value={position.id}
+                      {...register(`positions.${index}.position_id`)}
+                    />
+                    {position.name}
+                  </label>
+                ))}
+              </div>
+              {positionError && (
+                <Text className="text-error" variant="label">
+                  {positionError.message}
+                </Text>
+              )}
+            </div>
+
+            {/* 숙련도 선택 */}
+            <div>
+              <p className="font-medium">숙련도 선택</p>
+              <div className="flex flex-wrap gap-4 mt-1">
+                {experienceLevels.map((experienceLevel) => (
+                  <label key={experienceLevel.id} className="flex items-center gap-1">
+                    <input
+                      type="radio"
+                      value={experienceLevel.id}
+                      {...register(`positions.${index}.experienced_level_id`)}
+                    />
+                    {experienceLevel.name}
+                  </label>
+                ))}
+              </div>
+              {experiencedLevelError && (
+                <Text className="text-error" variant="label">
+                  {experiencedLevelError.message}
+                </Text>
+              )}
+            </div>
+
+            {/* 삭제 버튼 */}
+            <Button type="button" onClick={() => remove(index)} color="error">
+              <Text className="text-text-on-dark">삭제</Text>
+            </Button>
+          </div>
+        );
+      })}
+
+      {/* 추가 버튼 */}
+      <Button
+        type="button"
+        onClick={() => append({ position_id: "", experienced_level_id: "" })}
+        variant="default"
+        color="primary"
+      >
+        <Text className="text-text-on-dark">+ 포지션 추가</Text>
+      </Button>
     </div>
   );
 }
