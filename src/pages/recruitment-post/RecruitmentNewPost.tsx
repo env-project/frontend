@@ -96,7 +96,7 @@ const recruitmentPostSchema = z.object({
 type TRecruitmentPostSchema = z.infer<typeof recruitmentPostSchema>;
 
 export default function RecruitmentNewPost() {
-  const { register, setValue } = useForm<TRecruitmentPostSchema>({
+  const { register, setValue, handleSubmit } = useForm<TRecruitmentPostSchema>({
     resolver: zodResolver(recruitmentPostSchema),
   });
 
@@ -105,10 +105,17 @@ export default function RecruitmentNewPost() {
     setValue("image", imageFile);
   };
 
+  const onSubmit = (form: TRecruitmentPostSchema) => {
+    console.log(form);
+  };
+
   return (
     <div>
       RecruitmentNewPost
-      <form className="flex flex-col items-center jsutify-start space-y-1 w-full p-2 max-w-lg">
+      <form
+        className="flex flex-col items-center jsutify-start space-y-1 w-full p-2 max-w-lg"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <InputWithLabelContainer>
           <label htmlFor="title">제목*</label>
           <Input id="title" className="w-full" {...register("title")} />
@@ -153,7 +160,22 @@ export default function RecruitmentNewPost() {
           <Input id="other-conditions" className="w-full" {...register("otherConditions")} />
         </InputWithLabelContainer>
 
+        <CheckboxInputs
+          register={register}
+          name="orientationId"
+          data={MASTER_DATA.orientations}
+          type="radio"
+        />
+
+        <CheckboxInputs
+          register={register}
+          name="recruitmentTypeId"
+          data={MASTER_DATA.recruitment_types}
+          type="radio"
+        />
+
         <CheckboxInputs register={register} name="genreIds" data={MASTER_DATA.genres} />
+
         <CheckboxInputs register={register} name="regionIds" data={MASTER_DATA.regions} />
 
         <InputWithLabelContainer>
@@ -169,6 +191,8 @@ export default function RecruitmentNewPost() {
             {...register("content")}
           />
         </InputWithLabelContainer>
+
+        <button type="submit">제출</button>
       </form>
     </div>
   );
@@ -187,15 +211,16 @@ interface CheckboxInputsProps {
   }[];
   register: UseFormRegister<TRecruitmentPostSchema>;
   name: keyof TRecruitmentPostSchema;
+  type?: "checkbox" | "radio";
 }
 
-function CheckboxInputs({ data, register, name }: CheckboxInputsProps) {
+function CheckboxInputs({ data, register, name, type = "checkbox" }: CheckboxInputsProps) {
   return (
     <div className="flex justify-start items-center flex-wrap gap-0.5">
       {data.map(({ name: label, id }) => (
         <div>
           <label htmlFor={id + label}>{label}</label>
-          <input value={id} type="checkbox" {...register(name)} />
+          <input value={id} type={type} {...register(name)} />
         </div>
       ))}
     </div>
