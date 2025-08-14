@@ -114,6 +114,10 @@ export default function RecruitmentNewPost() {
     resolver: zodResolver(recruitmentPostSchema),
     defaultValues: {
       positions: [],
+      regionIds: [],
+      genreIds: [],
+      orientationId: "",
+      recruitmentTypeId: "",
     },
   });
 
@@ -123,6 +127,8 @@ export default function RecruitmentNewPost() {
   };
 
   const onSubmit = (form: TRecruitmentPostSchema) => {
+    //TODO: 실제 API 연결하기
+    //optional은 빈값을 보내는게 아니라 아예 key 값을 보내면 안 됨
     console.log(form);
   };
 
