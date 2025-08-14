@@ -19,6 +19,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
     positions,
     genres,
     email,
+    regions,
   } = profile;
   const firstPosition = positions?.[0];
   const positionName = firstPosition?.position.name ?? "포지션 없음";
@@ -67,12 +68,20 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
         </div>
       </div>
 
-      {/* 선호 장르 */}
-      <div className="mt-3 text-left">
-        <Text variant="label">선호 장르:</Text>
-        {genres.map((genre) => (
-          <Badge key={genre.id} label={genre.name} color="primarySoft" size="sm" />
-        ))}
+      <div className="flex items-center gap-4 mt-4 text-left">
+        {/* 선호 장르 */}
+        <div className="flex items-center gap-1">
+          <Text variant="label">선호 장르:</Text>
+          {genres.map((genre) => (
+            <Badge key={genre.id} label={genre.name} color="primarySoft" size="sm" />
+          ))}
+        </div>
+        <div className="flex items-center gap-1">
+          <Text variant="label">지역:</Text>
+          {regions.map((regions) => (
+            <Badge key={regions.id} label={regions.name} color="primarySoft" size="sm" />
+          ))}
+        </div>
       </div>
 
       {/* 이메일 */}
