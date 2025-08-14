@@ -58,8 +58,8 @@ const MASTER_DATA: MasterData = {
   ],
   experience_levels: [
     { id: "e1", name: "취미 1년 이하" },
-    { id: "e2", name: "취미 3년 이하" },
-    { id: "e3", name: "취미 5년 이하" },
+    { id: "e2", name: "취미 1~3년" },
+    { id: "e3", name: "취미 3~5년" },
     { id: "e4", name: "취미 5년 이상" },
     { id: "e5", name: "전공" },
     { id: "e6", name: "프로" },
@@ -82,7 +82,7 @@ const positionItemSchema = z.object({
 });
 
 const recruitmentPostSchema = z.object({
-  title: z.string().min(1, "1글자 이상으로 작성해주세요").max(20, "20글자 이하로 작성해주세요"),
+  title: z.string().min(1, "1글자 이상으로 작성해주세요").max(40, "40글자 이하로 작성해주세요"),
   content: z.string().min(1, "1글자 이상으로 작성해주세요").max(500, "500글자 이하로 작성해주세요"),
 
   image: z.file().optional(),
