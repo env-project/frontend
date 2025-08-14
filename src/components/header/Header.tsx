@@ -39,7 +39,7 @@ const Header: FC = () => {
       {/* 데스크톱 네비게이션 링크 (PC에서만 보임) */}
       <div className="items-center justify-around hidden gap-16 sm:flex">
         <NavigationLink title="Profile List" to="/profile" />
-        <NavigationLink title="Find People" to="#" />
+        <NavigationLink title="Find People" to="recruitment-post" />
       </div>
 
       <div className="flex items-center gap-8 ">
@@ -91,7 +91,7 @@ const Header: FC = () => {
         <div className="absolute flex flex-col w-[40%] bg-white right-0 top-full text-left p-5 sm:hidden rounded-bl-xl gap-2 shadow-xl">
           <div className="flex flex-col gap-4 my-4">
             <NavigationLink to="/profile" title="Profile List" onClick={toggleBurger} />
-            <NavigationLink to="#" title="People List" onClick={toggleBurger} />
+            <NavigationLink to="/recruitment-post" title="People List" onClick={toggleBurger} />
           </div>
           {isLogin ? (
             <>
