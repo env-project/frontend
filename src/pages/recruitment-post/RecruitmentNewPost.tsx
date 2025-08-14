@@ -82,8 +82,8 @@ const positionItemSchema = z.object({
 });
 
 const recruitmentPostSchema = z.object({
-  title: z.string().min(1, "1글자 이상").max(30, "30이하"),
-  content: z.string().min(1),
+  title: z.string().min(1, "1글자 이상으로 작성해주세요").max(20, "20글자 이하로 작성해주세요"),
+  content: z.string().min(1, "1글자 이상으로 작성해주세요").max(500, "500글자 이하로 작성해주세요"),
 
   image: z.file().optional(),
   bandName: z.string().optional(),
@@ -141,7 +141,12 @@ export default function RecruitmentNewPost() {
       >
         <InputWithLabelContainer>
           <label htmlFor="title">제목*</label>
-          <Input id="title" className="w-full" {...register("title")} />
+          <Input
+            id="title"
+            className="w-full"
+            {...register("title")}
+            error={errors.title?.message}
+          />
         </InputWithLabelContainer>
 
         <InputWithLabelContainer>
@@ -258,9 +263,14 @@ export default function RecruitmentNewPost() {
           <label htmlFor="content">자세한 설명*</label>
           <textarea
             id="content"
-            className="w-full h-32 p-2 rounded-xl border"
+            className="w-full h-32 p-2 rounded-xl border focus:outline-none"
             {...register("content")}
           />
+          {errors.content ? (
+            <Text className="text-error" variant="label">
+              {errors.content.message}
+            </Text>
+          ) : null}
         </InputWithLabelContainer>
 
         <Button type="submit">
