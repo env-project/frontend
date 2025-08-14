@@ -136,7 +136,7 @@ export default function RecruitmentNewPost() {
   return (
     <div className="w-full bg-bg-primary flex justify-center text-text-primary">
       <form
-        className="flex flex-col items-center jsutify-start space-y-3 w-full p-2 max-w-lg"
+        className="flex flex-col items-center jsutify-start space-y-6 w-full p-2 max-w-lg"
         onSubmit={handleSubmit(onSubmit)}
       >
         <InputWithLabelContainer>

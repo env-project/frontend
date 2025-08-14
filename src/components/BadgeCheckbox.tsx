@@ -29,7 +29,9 @@ export default function BadgeCheckBox({
         color={"primary"}
         size={size}
         textVariant={textVariant}
-        className={cn("peer-checked:bg-primary-thick")}
+        className={cn(
+          "bg-neutral-300 text-text-primary  peer-checked:bg-primary-thick peer-checked:text-text-on-dark"
+        )}
       />
     </label>
   );
