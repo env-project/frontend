@@ -1,6 +1,6 @@
 import z from "zod";
 import Input from "@/components/input/AuthInput";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import ImageInput from "@/components/input/ImageInput";
 import {
   useFieldArray,
@@ -133,15 +133,10 @@ export default function RecruitmentNewPost() {
     console.log(form);
   };
 
-  useEffect(() => {
-    console.error(errors);
-  }, [errors]);
-
   return (
-    <div className="w-full bg-bg-primary">
-      RecruitmentNewPost
+    <div className="w-full bg-bg-primary flex justify-center text-text-primary">
       <form
-        className="flex flex-col items-center jsutify-start space-y-1 w-full p-2 max-w-lg"
+        className="flex flex-col items-center jsutify-start space-y-3 w-full p-2 max-w-lg"
         onSubmit={handleSubmit(onSubmit)}
       >
         <InputWithLabelContainer>
@@ -196,28 +191,42 @@ export default function RecruitmentNewPost() {
           experienceLevels={MASTER_DATA.experience_levels}
         />
 
-        <CheckboxInputs
-          register={register}
-          name="orientationId"
-          data={MASTER_DATA.orientations}
-          type="radio"
-        />
-
-        <CheckboxInputs
-          register={register}
-          name="recruitmentTypeId"
-          data={MASTER_DATA.recruitment_types}
-          type="radio"
-        />
-
-        <CheckboxInputs register={register} name="genreIds" data={MASTER_DATA.genres} />
-
-        <CheckboxInputs register={register} name="regionIds" data={MASTER_DATA.regions} />
+        <InputWithLabelContainer>
+          <label>밴드 성격</label>
+          <CheckboxInputs
+            register={register}
+            name="orientationId"
+            data={MASTER_DATA.orientations}
+            type="radio"
+          />
+        </InputWithLabelContainer>
 
         <InputWithLabelContainer>
-          <label htmlFor="image">대표 이미지</label>
-          <ImageInput id="image" onChange={onImageChange} />
+          <label>밴드 형태</label>
+          <CheckboxInputs
+            register={register}
+            name="recruitmentTypeId"
+            data={MASTER_DATA.recruitment_types}
+            type="radio"
+          />
         </InputWithLabelContainer>
+
+        <InputWithLabelContainer>
+          <label>선호 장르(복수 선택 가능)</label>
+          <CheckboxInputs register={register} name="genreIds" data={MASTER_DATA.genres} />
+        </InputWithLabelContainer>
+
+        <InputWithLabelContainer>
+          <label>활동 지역(복수 선택 가능)</label>
+          <CheckboxInputs register={register} name="regionIds" data={MASTER_DATA.regions} />
+        </InputWithLabelContainer>
+
+        <div className="flex flex-col justify-center items-center space-y-0.5 w-full">
+          <label htmlFor="image" className="w-full">
+            대표 이미지
+          </label>
+          <ImageInput id="image" onChange={onImageChange} />
+        </div>
 
         <InputWithLabelContainer>
           <label htmlFor="content">자세한 설명*</label>
@@ -228,7 +237,9 @@ export default function RecruitmentNewPost() {
           />
         </InputWithLabelContainer>
 
-        <Button type="submit">제출</Button>
+        <Button type="submit">
+          <Text className="text-text-on-dark">제출</Text>
+        </Button>
       </form>
     </div>
   );
@@ -292,8 +303,8 @@ function PositionsInput({
   });
 
   return (
-    <div className="space-y-4">
-      <label>포지션 / 숙련도</label>
+    <div className="space-y-4 w-full flex flex-col justify-start items-center">
+      <label className="w-full ">모집 포지션(복수 선택 가능)</label>
 
       {fields.map((field, index) => {
         const positionError = errors?.positions?.[index]?.position_id;
