@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { ExperienceLevel, MasterData, Position } from "@/types/api-res-common";
 import Button from "@/components/Button";
 import Text from "@/components/text/Text";
+import BadgeCheckBox from "@/components/BadgeCheckbox";
 
 //마스터 데이터 실제론 api로 받기
 const MASTER_DATA: MasterData = {
@@ -137,7 +138,7 @@ export default function RecruitmentNewPost() {
   }, [errors]);
 
   return (
-    <div>
+    <div className="w-full bg-bg-primary">
       RecruitmentNewPost
       <form
         className="flex flex-col items-center jsutify-start space-y-1 w-full p-2 max-w-lg"
@@ -253,10 +254,18 @@ function CheckboxInputs({ data, register, name, type = "checkbox" }: CheckboxInp
   return (
     <div className="flex justify-start items-center flex-wrap gap-0.5">
       {data.map(({ name: label, id }) => (
-        <div key={id}>
-          <label htmlFor={id + label}>{label}</label>
-          <input value={id} type={type} {...register(name)} />
-        </div>
+        // <div key={id}>
+        //   <label htmlFor={id + label}>{label}</label>
+        //   <input value={id} type={type} {...register(name)} />
+        // </div>
+        <BadgeCheckBox
+          key={id}
+          label={label}
+          value={id}
+          type={type}
+          {...register(name)}
+          className="text-text-on-dark"
+        />
       ))}
     </div>
   );
