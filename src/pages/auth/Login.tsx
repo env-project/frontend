@@ -29,23 +29,26 @@ const LogIn = () => {
   };
 
   return (
-    <form
-      noValidate
-      className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-0 "
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="w-full max-w-[585px] flex flex-col gap-16 p-6 sm:px-8 py-16 sm:border-hidden sm:shadow-2xl sm:rounded-3xl">
-        <Link to="/" className=" sm:hidden">
-          <Text variant="mainText" className="flex items-center gap-2 font-semibold">
+    <div className="flex items-center justify-center w-auto min-h-screen bg-[url('/background.jpg')] py-[80px] bg-cover bg-center">
+      <form
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-[550px] flex flex-col gap-12 p-6 sm:px-8 my-10 py-10 sm:border sm:border-neutral-300  sm:shadow-neutral-400 sm:shadow-lg sm:rounded-3xl backdrop-blur-sm sm:bg-bg-primary/10"
+      >
+        <Link to="/">
+          <Text variant="mainText" className="flex items-center gap-2 text-text-on-dark">
             <FaArrowLeftLong />
-            로그인
+            홈페이지
           </Text>
         </Link>
-        <Text className="text-3xl font-semibold sm:text-3xl sm:font-bold">
-          악기하나
-          <br />
-          비어 있어요
-        </Text>
+        <div className="flex gap-10">
+          <Text className="px-2 text-3xl font-semibold leading-normal whitespace-pre-line sm:text-4xl sm:font-bold text-text-on-dark ">
+            <span className="text-secondary ">악</span>기<span className="text-secondary"> 하</span>
+            나
+            <br />
+            <span className="text-secondary">비</span>어 있어요
+          </Text>
+        </div>
         <div className="flex flex-col gap-8 ">
           <div className="flex flex-col gap-2">
             <AuthInput
@@ -68,7 +71,7 @@ const LogIn = () => {
               disabled={isSubmitting}
             >
               <Text className="text-base font-semibold text-text-on-dark ">
-                {isSubmitting ? "좀멘 기다리소" : "로그인"}
+                {isSubmitting ? "로그인 중..." : "로그인"}
               </Text>
             </Button>
             <Button variant="default" className="p-3 bg-bg-secondary hover:scale-100">
@@ -77,11 +80,11 @@ const LogIn = () => {
             </Button>
           </div>
         </div>
-        <Link to="/sign-up" className="text-center">
+        <Link to="/sign-up" className="text-center text-text-on-dark">
           <Text variant="mainText">아직 회원이 아니신가요? 회원가입</Text>
         </Link>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
