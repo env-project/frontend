@@ -29,7 +29,7 @@ const LogIn = () => {
   };
 
   return (
-    <div className="flex items-center justify-center w-auto min-h-screen bg-[url('/background.jpg')] py-[80px] bg-cover bg-center">
+    <div className="flex items-center justify-center w-auto min-h-screen bg-[url('/background.jpg')] py-[80px] bg-cover ">
       <form
         noValidate
         onSubmit={handleSubmit(onSubmit)}
@@ -41,12 +41,14 @@ const LogIn = () => {
             홈페이지
           </Text>
         </Link>
+
         <div className="flex gap-10">
           <Text className="px-2 text-3xl font-semibold leading-normal whitespace-pre-line sm:text-4xl sm:font-bold text-text-on-dark ">
-            <span className="text-secondary ">악</span>기<span className="text-secondary"> 하</span>
+            <span className="text-secondary-soft ">악</span>기
+            <span className="text-secondary-soft"> 하</span>
             나
             <br />
-            <span className="text-secondary">비</span>어 있어요
+            <span className="text-secondary-soft">비</span>어 있어요
           </Text>
         </div>
         <div className="flex flex-col gap-8 ">
