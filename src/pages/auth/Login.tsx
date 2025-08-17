@@ -29,23 +29,33 @@ const LogIn = () => {
   };
 
   return (
-    <form
-      noValidate
-      className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-0 "
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="w-full max-w-[585px] flex flex-col gap-16 p-6 sm:px-8 py-16 sm:border-hidden sm:shadow-2xl sm:rounded-3xl">
-        <Link to="/" className=" sm:hidden">
-          <Text variant="mainText" className="flex items-center gap-2 font-semibold">
+    <div className="flex items-center justify-center w-screen min-h-screen bg-[url('/background.jpg')] bg-cover sm:bg-fixed relative before:absolute before:inset-0 before:bg-black/50 pt-[120px] pb-[80px]">
+      {/* 폼 컨테이너 */}
+      <form
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+        className="
+        relative z-10 w-full max-w-[550px] flex flex-col gap-12 px-8 py-16 
+        backdrop-blur-sm sm:p-10 sm:border sm:border-neutral-100 sm:shadow-md  
+        sm:rounded-3xl sm:backdrop-blur-lg sm:bg-bg-primary/20 sm:shadow-neutral-50
+      "
+      >
+        <Link to="/">
+          <Text variant="mainText" className="flex items-center gap-2 text-text-on-dark">
             <FaArrowLeftLong />
-            로그인
+            홈으로 돌아가기
           </Text>
         </Link>
-        <Text className="text-3xl font-semibold sm:text-3xl sm:font-bold">
-          악기하나
-          <br />
-          비어 있어요
-        </Text>
+
+        <div className="flex gap-10">
+          <Text className="px-2 text-3xl font-semibold leading-normal whitespace-pre-line sm:text-4xl sm:font-bold text-text-on-dark ">
+            <span className="text-secondary-soft ">악</span>기
+            <span className="text-secondary-soft"> 하</span>
+            나
+            <br />
+            <span className="text-secondary-soft">비</span>어 있어요
+          </Text>
+        </div>
         <div className="flex flex-col gap-8 ">
           <div className="flex flex-col gap-2">
             <AuthInput
@@ -68,7 +78,7 @@ const LogIn = () => {
               disabled={isSubmitting}
             >
               <Text className="text-base font-semibold text-text-on-dark ">
-                {isSubmitting ? "좀멘 기다리소" : "로그인"}
+                {isSubmitting ? "로그인 중..." : "로그인"}
               </Text>
             </Button>
             <Button variant="default" className="p-3 bg-bg-secondary hover:scale-100">
@@ -77,11 +87,11 @@ const LogIn = () => {
             </Button>
           </div>
         </div>
-        <Link to="/sign-up" className="text-center">
+        <Link to="/sign-up" className="text-center text-text-on-dark">
           <Text variant="mainText">아직 회원이 아니신가요? 회원가입</Text>
         </Link>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
