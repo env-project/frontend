@@ -41,23 +41,28 @@ const SignUp = () => {
   const handleGoogleSignUp = (): void => {};
 
   return (
-    <form
-      noValidate
-      className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-0 "
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="w-full max-w-[585px] flex flex-col gap-16 p-6 sm:px-8 py-16 sm:border-hidden sm:shadow-2xl sm:rounded-3xl">
+    <div className="flex items-center justify-center w-screen min-h-screen bg-[url('/background.jpg')] bg-cover sm:bg-fixed relative before:absolute before:inset-0 before:bg-black/50 pt-[120px] pb-[80px]">
+      {/* 폼 컨테이너 */}
+      <form
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+        className="
+        relative z-10 w-full max-w-[550px] flex flex-col gap-12 px-8 py-16 
+        backdrop-blur-sm sm:p-10 sm:border sm:border-neutral-100 sm:shadow-md  
+        sm:rounded-3xl sm:backdrop-blur-lg sm:bg-bg-primary/20 sm:shadow-neutral-50
+      "
+      >
         <Link to="/">
-          <Text variant="mainText" className="flex items-center gap-2 ">
+          <Text variant="mainText" className="flex items-center gap-2 text-text-on-dark">
             <FaArrowLeftLong />
             홈으로 돌아가기
           </Text>
         </Link>
 
-        <Text className="text-2xl font-semibold leading-relaxed whitespace-pre-line sm:text-3xl text-primary">
-          반가워요! <span className="font-extrabold text-primary-thick">회원가입</span> 하고
+        <Text className="text-2xl font-semibold leading-relaxed whitespace-pre-line sm:text-3xl text-text-on-dark">
+          반가워요! <span className="font-extrabold text-secondary-soft">회원가입</span> 하고
           <br />
-          밴드 매칭 기능을 이용해보세요.
+          <span className="font-extrabold text-secondary-soft">나만의 밴드</span>를 찾아보세요.
         </Text>
         <div className="flex flex-col gap-8 ">
           <div className="flex flex-col gap-2">
@@ -104,8 +109,8 @@ const SignUp = () => {
             </Button>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
