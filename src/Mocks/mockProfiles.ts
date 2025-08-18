@@ -95,6 +95,10 @@ export const mockProfiles: UserProfile[] = [
     genres: [
       { id: "g2", name: "K-pop" },
       { id: "g7", name: "그 외" },
+      { id: "g2", name: "K-pop" },
+      { id: "g2", name: "K-pop" },
+      { id: "g2", name: "K-pop" },
+      { id: "g2", name: "K-pop" },
     ],
     email: "jihoon@example.com",
   },
