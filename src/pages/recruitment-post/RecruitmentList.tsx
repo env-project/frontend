@@ -57,7 +57,7 @@ const DUMMY_COMMENT_LIST: CommentList = {
 
 export default function RecruitmentList() {
   return (
-    <div className="p-4 gap-2 flex flex-col pt-20">
+    <div className="p-4 gap-2 flex flex-col ">
       <Filter filterType="recruitmentPostFilter" />
       RecruitmentList
       <div className="flex flex-col items-start max-w-sm w-full space-y-0.5">
