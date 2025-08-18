@@ -77,12 +77,14 @@ interface FilterProps {
   filterType: "profileFilter" | "recruitmentPostFilter";
   breakPointPX?: number; //접었다 폈다 가능하게 하는 px(기본값은 640(tailwind의 sm 사이즈))
   className?: string;
+  isLogin?: boolean;
 }
 
 export default function Filter({
   filterType,
   breakPointPX = MOBILE_SIZE_PX,
   className = "",
+  isLogin = false,
 }: FilterProps) {
   //마스터 데이터 실제론 api로 받기
   const {
@@ -93,12 +95,18 @@ export default function Filter({
     orientations,
   } = MASTER_DATA;
 
-  const orders = [
+  const sortBys = [
     { id: "latest", name: "최신순" },
     { id: "comments", name: "댓글순" },
     { id: "views", name: "인기순" },
     { id: "boomark", name: "북마크순" },
   ];
+
+  const orderBys = [
+    { id: "asc", name: "오름차순" },
+    { id: "desc", name: "내림차순" },
+  ];
+
   const bookmarks = [{ id: "me", name: "북마크만" }];
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -154,11 +162,15 @@ export default function Filter({
         />
       </div>
       <div className={cn("flex flex-col space-y-2", isVisible ? "visible" : "hidden")}>
-        {/* 프로필 카드일 경우 순서, 지향은 숨김 */}
-        {!isProfile && (
-          <FilterSection queryKey="sort_by" title="순서" data={orders} mode="single" />
-        )}
-        <FilterSection queryKey="bookmarks" title={"북마크"} data={bookmarks} mode="single" />
+        <FilterSection queryKey="sort_by" title="정렬" data={sortBys} mode="single" />
+        {isProfile ? (
+          <FilterSection queryKey="order_by" title="순서" data={orderBys} mode="single" />
+        ) : null}
+
+        {isLogin ? (
+          <FilterSection queryKey="bookmarks" title={"북마크"} data={bookmarks} mode="single" />
+        ) : null}
+
         <FilterSection queryKey="region_ids" title={"지역"} data={regions} />
         <FilterSection queryKey="genre_ids" title={"선호 장르"} data={genres} />
         <FilterSection queryKey="positions_id" title={"포지션"} data={positions} />
