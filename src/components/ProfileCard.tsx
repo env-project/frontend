@@ -10,6 +10,36 @@ interface ProfileCardProps {
   profile: UserProfile;
 }
 
+const BADGE_LIMIT = 2;
+
+function renderLimitedBadges(
+  items: { id: string; name: string }[] | undefined,
+  limit = BADGE_LIMIT,
+  showKey: "name" | "id" = "name"
+) {
+  if (!items || items.length === 0) return null;
+  const shown = items.slice(0, limit);
+  const extra = items.length - shown.length;
+  const hidden = items.slice(limit);
+
+  return (
+    <>
+      {shown.map((item) => (
+        <Badge key={item.id} label={item.name} color="primarySoft" size="sm" />
+      ))}
+      {extra > 0 && (
+        <Badge
+          // 전체 목록을 툴팁으로
+          title={hidden.map((it) => it[showKey]).join(", ")}
+          label={`+${extra}`}
+          color="secondarySoft"
+          size="sm"
+        />
+      )}
+    </>
+  );
+}
+
 export default function ProfileCard({ profile }: ProfileCardProps) {
   const {
     user_id: userId,
@@ -80,9 +110,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
             선호 장르:
           </Text>
           <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 min-w-0">
-            {genres.map((genre) => (
-              <Badge key={genre.id} label={genre.name} color="primarySoft" size="sm" />
-            ))}
+            {renderLimitedBadges(genres)}
           </div>
         </div>
         <div className="grid grid-cols-[auto_1fr] items-start gap-x-1">
