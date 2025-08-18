@@ -28,7 +28,7 @@ export interface PostDetail extends Post {
   practice_frequency_time?: string;
   other_conditions?: string;
 
-  recruitment_type: RecruitmentType;
+  recruitment_type?: RecruitmentType;
 }
 
 export interface Post {
@@ -50,10 +50,10 @@ export interface Post {
   comments_count: number;
   bookmarks_count: number;
 
-  regions: Region[];
-  genres: Genre[];
-  orientation: Orientation;
-  positions: {
+  regions?: Region[];
+  genres?: Genre[];
+  orientation?: Orientation;
+  positions?: {
     position_id: Position["id"];
     position_name: Position["name"];
     experience_level_id: ExperienceLevel["id"];
