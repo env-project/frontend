@@ -1,5 +1,11 @@
+import Badge from "@/components/Badge";
+import BookmarkButton from "@/components/BookmarkBtn";
+import H1 from "@/components/text/H1";
+import Text from "@/components/text/Text";
+import { getTimeDiff } from "@/libs/utils";
 import type { PostDetail } from "@/types/api-res-recruitment";
-import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+//import { useParams } from "react-router";
 
 //더미 포스트 데이터 실제론 api 준비
 const dummyPostData: PostDetail = {
@@ -55,6 +61,12 @@ const dummyPostData: PostDetail = {
       experience_level_id: "312345",
       experience_level_name: "취미 1년 이상 3년 이하",
     },
+    {
+      position_id: "12234t622",
+      position_name: "여보컬",
+      experience_level_id: "312315545",
+      experience_level_name: "취미 1년 이상 3년 이하",
+    },
   ],
 
   regions: [
@@ -70,7 +82,136 @@ const dummyPostData: PostDetail = {
 };
 
 export default function RecruitmentDetail() {
-  const { postId } = useParams();
+  //const { postId } = useParams();
+  const {
+    title,
+    is_bookmarked: isBookmarked,
+    author: { id: userId, nickname },
+    created_at: createdAt,
+    is_closed: isClosed,
+    band_name: bandName,
+    band_composition: bandComposition,
+    activity_time: activityTime,
+    practice_frequency_time: practiceFrequencyTime,
+    application_method: applicationMethod,
+    contact_info: contactInfo,
+    other_conditions: otherCondition,
+    recruitment_type: recruitmentType,
+    genres,
+    orientation,
+    positions,
+    regions,
+    content,
+    image_url: imageUrl,
+  } = dummyPostData;
 
-  return <div>RecruitmentDetail of {postId}</div>;
+  const [timeDiff, setTimeDiff] = useState("");
+
+  useEffect(() => {
+    setTimeDiff(getTimeDiff(new Date(createdAt)));
+  }, [createdAt, setTimeDiff]);
+
+  return (
+    <div className="bg-bg-primary text-text-primary p-2">
+      <div className="flex flex-col">
+        <div className="flex w-full justify-between items-center">
+          <H1 className="truncate w-full">{title}</H1>
+          <BookmarkButton isBookmarked={isBookmarked} size="sm" userId={userId} />
+        </div>
+
+        <div className="flex justify-between items-center w-full mt-2 mb-3">
+          {isClosed ? (
+            <Badge size="sm" className="bg-primary-thick">
+              <Text variant="label" className="text-text-on-dark">
+                마감
+              </Text>
+            </Badge>
+          ) : (
+            <Badge size="sm" color="secondary">
+              모집중
+            </Badge>
+          )}
+          <div>
+            <Text variant="subText">{nickname}</Text>
+            <Text variant="subText">·</Text>
+            <Text variant="subText">{`${timeDiff}`}</Text>
+          </div>
+        </div>
+
+        <div className="flex flex-col space-y-1 justify-start items-start">
+          {bandName ? <Text>{`밴드 이름: ${bandName}`}</Text> : null}
+          {bandComposition ? <Text>{`밴드 구성: ${bandComposition}`}</Text> : null}
+          {activityTime ? <Text>{`주 활동 시간: ${activityTime}`}</Text> : null}
+          {practiceFrequencyTime ? <Text>{`활동 주기: ${practiceFrequencyTime}`}</Text> : null}
+          {contactInfo ? <Text>{`연락 방법: ${contactInfo}`}</Text> : null}
+          {applicationMethod ? <Text>{`지원 방법: ${applicationMethod}`}</Text> : null}
+          {otherCondition ? <Text>{`기타 조건: ${otherCondition}`}</Text> : null}
+
+          {positions ? (
+            <div className="flex flex-col space-y-0.5">
+              {positions.map((position, index) => {
+                const { position_name: positionName, experience_level_name: experienceLevelName } =
+                  position;
+                return (
+                  <div className="flex flex-row justify-start items-center space-x-0.5" key={index}>
+                    <Text>{`모집 포지션 ${index + 1}`}</Text>
+                    <Badge size="sm" color="primarySoft">
+                      {positionName}
+                    </Badge>
+                    <Badge size="sm" color="primarySoft">
+                      {experienceLevelName}
+                    </Badge>
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
+
+          {genres ? (
+            <div className="flex flex-row justify-start items-center space-x-0.5">
+              <Text>선호 장르</Text>
+              {genres.map(({ name, id }) => (
+                <Badge size="sm" color="primarySoft" key={id}>
+                  {name}
+                </Badge>
+              ))}
+            </div>
+          ) : null}
+
+          {regions ? (
+            <div className="flex flex-row justify-start items-center space-x-0.5">
+              <Text>활동 지역</Text>
+              {regions.map(({ name, id }) => (
+                <Badge size="sm" color="primarySoft" key={id}>
+                  {name}
+                </Badge>
+              ))}
+            </div>
+          ) : null}
+
+          {orientation ? (
+            <div className="flex flex-row justify-start items-center space-x-0.5">
+              <Text>지향</Text>
+              <Badge size="sm" color="primarySoft">
+                {orientation.name}
+              </Badge>
+            </div>
+          ) : null}
+
+          {recruitmentType ? (
+            <div className="flex flex-row justify-start items-center space-x-0.5">
+              <Text>밴드 형태</Text>
+              <Badge size="sm" color="primarySoft">
+                {recruitmentType.name}
+              </Badge>
+            </div>
+          ) : null}
+
+          <Text>{content}</Text>
+
+          {imageUrl ? <img src={imageUrl} className="rounded-lg" /> : null}
+        </div>
+      </div>
+    </div>
+  );
 }
