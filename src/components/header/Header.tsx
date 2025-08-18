@@ -1,16 +1,20 @@
 import { useState, useCallback, type FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import DarkModeToggle from "@/components/darkMode/DarkModeToggle";
 
 import HamburgerIcon from "@/components/icons/BurgerIcon";
 import NavigationLink from "@/components/header/NavigationLink";
 import Button from "@/components/Button";
 import Text from "@/components/text/Text";
+import { cn } from "@/libs/utils";
 
 const Header: FC = () => {
   const [isBurgerOpen, setBurgerOpen] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const [isLogin, setIsLogin] = useState<boolean>(false);
+
+  const location = useLocation();
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/sign-up";
 
   // 버거버튼 클릭 시 상태 변경
   const toggleBurger = useCallback(() => {
@@ -29,28 +33,41 @@ const Header: FC = () => {
 
   return (
     <header
-      className={`relative z-40 flex justify-between items-center w-full h-[52px] sm:h-[80px] px-4 sm:px-6 sm:py-0 ${isBurgerOpen ? "shadow-lg" : ""} sm:shadow-none`}
+      className={cn(
+        "fixed top-0  z-40 flex justify-between items-center w-full h-[52px] sm:h-[80px] px-4 sm:px-6 sm:py-0 bg-transparent sm:shadow-none",
+        isBurgerOpen && "shadow-lg",
+        !isAuthPage && "bg-bg-primary"
+      )}
     >
       {/* 메인 로고 */}
       <Link to="/">
         <img src="/logo.png" alt="logo" className="w-[70px] md:w-[80px] ml-2" />
       </Link>
-
       {/* 데스크톱 네비게이션 링크 (PC에서만 보임) */}
-      <div className="items-center justify-around hidden gap-16 sm:flex">
+      <div
+        className={cn(
+          "items-center justify-around hidden gap-16 sm:flex",
+          isAuthPage && "text-text-on-dark"
+        )}
+      >
         <NavigationLink title="Profile List" to="/profile" />
-
         <NavigationLink title="Find People" to="recruitment-post" />
       </div>
-
       <div className="flex items-center gap-8 ">
         {/* 다크 모드 토글 버튼 */}
-        <DarkModeToggle isDarkMode={isDarkMode} onToggle={toggleDarkMode} />
+        <DarkModeToggle
+          isDarkMode={isDarkMode}
+          onToggle={toggleDarkMode}
+          className={cn("flex items-center gap-8 ", isAuthPage && "hidden")}
+        />
 
         {/* 햄버거 메뉴 버튼 (모바일에서만 보임) */}
         <button
           onClick={toggleBurger}
-          className="flex items-center justify-end sm:hidden"
+          className={cn(
+            "flex items-center justify-end sm:hidden",
+            isAuthPage && "text-text-on-dark"
+          )}
           aria-expanded={isBurgerOpen}
           aria-controls="mobile-menu"
         >
@@ -86,15 +103,12 @@ const Header: FC = () => {
           </div>
         )}
       </div>
-
       {/* 모바일 드롭다운 메뉴 (모바일에서만 보임) */}
       {isBurgerOpen && (
         <div className="absolute flex flex-col w-[40%] bg-white right-0 top-full text-left p-5 sm:hidden rounded-bl-xl gap-2 shadow-xl">
           <div className="flex flex-col gap-4 my-4">
             <NavigationLink to="/profile" title="Profile List" onClick={toggleBurger} />
-
             <NavigationLink to="/recruitment-post" title="People List" onClick={toggleBurger} />
-
           </div>
           {isLogin ? (
             <>
