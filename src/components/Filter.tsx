@@ -99,10 +99,7 @@ export default function Filter({
     { id: "views", name: "인기순" },
     { id: "boomark", name: "북마크순" },
   ];
-  const bookmarks = [
-    { id: "all", name: "전부" },
-    { id: "bookmark", name: "북마크만" },
-  ];
+  const bookmarks = [{ id: "me", name: "북마크만" }];
 
   const [searchParams, setSearchParams] = useSearchParams();
   const isProfile = filterType === "profileFilter"; // ✅ 추가
@@ -161,7 +158,7 @@ export default function Filter({
         {!isProfile && (
           <FilterSection queryKey="sort_by" title="순서" data={orders} mode="single" />
         )}
-        <FilterSection queryKey="bookmark" title={"북마크"} data={bookmarks} mode="single" />
+        <FilterSection queryKey="bookmarks" title={"북마크"} data={bookmarks} mode="single" />
         <FilterSection queryKey="region_ids" title={"지역"} data={regions} />
         <FilterSection queryKey="genre_ids" title={"선호 장르"} data={genres} />
         <FilterSection queryKey="positions_id" title={"포지션"} data={positions} />
