@@ -1,8 +1,10 @@
 import Badge from "@/components/Badge";
 import BookmarkButton from "@/components/BookmarkBtn";
+import CommentUI from "@/components/commentUI/CommentUI";
 import H1 from "@/components/text/H1";
 import Text from "@/components/text/Text";
 import { getTimeDiff } from "@/libs/utils";
+import type { CommentList } from "@/types/api-res-comment";
 import type { PostDetail } from "@/types/api-res-recruitment";
 import { useEffect, useState } from "react";
 //import { useParams } from "react-router";
@@ -83,6 +85,59 @@ const dummyPostData: PostDetail = {
   image_url: "https://dummyimage.com/600x400/000/fff​",
 };
 
+//실제론 api로 호출
+const dummyCommenList: CommentList = {
+  next_cursor: "cursor_12345",
+  comments: [
+    {
+      id: "comment_1",
+      content: "첫 번째 댓글입니다.",
+      created_at: "2025-08-12T10:30:00Z",
+      post: {
+        id: "post_1",
+        title: "첫 번째 게시글 제목",
+      },
+      children: [
+        {
+          id: "comment_1_1",
+          content: "첫 번째 댓글의 대댓글입니다.",
+          created_at: "2025-08-12T11:00:00Z",
+          post: {
+            id: "post_1",
+            title: "첫 번째 게시글 제목",
+          },
+          children: [],
+          is_owner: false,
+          author: {
+            user_id: "user_002",
+            nickname: "김한주",
+          },
+        },
+      ],
+      is_owner: true,
+      author: {
+        user_id: "user_001",
+        nickname: "유다빈",
+      },
+    },
+    {
+      id: "comment_2",
+      content: "두 번째 댓글입니다.",
+      created_at: "2025-08-12T12:15:00Z",
+      post: {
+        id: "post_2",
+        title: "두 번째 게시글 제목",
+      },
+      children: [],
+      is_owner: false,
+      author: {
+        user_id: "user_003",
+        nickname: "최웅희",
+      },
+    },
+  ],
+};
+
 export default function RecruitmentDetail() {
   //const { postId } = useParams();
   const {
@@ -115,107 +170,120 @@ export default function RecruitmentDetail() {
 
   return (
     <div className="bg-bg-primary text-text-primary p-2 flex justify-center ">
-      <div className="flex flex-col max-w-5xl">
-        <div className="flex w-full justify-between items-center">
-          <H1 className="truncate w-full">{title}</H1>
-          <BookmarkButton isBookmarked={isBookmarked} size="sm" userId={userId} />
-        </div>
+      <div className="flex flex-col gap-3 items-center lg:flex-row lg:items-start">
+        <div className="flex flex-col max-w-2xl">
+          <div className="flex w-full justify-between items-center">
+            <H1 className="truncate w-full">{title}</H1>
+            <BookmarkButton isBookmarked={isBookmarked} size="sm" userId={userId} />
+          </div>
 
-        <div className="flex justify-between items-center w-full mt-2 mb-3">
-          {isClosed ? (
-            <Badge size="sm" className="bg-primary-thick">
-              <Text variant="label" className="text-text-on-dark">
-                마감
-              </Text>
-            </Badge>
-          ) : (
-            <Badge size="sm" color="secondary">
-              모집중
-            </Badge>
-          )}
-          <div>
-            <Text variant="subText">{nickname}</Text>
-            <Text variant="subText">·</Text>
-            <Text variant="subText">{`${timeDiff}`}</Text>
+          <div className="flex justify-between items-center w-full mt-2 mb-3">
+            {isClosed ? (
+              <Badge size="sm" className="bg-primary-thick">
+                <Text variant="label" className="text-text-on-dark">
+                  마감
+                </Text>
+              </Badge>
+            ) : (
+              <Badge size="sm" color="secondary">
+                모집중
+              </Badge>
+            )}
+            <div>
+              <Text variant="subText">{nickname}</Text>
+              <Text variant="subText">·</Text>
+              <Text variant="subText">{`${timeDiff}`}</Text>
+            </div>
+          </div>
+
+          <div className="flex flex-col space-y-3 justify-start items-start">
+            {bandName ? <Text>{`밴드 이름: ${bandName}`}</Text> : null}
+            {bandComposition ? <Text>{`밴드 구성: ${bandComposition}`}</Text> : null}
+            {activityTime ? <Text>{`주 활동 시간: ${activityTime}`}</Text> : null}
+            {practiceFrequencyTime ? <Text>{`활동 주기: ${practiceFrequencyTime}`}</Text> : null}
+            {contactInfo ? <Text>{`연락 방법: ${contactInfo}`}</Text> : null}
+            {applicationMethod ? <Text>{`지원 방법: ${applicationMethod}`}</Text> : null}
+            {otherCondition ? <Text>{`기타 조건: ${otherCondition}`}</Text> : null}
+
+            {positions ? (
+              <div className="flex flex-col space-y-0.5">
+                {positions.map((position, index) => {
+                  const {
+                    position_name: positionName,
+                    experience_level_name: experienceLevelName,
+                  } = position;
+                  return (
+                    <div
+                      className="flex flex-row justify-start items-center space-x-1.5"
+                      key={index}
+                    >
+                      <Text>{`모집 포지션 ${index + 1}`}</Text>
+                      <Badge size="sm" color="primarySoft">
+                        {positionName}
+                      </Badge>
+                      <Badge size="sm" color="primarySoft">
+                        {experienceLevelName}
+                      </Badge>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
+
+            {genres ? (
+              <div className="flex flex-row justify-start items-center space-x-1.5">
+                <Text>선호 장르</Text>
+                {genres.map(({ name, id }) => (
+                  <Badge size="sm" color="primarySoft" key={id}>
+                    {name}
+                  </Badge>
+                ))}
+              </div>
+            ) : null}
+
+            {regions ? (
+              <div className="flex flex-row justify-start items-center space-x-1.5">
+                <Text>활동 지역</Text>
+                {regions.map(({ name, id }) => (
+                  <Badge size="sm" color="primarySoft" key={id}>
+                    {name}
+                  </Badge>
+                ))}
+              </div>
+            ) : null}
+
+            {orientation ? (
+              <div className="flex flex-row justify-start items-center space-x-1.5">
+                <Text>지향</Text>
+                <Badge size="sm" color="primarySoft">
+                  {orientation.name}
+                </Badge>
+              </div>
+            ) : null}
+
+            {recruitmentType ? (
+              <div className="flex flex-row justify-start items-center space-x-1.5">
+                <Text>밴드 형태</Text>
+                <Badge size="sm" color="primarySoft">
+                  {recruitmentType.name}
+                </Badge>
+              </div>
+            ) : null}
+
+            <Text>{content}</Text>
+
+            {imageUrl ? (
+              <div className="w-full flex justify-center">
+                <img src={imageUrl} className="rounded-lg w-[512px]" />
+              </div>
+            ) : null}
           </div>
         </div>
 
-        <div className="flex flex-col space-y-3 justify-start items-start">
-          {bandName ? <Text>{`밴드 이름: ${bandName}`}</Text> : null}
-          {bandComposition ? <Text>{`밴드 구성: ${bandComposition}`}</Text> : null}
-          {activityTime ? <Text>{`주 활동 시간: ${activityTime}`}</Text> : null}
-          {practiceFrequencyTime ? <Text>{`활동 주기: ${practiceFrequencyTime}`}</Text> : null}
-          {contactInfo ? <Text>{`연락 방법: ${contactInfo}`}</Text> : null}
-          {applicationMethod ? <Text>{`지원 방법: ${applicationMethod}`}</Text> : null}
-          {otherCondition ? <Text>{`기타 조건: ${otherCondition}`}</Text> : null}
-
-          {positions ? (
-            <div className="flex flex-col space-y-0.5">
-              {positions.map((position, index) => {
-                const { position_name: positionName, experience_level_name: experienceLevelName } =
-                  position;
-                return (
-                  <div className="flex flex-row justify-start items-center space-x-1.5" key={index}>
-                    <Text>{`모집 포지션 ${index + 1}`}</Text>
-                    <Badge size="sm" color="primarySoft">
-                      {positionName}
-                    </Badge>
-                    <Badge size="sm" color="primarySoft">
-                      {experienceLevelName}
-                    </Badge>
-                  </div>
-                );
-              })}
-            </div>
-          ) : null}
-
-          {genres ? (
-            <div className="flex flex-row justify-start items-center space-x-1.5">
-              <Text>선호 장르</Text>
-              {genres.map(({ name, id }) => (
-                <Badge size="sm" color="primarySoft" key={id}>
-                  {name}
-                </Badge>
-              ))}
-            </div>
-          ) : null}
-
-          {regions ? (
-            <div className="flex flex-row justify-start items-center space-x-1.5">
-              <Text>활동 지역</Text>
-              {regions.map(({ name, id }) => (
-                <Badge size="sm" color="primarySoft" key={id}>
-                  {name}
-                </Badge>
-              ))}
-            </div>
-          ) : null}
-
-          {orientation ? (
-            <div className="flex flex-row justify-start items-center space-x-1.5">
-              <Text>지향</Text>
-              <Badge size="sm" color="primarySoft">
-                {orientation.name}
-              </Badge>
-            </div>
-          ) : null}
-
-          {recruitmentType ? (
-            <div className="flex flex-row justify-start items-center space-x-1.5">
-              <Text>밴드 형태</Text>
-              <Badge size="sm" color="primarySoft">
-                {recruitmentType.name}
-              </Badge>
-            </div>
-          ) : null}
-
-          <Text>{content}</Text>
-
-          {imageUrl ? (
-            <div className="w-full flex justify-center">
-              <img src={imageUrl} className="rounded-lg w-[512px]" />
-            </div>
-          ) : null}
+        <div className="flex flex-col items-start w-full max-w-[512px] space-y-1">
+          {dummyCommenList.comments.map((comment) => (
+            <CommentUI comment={comment} key={comment.id} className="w-full" />
+          ))}
         </div>
       </div>
     </div>
