@@ -69,34 +69,45 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
 
       <div className="flex flex-col justify-between w-full sm:flex-row">
         <div className="flex flex-col space-y-0.5 flex-1">
-          <div className="flex items-center space-x-1">
-            <Text variant="mainText">포지션</Text>
-            {positions.slice(0, 3).map(({ position_name: positionName }, i) => (
-              <Badge size="sm" key={i}>
-                {positionName}
-              </Badge>
-            ))}
-          </div>
-          <div className="flex items-center space-x-1">
-            <Text variant="mainText">지역</Text>
-            {regions.slice(0, 3).map((region, i) => (
-              <Badge size="sm" key={i}>
-                {region.name}
-              </Badge>
-            ))}
-          </div>
-          <div className="flex items-center space-x-1">
-            <Text variant="mainText">선호장르</Text>
-            {genres.slice(0, 3).map((genre, i) => (
-              <Badge size="sm" key={i}>
-                {genre.name}
-              </Badge>
-            ))}
-          </div>
-          <div className="flex items-center space-x-1">
-            <Text variant="mainText">지향</Text>
-            <Badge size="sm">{orientation.name}</Badge>
-          </div>
+          {positions ? (
+            <div className="flex items-center space-x-1">
+              <Text variant="mainText">포지션</Text>
+              {positions.slice(0, 3).map(({ position_name: positionName }, i) => (
+                <Badge size="sm" key={i}>
+                  {positionName}
+                </Badge>
+              ))}
+            </div>
+          ) : null}
+
+          {regions ? (
+            <div className="flex items-center space-x-1">
+              <Text variant="mainText">지역</Text>
+              {regions.slice(0, 3).map((region, i) => (
+                <Badge size="sm" key={i}>
+                  {region.name}
+                </Badge>
+              ))}
+            </div>
+          ) : null}
+
+          {genres ? (
+            <div className="flex items-center space-x-1">
+              <Text variant="mainText">선호장르</Text>
+              {genres.slice(0, 3).map((genre, i) => (
+                <Badge size="sm" key={i}>
+                  {genre.name}
+                </Badge>
+              ))}
+            </div>
+          ) : null}
+
+          {orientation ? (
+            <div className="flex items-center space-x-1">
+              <Text variant="mainText">지향</Text>
+              <Badge size="sm">{orientation.name}</Badge>
+            </div>
+          ) : null}
         </div>
         <div className="flex flex-col justify-end items-end">
           <div className="flex space-x-1 justify-center items-center">
