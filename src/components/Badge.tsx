@@ -19,11 +19,9 @@ interface BadgeProps extends ComponentPropsWithoutRef<"span"> {
   color?: BadgeColor;
   size?: BadgeSize;
   textVariant?: "label" | "mainText" | "subText" | "tooltip";
-  as?: "span" | "li" | "button";
 }
 
 export default function Badge({
-  as = "span",
   label,
   children,
   color = "primary", // 기본 색상: primary
