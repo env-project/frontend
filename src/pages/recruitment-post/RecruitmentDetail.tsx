@@ -79,6 +79,8 @@ const dummyPostData: PostDetail = {
       name: "서울 남부",
     },
   ],
+
+  image_url: "https://dummyimage.com/600x400/000/fff​",
 };
 
 export default function RecruitmentDetail() {
@@ -112,8 +114,8 @@ export default function RecruitmentDetail() {
   }, [createdAt, setTimeDiff]);
 
   return (
-    <div className="bg-bg-primary text-text-primary p-2">
-      <div className="flex flex-col">
+    <div className="bg-bg-primary text-text-primary p-2 flex justify-center ">
+      <div className="flex flex-col max-w-5xl">
         <div className="flex w-full justify-between items-center">
           <H1 className="truncate w-full">{title}</H1>
           <BookmarkButton isBookmarked={isBookmarked} size="sm" userId={userId} />
@@ -138,7 +140,7 @@ export default function RecruitmentDetail() {
           </div>
         </div>
 
-        <div className="flex flex-col space-y-1 justify-start items-start">
+        <div className="flex flex-col space-y-3 justify-start items-start">
           {bandName ? <Text>{`밴드 이름: ${bandName}`}</Text> : null}
           {bandComposition ? <Text>{`밴드 구성: ${bandComposition}`}</Text> : null}
           {activityTime ? <Text>{`주 활동 시간: ${activityTime}`}</Text> : null}
@@ -153,7 +155,7 @@ export default function RecruitmentDetail() {
                 const { position_name: positionName, experience_level_name: experienceLevelName } =
                   position;
                 return (
-                  <div className="flex flex-row justify-start items-center space-x-0.5" key={index}>
+                  <div className="flex flex-row justify-start items-center space-x-1.5" key={index}>
                     <Text>{`모집 포지션 ${index + 1}`}</Text>
                     <Badge size="sm" color="primarySoft">
                       {positionName}
@@ -168,7 +170,7 @@ export default function RecruitmentDetail() {
           ) : null}
 
           {genres ? (
-            <div className="flex flex-row justify-start items-center space-x-0.5">
+            <div className="flex flex-row justify-start items-center space-x-1.5">
               <Text>선호 장르</Text>
               {genres.map(({ name, id }) => (
                 <Badge size="sm" color="primarySoft" key={id}>
@@ -179,7 +181,7 @@ export default function RecruitmentDetail() {
           ) : null}
 
           {regions ? (
-            <div className="flex flex-row justify-start items-center space-x-0.5">
+            <div className="flex flex-row justify-start items-center space-x-1.5">
               <Text>활동 지역</Text>
               {regions.map(({ name, id }) => (
                 <Badge size="sm" color="primarySoft" key={id}>
@@ -190,7 +192,7 @@ export default function RecruitmentDetail() {
           ) : null}
 
           {orientation ? (
-            <div className="flex flex-row justify-start items-center space-x-0.5">
+            <div className="flex flex-row justify-start items-center space-x-1.5">
               <Text>지향</Text>
               <Badge size="sm" color="primarySoft">
                 {orientation.name}
@@ -199,7 +201,7 @@ export default function RecruitmentDetail() {
           ) : null}
 
           {recruitmentType ? (
-            <div className="flex flex-row justify-start items-center space-x-0.5">
+            <div className="flex flex-row justify-start items-center space-x-1.5">
               <Text>밴드 형태</Text>
               <Badge size="sm" color="primarySoft">
                 {recruitmentType.name}
@@ -209,7 +211,11 @@ export default function RecruitmentDetail() {
 
           <Text>{content}</Text>
 
-          {imageUrl ? <img src={imageUrl} className="rounded-lg" /> : null}
+          {imageUrl ? (
+            <div className="w-full flex justify-center">
+              <img src={imageUrl} className="rounded-lg w-[512px]" />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
