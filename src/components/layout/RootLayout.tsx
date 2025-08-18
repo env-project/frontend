@@ -4,10 +4,12 @@ import Footer from "@/components/Footer";
 
 export default function RootLayout() {
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <Outlet />
+      <main className="flex-1  pt-[52px] sm:pt-[80px]">
+        <Outlet />
+      </main>
       <Footer />
-    </>
+    </div>
   );
 }
