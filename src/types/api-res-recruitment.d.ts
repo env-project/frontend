@@ -35,7 +35,7 @@ export interface Post {
   id: string;
   title: string;
   author: {
-    user_id: string;
+    id: string;
     nickname: string;
     image_url?: string;
   };
