@@ -95,7 +95,7 @@ export default function Filter({
 
   const orders = [
     { id: "latest", name: "최신순" },
-    { id: "commnets", name: "댓글순" },
+    { id: "comments", name: "댓글순" },
     { id: "views", name: "인기순" },
     { id: "boomark", name: "북마크순" },
   ];
