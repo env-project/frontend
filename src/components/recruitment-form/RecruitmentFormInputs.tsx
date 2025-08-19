@@ -212,6 +212,7 @@ export default function RecruitmentFormInputs({
           name="orientationId"
           data={MASTER_DATA.orientations}
           type="radio"
+          defaultValues={orientation ? [orientation] : undefined}
         />
       </InputWithLabelContainer>
 
@@ -222,17 +223,28 @@ export default function RecruitmentFormInputs({
           name="recruitmentTypeId"
           data={MASTER_DATA.recruitment_types}
           type="radio"
+          defaultValues={recruitmentType ? [recruitmentType] : undefined}
         />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
         <label>선호 장르(복수 선택 가능)</label>
-        <CheckboxInputs register={register} name="genreIds" data={MASTER_DATA.genres} />
+        <CheckboxInputs
+          register={register}
+          name="genreIds"
+          data={MASTER_DATA.genres}
+          defaultValues={genres}
+        />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
         <label>활동 지역(복수 선택 가능)</label>
-        <CheckboxInputs register={register} name="regionIds" data={MASTER_DATA.regions} />
+        <CheckboxInputs
+          register={register}
+          name="regionIds"
+          data={MASTER_DATA.regions}
+          defaultValues={regions}
+        />
       </InputWithLabelContainer>
 
       <div className="flex flex-col justify-center items-center space-y-0.5 w-full">

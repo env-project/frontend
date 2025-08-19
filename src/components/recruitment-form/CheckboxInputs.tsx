@@ -10,6 +10,10 @@ interface CheckboxInputsProps {
   register: UseFormRegister<TRecruitmentPostSchema>;
   name: keyof TRecruitmentPostSchema;
   type?: "checkbox" | "radio";
+  defaultValues?: {
+    id: string;
+    name: string;
+  }[];
 }
 
 export default function CheckboxInputs({
@@ -17,23 +21,27 @@ export default function CheckboxInputs({
   register,
   name,
   type = "checkbox",
+  defaultValues,
 }: CheckboxInputsProps) {
   return (
     <div className="flex justify-start items-center flex-wrap gap-0.5">
-      {data.map(({ name: label, id }) => (
-        // <div key={id}>
-        //   <label htmlFor={id + label}>{label}</label>
-        //   <input value={id} type={type} {...register(name)} />
-        // </div>
-        <BadgeCheckBox
-          key={id}
-          label={label}
-          value={id}
-          type={type}
-          {...register(name)}
-          className="text-text-on-dark"
-        />
-      ))}
+      {data.map(({ name: label, id }) => {
+        const isDefaultChecked = defaultValues
+          ? defaultValues.some(({ id: defaultId }) => id === defaultId)
+          : false;
+
+        return (
+          <BadgeCheckBox
+            key={id}
+            label={label}
+            value={id}
+            type={type}
+            {...register(name)}
+            className="text-text-on-dark"
+            defaultChecked={isDefaultChecked}
+          />
+        );
+      })}
     </div>
   );
 }
