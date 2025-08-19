@@ -1,4 +1,4 @@
-import Input from "@/components/input/AuthInput";
+import Input from "@/components/input/Input";
 import { Modal, ModalClose, ModalContent, ModalTrigger } from "@/components/Modal";
 import Button from "@/components/Button";
 import H3 from "@/components/text/H3";

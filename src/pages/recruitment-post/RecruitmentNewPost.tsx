@@ -1,5 +1,5 @@
 import z from "zod";
-import Input from "@/components/input/AuthInput";
+import Input from "@/components/input/Input";
 import { type ReactNode } from "react";
 import ImageInput from "@/components/input/ImageInput";
 import {
