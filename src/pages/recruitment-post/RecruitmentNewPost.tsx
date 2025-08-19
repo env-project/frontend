@@ -1,4 +1,3 @@
-import z from "zod";
 import Input from "@/components/input/Input";
 import { type ReactNode } from "react";
 import ImageInput from "@/components/input/ImageInput";
@@ -14,6 +13,10 @@ import type { ExperienceLevel, MasterData, Position } from "@/types/api-res-comm
 import Button from "@/components/Button";
 import Text from "@/components/text/Text";
 import BadgeCheckBox from "@/components/BadgeCheckbox";
+import {
+  recruitmentPostSchema,
+  type TRecruitmentPostSchema,
+} from "@/types/zod-schema/recruitment-post-schema";
 
 //마스터 데이터 실제론 api로 받기
 const MASTER_DATA: MasterData = {
@@ -75,34 +78,6 @@ const MASTER_DATA: MasterData = {
   ],
   recruiting_post_types: [],
 };
-
-const positionItemSchema = z.object({
-  position_id: z.string(),
-  experienced_level_id: z.string(),
-});
-
-const recruitmentPostSchema = z.object({
-  title: z.string().min(1, "1글자 이상으로 작성해주세요").max(40, "40글자 이하로 작성해주세요"),
-  content: z.string().min(1, "1글자 이상으로 작성해주세요").max(500, "500글자 이하로 작성해주세요"),
-
-  image: z.file().optional(),
-  bandName: z.string().optional(),
-  bandComposition: z.string().optional(),
-  activityTime: z.string().optional(),
-  contactInfo: z.string().optional(),
-  applicationMethod: z.string().optional(),
-  practiceFrequencyTime: z.string().optional(),
-  otherConditions: z.string().optional(),
-
-  orientationId: z.string().optional(),
-  recruitmentTypeId: z.string().optional(),
-
-  regionIds: z.array(z.string()).optional(),
-  genreIds: z.array(z.string()).optional(),
-  positions: z.array(positionItemSchema).optional(),
-});
-
-type TRecruitmentPostSchema = z.infer<typeof recruitmentPostSchema>;
 
 export default function RecruitmentNewPost() {
   const {
