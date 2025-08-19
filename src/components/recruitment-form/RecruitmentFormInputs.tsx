@@ -260,6 +260,7 @@ export default function RecruitmentFormInputs({
           id="content"
           className="w-full h-32 p-2 rounded-xl border focus:outline-none"
           {...register("content")}
+          defaultValue={content}
         />
         {errors.content ? (
           <Text className="text-error" variant="label">
