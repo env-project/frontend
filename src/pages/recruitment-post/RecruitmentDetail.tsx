@@ -170,11 +170,16 @@ export default function RecruitmentDetail() {
 
   return (
     <div className="bg-bg-primary text-text-primary p-2 flex justify-center ">
-      <div className="flex flex-col gap-3 items-center lg:flex-row lg:items-start">
-        <div className="flex flex-col max-w-2xl">
-          <div className="flex w-full justify-between items-center">
-            <H1 className="truncate w-full">{title}</H1>
-            <BookmarkButton isBookmarked={isBookmarked} size="sm" userId={userId} />
+      <div className="flex flex-col gap-3 items-center max-w-full min-w-0 ">
+        <div className="flex flex-col max-w-2xl min-w-0">
+          <div className="flex max-w-full min-w-0 justify-between items-center">
+            <H1 className="truncate  min-w-0 flex-1">{title}</H1>
+            <BookmarkButton
+              isBookmarked={isBookmarked}
+              className="shrink-0"
+              size="sm"
+              userId={userId}
+            />
           </div>
 
           <div className="flex justify-between items-center w-full mt-2 mb-3">
