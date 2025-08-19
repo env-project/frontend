@@ -1,5 +1,6 @@
 import Badge from "@/components/Badge";
 import BookmarkButton from "@/components/BookmarkBtn";
+import CommentInput from "@/components/commentUI/CommentInput";
 import CommentUI from "@/components/commentUI/CommentUI";
 import H1 from "@/components/text/H1";
 import Text from "@/components/text/Text";
@@ -7,7 +8,7 @@ import { getTimeDiff } from "@/libs/utils";
 import type { CommentList } from "@/types/api-res-comment";
 import type { PostDetail } from "@/types/api-res-recruitment";
 import { useEffect, useState } from "react";
-//import { useParams } from "react-router";
+import { useParams } from "react-router";
 
 //더미 포스트 데이터 실제론 api 준비
 const dummyPostData: PostDetail = {
@@ -139,7 +140,8 @@ const dummyCommenList: CommentList = {
 };
 
 export default function RecruitmentDetail() {
-  //const { postId } = useParams();
+  const { postId } = useParams();
+
   const {
     title,
     is_bookmarked: isBookmarked,
@@ -167,6 +169,10 @@ export default function RecruitmentDetail() {
   useEffect(() => {
     setTimeDiff(getTimeDiff(new Date(createdAt)));
   }, [createdAt, setTimeDiff]);
+
+  if (!postId) {
+    return <div>해당 게시물은 삭제되었습니다.</div>;
+  }
 
   return (
     <div className="bg-bg-primary text-text-primary p-2 flex justify-center ">
@@ -286,9 +292,14 @@ export default function RecruitmentDetail() {
         </div>
 
         <div className="flex flex-col items-start w-full max-w-[512px] space-y-1">
-          {dummyCommenList.comments.map((comment) => (
-            <CommentUI comment={comment} key={comment.id} className="w-full" />
-          ))}
+          <CommentInput postId={postId} className="w-full" />
+          {dummyCommenList.comments.length > 0 ? (
+            dummyCommenList.comments.map((comment) => (
+              <CommentUI comment={comment} key={comment.id} className="w-full" />
+            ))
+          ) : (
+            <Text>아직 댓글이 없습니다</Text>
+          )}
         </div>
       </div>
     </div>
