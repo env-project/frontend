@@ -1,4 +1,3 @@
-import type { PostDetail } from "@/types/api-res-recruitment";
 import type { TRecruitmentPostSchema } from "@/types/zod-schema/recruitment-post-schema";
 import { type UseFormReturn } from "react-hook-form";
 import Input from "@/components/input/Input";
@@ -72,17 +71,17 @@ const MASTER_DATA: MasterData = {
 };
 
 interface RecruitmentFormInputsProps {
-  defaultValue: Partial<PostDetail>;
   formData: UseFormReturn<TRecruitmentPostSchema>;
   onImageChange: (imageFile: File | null) => void;
   className?: string;
+  defaultImageUrl?: string;
 }
 
 export default function RecruitmentFormInputs({
   formData,
   onImageChange,
   className = "",
-  defaultValue,
+  defaultImageUrl,
 }: RecruitmentFormInputsProps) {
   const {
     register,
@@ -90,45 +89,16 @@ export default function RecruitmentFormInputs({
     control,
   } = formData;
 
-  const {
-    title,
-    band_name: bandName,
-    band_composition: bandComposition,
-    activity_time: activityTime,
-    practice_frequency_time: practiceFrequencyTime,
-    application_method: applicationMethod,
-    contact_info: contactInfo,
-    other_conditions: otherCondition,
-    recruitment_type: recruitmentType,
-    genres,
-    orientation,
-    positions,
-    regions,
-    content,
-    image_url: imageUrl,
-  } = defaultValue;
-
   return (
     <div className={className}>
       <InputWithLabelContainer>
         <label htmlFor="title">제목*</label>
-        <Input
-          id="title"
-          className="w-full"
-          {...register("title")}
-          error={errors.title?.message}
-          defaultValue={title ? title : ""}
-        />
+        <Input id="title" className="w-full" {...register("title")} error={errors.title?.message} />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
         <label htmlFor="band-name">밴드 이름</label>
-        <Input
-          id="band-name"
-          className="w-full"
-          {...register("bandName")}
-          defaultValue={bandName}
-        />
+        <Input id="band-name" className="w-full" {...register("bandName")} />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
@@ -138,7 +108,6 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("bandComposition")}
           placeholder="e.g. 남보컬 1명, 드럼 1명, 베이스 1명"
-          defaultValue={bandComposition}
         />
       </InputWithLabelContainer>
 
@@ -149,7 +118,6 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("activityTime")}
           placeholder="e.g. 토요일 오후 4시, 수요일 오후 8시"
-          defaultValue={activityTime}
         />
       </InputWithLabelContainer>
 
@@ -160,7 +128,6 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("practiceFrequencyTime")}
           placeholder="e.g. 격주"
-          defaultValue={practiceFrequencyTime}
         />
       </InputWithLabelContainer>
 
@@ -171,7 +138,6 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("contactInfo")}
           placeholder="이메일, 오픈채팅링크 등"
-          defaultValue={contactInfo}
         />
       </InputWithLabelContainer>
 
@@ -182,7 +148,6 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("applicationMethod")}
           placeholder="e.g. 연주 영상 이메일 첨부"
-          defaultValue={applicationMethod}
         />
       </InputWithLabelContainer>
 
@@ -193,7 +158,6 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("otherConditions")}
           placeholder="e.g. 공연경험 필수"
-          defaultValue={otherCondition}
         />
       </InputWithLabelContainer>
 
@@ -212,7 +176,6 @@ export default function RecruitmentFormInputs({
           name="orientationId"
           data={MASTER_DATA.orientations}
           type="radio"
-          defaultValues={orientation ? [orientation] : undefined}
         />
       </InputWithLabelContainer>
 
@@ -223,35 +186,24 @@ export default function RecruitmentFormInputs({
           name="recruitmentTypeId"
           data={MASTER_DATA.recruitment_types}
           type="radio"
-          defaultValues={recruitmentType ? [recruitmentType] : undefined}
         />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
         <label>선호 장르(복수 선택 가능)</label>
-        <CheckboxInputs
-          register={register}
-          name="genreIds"
-          data={MASTER_DATA.genres}
-          defaultValues={genres}
-        />
+        <CheckboxInputs register={register} name="genreIds" data={MASTER_DATA.genres} />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
         <label>활동 지역(복수 선택 가능)</label>
-        <CheckboxInputs
-          register={register}
-          name="regionIds"
-          data={MASTER_DATA.regions}
-          defaultValues={regions}
-        />
+        <CheckboxInputs register={register} name="regionIds" data={MASTER_DATA.regions} />
       </InputWithLabelContainer>
 
       <div className="flex flex-col justify-center items-center space-y-0.5 w-full">
         <label htmlFor="image" className="w-full">
           대표 이미지
         </label>
-        <ImageInput id="image" onChange={onImageChange} defaultImage={imageUrl} />
+        <ImageInput id="image" onChange={onImageChange} defaultImage={defaultImageUrl} />
       </div>
 
       <InputWithLabelContainer>
@@ -260,7 +212,6 @@ export default function RecruitmentFormInputs({
           id="content"
           className="w-full h-32 p-2 rounded-xl border focus:outline-none"
           {...register("content")}
-          defaultValue={content}
         />
         {errors.content ? (
           <Text className="text-error" variant="label">
