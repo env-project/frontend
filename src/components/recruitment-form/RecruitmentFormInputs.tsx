@@ -72,7 +72,7 @@ const MASTER_DATA: MasterData = {
 };
 
 interface RecruitmentFormInputsProps {
-  defaultValue?: PostDetail;
+  defaultValue: Partial<PostDetail>;
   formData: UseFormReturn<TRecruitmentPostSchema>;
   onImageChange: (imageFile: File | null) => void;
   className?: string;
@@ -82,22 +82,53 @@ export default function RecruitmentFormInputs({
   formData,
   onImageChange,
   className = "",
+  defaultValue,
 }: RecruitmentFormInputsProps) {
   const {
     register,
     formState: { errors },
     control,
   } = formData;
+
+  const {
+    title,
+    band_name: bandName,
+    band_composition: bandComposition,
+    activity_time: activityTime,
+    practice_frequency_time: practiceFrequencyTime,
+    application_method: applicationMethod,
+    contact_info: contactInfo,
+    other_conditions: otherCondition,
+    recruitment_type: recruitmentType,
+    genres,
+    orientation,
+    positions,
+    regions,
+    content,
+    image_url: imageUrl,
+  } = defaultValue;
+
   return (
     <div className={className}>
       <InputWithLabelContainer>
         <label htmlFor="title">제목*</label>
-        <Input id="title" className="w-full" {...register("title")} error={errors.title?.message} />
+        <Input
+          id="title"
+          className="w-full"
+          {...register("title")}
+          error={errors.title?.message}
+          defaultValue={title ? title : ""}
+        />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
         <label htmlFor="band-name">밴드 이름</label>
-        <Input id="band-name" className="w-full" {...register("bandName")} />
+        <Input
+          id="band-name"
+          className="w-full"
+          {...register("bandName")}
+          defaultValue={bandName}
+        />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
@@ -107,6 +138,7 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("bandComposition")}
           placeholder="e.g. 남보컬 1명, 드럼 1명, 베이스 1명"
+          defaultValue={bandComposition}
         />
       </InputWithLabelContainer>
 
@@ -117,6 +149,7 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("activityTime")}
           placeholder="e.g. 토요일 오후 4시, 수요일 오후 8시"
+          defaultValue={activityTime}
         />
       </InputWithLabelContainer>
 
@@ -127,6 +160,7 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("practiceFrequencyTime")}
           placeholder="e.g. 격주"
+          defaultValue={practiceFrequencyTime}
         />
       </InputWithLabelContainer>
 
@@ -137,6 +171,7 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("contactInfo")}
           placeholder="이메일, 오픈채팅링크 등"
+          defaultValue={contactInfo}
         />
       </InputWithLabelContainer>
 
@@ -147,6 +182,7 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("applicationMethod")}
           placeholder="e.g. 연주 영상 이메일 첨부"
+          defaultValue={applicationMethod}
         />
       </InputWithLabelContainer>
 
@@ -157,6 +193,7 @@ export default function RecruitmentFormInputs({
           className="w-full placeholder:text-neutral-400"
           {...register("otherConditions")}
           placeholder="e.g. 공연경험 필수"
+          defaultValue={otherCondition}
         />
       </InputWithLabelContainer>
 

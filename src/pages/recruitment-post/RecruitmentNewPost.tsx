@@ -43,6 +43,7 @@ export default function RecruitmentNewPost() {
           onImageChange={onImageChange}
           formData={formData}
           className="flex flex-col items-center jsutify-start space-y-6 w-full"
+          defaultValue={{}}
         />
 
         <Button type="submit">
