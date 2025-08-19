@@ -29,7 +29,7 @@ const LogIn = () => {
   };
 
   return (
-    <div className="flex items-center justify-center w-screen min-h-screen bg-[url('/background.jpg')] bg-cover sm:bg-fixed relative before:absolute before:inset-0 before:bg-black/50 pt-[120px] pb-[80px]">
+    <div className="flex items-center justify-center w-screen min-h-screen bg-[url('/background.jpg')] bg-cover -mt-[52px] sm:-mt-[110px] sm:bg-fixed relative before:absolute before:inset-0 before:bg-black/50 pt-[120px] pb-[80px]">
       {/* 폼 컨테이너 */}
       <form
         noValidate

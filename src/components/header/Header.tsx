@@ -36,7 +36,7 @@ const Header: FC = () => {
       className={cn(
         "fixed top-0  z-40 flex justify-between items-center w-full h-[52px] sm:h-[80px] px-4 sm:px-6 sm:py-0 bg-transparent sm:shadow-none",
         isBurgerOpen && "shadow-lg",
-        !isAuthPage && "bg-bg-primary"
+        !isAuthPage && "bg-white"
       )}
     >
       {/* 메인 로고 */}
