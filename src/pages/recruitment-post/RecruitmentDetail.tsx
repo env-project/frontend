@@ -9,6 +9,9 @@ import type { CommentList } from "@/types/api-res-comment";
 import type { PostDetail } from "@/types/api-res-recruitment";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import EyeIcon from "@/components/icons/EyeIcon";
+import CommentIcon from "@/components/icons/CommentIcon";
+import BookmarkIcon from "@/components/icons/BookmarkIcon";
 
 //더미 포스트 데이터 실제론 api 준비
 const dummyPostData: PostDetail = {
@@ -162,6 +165,9 @@ export default function RecruitmentDetail() {
     regions,
     content,
     image_url: imageUrl,
+    views_count: viewsCount,
+    comments_count: commentsCount,
+    bookmarks_count: bookmarksCount,
   } = dummyPostData;
 
   const [timeDiff, setTimeDiff] = useState("");
@@ -288,6 +294,15 @@ export default function RecruitmentDetail() {
                 <img src={imageUrl} className="rounded-lg w-[512px]" />
               </div>
             ) : null}
+
+            <div className="flex space-x-1 justify-center items-center">
+              <EyeIcon />
+              <Text variant="subText">{viewsCount}</Text>
+              <CommentIcon />
+              <Text variant="subText">{commentsCount}</Text>
+              <BookmarkIcon />
+              <Text variant="subText">{bookmarksCount}</Text>
+            </div>
           </div>
         </div>
 
