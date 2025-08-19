@@ -239,7 +239,7 @@ export default function RecruitmentFormInputs({
         <label htmlFor="image" className="w-full">
           대표 이미지
         </label>
-        <ImageInput id="image" onChange={onImageChange} />
+        <ImageInput id="image" onChange={onImageChange} defaultImage={imageUrl} />
       </div>
 
       <InputWithLabelContainer>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Text from "@/components/text/Text";
 import Button from "@/components/Button";
 import { useDropzone } from "react-dropzone";
@@ -9,35 +9,45 @@ interface ImageInputProps {
   explanation?: string;
   className?: string;
   onChange?: (file: File | null) => void;
+  defaultImage?: string;
 }
 
 /**
  * ref 중복 문제로 인해서 useForm의 register 함수로 등록 불가능.
  * 대신 useFrom의 setValue 함수를 onChange prop으로 등록하고 watch로 값 감시.
  */
-export default function ImageInput({ id, className, onChange, explanation }: ImageInputProps) {
+export default function ImageInput({
+  id,
+  className,
+  onChange,
+  explanation,
+  defaultImage,
+}: ImageInputProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState("");
 
-  const handleFile = (file: File | null) => {
-    if (!file) return;
+  const handleFile = useCallback(
+    (file: File | null) => {
+      if (!file) return;
 
-    const isValidType = ["image/jpeg", "image/png"].includes(file.type);
-    const isValidSize = file.size <= 5 * 1024 * 1024;
+      const isValidType = ["image/jpeg", "image/png"].includes(file.type);
+      const isValidSize = file.size <= 5 * 1024 * 1024;
 
-    if (!isValidType || !isValidSize) {
-      setError("유효하지 않은 파일입니다. JPG 또는 PNG, 5MB 이하만 가능");
-      onChange?.(null);
-      return;
-    }
+      if (!isValidType || !isValidSize) {
+        setError("유효하지 않은 파일입니다. JPG 또는 PNG, 5MB 이하만 가능");
+        onChange?.(null);
+        return;
+      }
 
-    setError("");
-    const reader = new FileReader();
-    reader.onloadend = () => setPreviewUrl(reader.result as string);
-    reader.readAsDataURL(file);
+      setError("");
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewUrl(reader.result as string);
+      reader.readAsDataURL(file);
 
-    onChange?.(file);
-  };
+      onChange?.(file);
+    },
+    [onChange]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -49,6 +59,19 @@ export default function ImageInput({ id, className, onChange, explanation }: Ima
       handleFile(acceptedFiles[0] ?? null);
     },
   });
+
+  useEffect(() => {
+    if (defaultImage) {
+      setPreviewUrl(defaultImage);
+
+      fetch(defaultImage)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const image = new File([blob], "image", { type: blob.type });
+          handleFile(image);
+        });
+    }
+  }, [defaultImage, handleFile]);
 
   return (
     <div className={cn("w-[90%] max-w-96", className)}>
