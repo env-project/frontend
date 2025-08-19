@@ -39,7 +39,11 @@ export default function RecruitmentNewPost() {
         className="flex flex-col items-center jsutify-start space-y-6 w-full p-2 max-w-lg"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <RecruitmentFormInputs onImageChange={onImageChange} formData={formData} />
+        <RecruitmentFormInputs
+          onImageChange={onImageChange}
+          formData={formData}
+          className="flex flex-col items-center jsutify-start space-y-6 w-full"
+        />
 
         <Button type="submit">
           <Text className="text-text-on-dark">제출</Text>
