@@ -1,7 +1,7 @@
 import Text from "@/components/text/Text";
 import { cn } from "@/libs/utils";
 import type { ComponentPropsWithoutRef } from "react";
-import Input from "@/components/input/AuthInput";
+import Input from "@/components/input/Input";
 import Button from "../Button";
 import z from "zod";
 import { useForm } from "react-hook-form";

@@ -9,7 +9,7 @@ interface InputProps extends ComponentPropsWithoutRef<"input"> {
   error?: string;
 }
 
-export default function AuthInput({
+export default function Input({
   className,
   type = "text",
   error,

@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import AuthInput from "@/components/input/AuthInput";
+import Input from "@/components/input/Input";
 import Text from "@/components/text/Text";
 import { FcGoogle } from "react-icons/fc";
 import { FaArrowLeftLong } from "react-icons/fa6";
@@ -66,25 +66,25 @@ const SignUp = () => {
         </Text>
         <div className="flex flex-col gap-8 ">
           <div className="flex flex-col gap-2">
-            <AuthInput
+            <Input
               {...register("nickName")}
               type="text"
               placeholder="닉네임을 입력해주세요"
               error={errors.nickName?.message}
             />
-            <AuthInput
+            <Input
               {...register("email")}
               type="email"
               placeholder="이메일을 입력해주세요"
               error={errors.email?.message}
             />
-            <AuthInput
+            <Input
               {...register("password")}
               type="password"
               placeholder="비밀번호를 입력해주세요"
               error={errors.password?.message}
             />
-            <AuthInput
+            <Input
               {...register("confirmPassword")}
               type="password"
               placeholder="비밀번호를 확인해주세요"
