@@ -8,10 +8,13 @@ import { getTimeDiff } from "@/libs/utils";
 import type { CommentList } from "@/types/api-res-comment";
 import type { PostDetail } from "@/types/api-res-recruitment";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import EyeIcon from "@/components/icons/EyeIcon";
 import CommentIcon from "@/components/icons/CommentIcon";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
+import Button from "@/components/Button";
+import { Modal, ModalClose, ModalContent, ModalTrigger } from "@/components/Modal";
+import H3 from "@/components/text/H3";
 
 //더미 포스트 데이터 실제론 api 준비
 const dummyPostData: PostDetail = {
@@ -22,7 +25,7 @@ const dummyPostData: PostDetail = {
     nickname: "이재현",
   },
   is_closed: false,
-  is_owner: false,
+  is_owner: true,
   is_bookmarked: true,
 
   created_at: "2025-08-12T11:00:00Z",
@@ -168,6 +171,7 @@ export default function RecruitmentDetail() {
     views_count: viewsCount,
     comments_count: commentsCount,
     bookmarks_count: bookmarksCount,
+    is_owner: isOwner,
   } = dummyPostData;
 
   const [timeDiff, setTimeDiff] = useState("");
@@ -303,6 +307,17 @@ export default function RecruitmentDetail() {
               <BookmarkIcon />
               <Text variant="subText">{bookmarksCount}</Text>
             </div>
+
+            {isOwner ? (
+              <div className="flex items-center justify-center space-x-2 w-full">
+                <Link to="#">
+                  <Button color="secondary" variant="outline">
+                    <Text>수정하기</Text>
+                  </Button>
+                </Link>
+                <TogglePostStatusModal isClosed={isClosed} postId={postId} />
+              </div>
+            ) : null}
           </div>
         </div>
 
@@ -318,5 +333,46 @@ export default function RecruitmentDetail() {
         </div>
       </div>
     </div>
+  );
+}
+
+interface TogglePostStatusModalProps {
+  isClosed: boolean;
+  postId: string;
+}
+
+function TogglePostStatusModal({ isClosed, postId }: TogglePostStatusModalProps) {
+  const handleClick = () => {
+    //실제 api 연결
+    console.log(`${postId} 마감 상태 변경`);
+  };
+
+  return (
+    <Modal>
+      <ModalTrigger>
+        <Button color="error" variant="outline">
+          <Text>{isClosed ? "다시 열기" : "마감하기"}</Text>
+        </Button>
+      </ModalTrigger>
+      <ModalContent className="flex flex-col items-start justify-start p-2 space-y-5">
+        <H3 className="text-text-primary">
+          {isClosed ? "다시 열시겠습니까?" : "마감하시겠습니까?"}
+        </H3>
+        <div className="flex justify-end items-center w-full space-x-2">
+          <ModalClose>
+            <Button variant="outline" color="error">
+              <Text variant="subText" className="text-text-primary">
+                취소
+              </Text>
+            </Button>
+          </ModalClose>
+          <Button color="error" onClick={handleClick}>
+            <Text className="text-text-on-dark" variant="subText">
+              {isClosed ? "다시 열기" : "마감하기"}
+            </Text>{" "}
+          </Button>
+        </div>
+      </ModalContent>
+    </Modal>
   );
 }
