@@ -7,6 +7,7 @@ import SignUp from "@/pages/auth/SignUp";
 import RecruitmentList from "@/pages/recruitment-post/RecruitmentList";
 import ProfileList from "@/pages/profile/ProfileList";
 import RecruitmentNewPost from "@/pages/recruitment-post/RecruitmentNewPost";
+import RecruitmentDetail from "@/pages/recruitment-post/RecruitmentDetail";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
 
         <Route path="/recruitment-post">
           <Route index element={<RecruitmentList />} />
+          <Route path="/recruitment-post/:postId" element={<RecruitmentDetail />} />
           <Route path="/recruitment-post/new-post" element={<RecruitmentNewPost />} />
         </Route>
 
