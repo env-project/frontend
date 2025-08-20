@@ -11,7 +11,7 @@ import RecruitmentCard from "@/components/RecruitmentCard";
 import CommentCard from "@/components/CommentCard";
 import type { Post } from "@/types/api-res-recruitment";
 import type { PublicUserProfileDetail, PrivateUserProfileDetail } from "@/types/api-res-profile";
-import { fetchProfileDetail } from "./api/fetchProfileDetail";
+import { fetchProfileDetail } from "../../api/fetchProfileDetail";
 
 type Detail = PublicUserProfileDetail | PrivateUserProfileDetail;
 

@@ -7,7 +7,7 @@ import { useInfinite } from "@/hooks/useInfinite";
 import { useSearchParams } from "react-router";
 import { buildProfilesQueryFromSearchParams } from "@/libs/buildProfilesquery";
 import type { UserProfile } from "@/types/api-res-profile";
-import { fetchProfilesInfinitePage } from "@/pages/profile/api/fetchProfilesInfinite";
+import { fetchProfilesInfinitePage } from "@/api/fetchProfilesInfinite";
 
 const GRID =
   "grid gap-4 sm:gap-6 lg:gap-8 justify-items-center [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]";

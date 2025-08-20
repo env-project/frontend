@@ -1,5 +1,7 @@
 import { Genre, Region, Position, ExperienceLevel } from "@/types/api-res-common";
-import { Post } from "@/types/api-res-recruitment";
+import type { Post } from "./api-res-recruitment";
+
+type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 
 /* --------------- 프로필 --------------- */
 // GET /api/v1/users/me
@@ -25,6 +27,13 @@ export interface UserProfileDetail {
   regions: Region[];
   positions: PositionAndLevel[];
   genres: Genre[];
+}
+export interface PublicUserProfileDetail extends BaseUserProfileDetail {
+  is_public: true;
+}
+export interface PrivateUserProfileDetail extends BaseUserProfileDetail {
+  is_public: false;
+  // `recent_posts`와 `recent_comments` 없음
 }
 
 export interface MyProfile {
