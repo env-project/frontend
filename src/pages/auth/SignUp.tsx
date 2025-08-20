@@ -7,6 +7,9 @@ import { Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
+import { API_BASE_URL } from "@/constants/api-constants";
 
 const SignUpSchema = z
   .object({
@@ -33,9 +36,28 @@ const SignUp = () => {
     reset,
   } = useForm<TSignUpSchema>({ resolver: zodResolver(SignUpSchema) });
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    reset();
+  const { mutate } = useMutation({
+    mutationFn: (signUpForm: TSignUpSchema) => {
+      return axios.post(`${API_BASE_URL}/users`, {
+        email: signUpForm.email,
+        password: signUpForm.password,
+        nickname: signUpForm.nickName,
+      });
+    },
+    onSuccess: () => {
+      console.log("success");
+    },
+    onError: (e) => {
+      if (e instanceof AxiosError) {
+        console.error(`Error with code ${e.code} ${e.status}`);
+      } else {
+        console.error("unexpected error");
+      }
+    },
+  });
+
+  const onSubmit = async (form: TSignUpSchema) => {
+    mutate(form);
   };
 
   const handleGoogleSignUp = (): void => {};
