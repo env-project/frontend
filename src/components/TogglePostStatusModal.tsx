@@ -17,7 +17,7 @@ export default function TogglePostStatusModal({ isClosed, postId }: TogglePostSt
   return (
     <Modal>
       <ModalTrigger>
-        <Button color="error" variant="outline">
+        <Button color="error" variant="outline" type="button">
           <Text>{isClosed ? "다시 열기" : "마감하기"}</Text>
         </Button>
       </ModalTrigger>
