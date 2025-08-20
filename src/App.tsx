@@ -8,6 +8,7 @@ import RecruitmentList from "@/pages/recruitment-post/RecruitmentList";
 import ProfileList from "@/pages/profile/ProfileList";
 import RecruitmentNewPost from "@/pages/recruitment-post/RecruitmentNewPost";
 import RecruitmentDetail from "@/pages/recruitment-post/RecruitmentDetail";
+import RecruitmentFix from "@/pages/recruitment-post/RecruitmentFix";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/recruitment-post">
           <Route index element={<RecruitmentList />} />
           <Route path="/recruitment-post/:postId" element={<RecruitmentDetail />} />
+          <Route path="/recruitment-post/:postId/fix" element={<RecruitmentFix />} />
           <Route path="/recruitment-post/new-post" element={<RecruitmentNewPost />} />
         </Route>
 
