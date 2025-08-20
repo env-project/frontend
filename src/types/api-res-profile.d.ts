@@ -17,20 +17,14 @@ export interface UserList {
 }
 
 // GET /api/v1/profiles/{user_id}
-export type UserProfileDetail = PublicUserProfileDetail | PrivateUserProfileDetail;
-export interface BaseUserProfileDetail extends UserProfile {
+export interface UserProfileDetail {
+  user_id?: string;
+  nickname: string;
+  image_url: string;
   is_public: boolean;
-}
-export interface PublicUserProfileDetail extends BaseUserProfileDetail {
-  is_public: true;
-  recent_posts: Pick<Post, "id" | "title" | "created_at">[];
-  recent_comments: (Pick<Comment, "id" | "content" | "created_at"> & {
-    post: Pick<Post, "id" | "title">;
-  })[];
-}
-export interface PrivateUserProfileDetail extends BaseUserProfileDetail {
-  is_public: false;
-  // `recent_posts`와 `recent_comments` 없음
+  regions: Region[];
+  positions: PositionAndLevel[];
+  genres: Genre[];
 }
 
 export interface MyProfile {
