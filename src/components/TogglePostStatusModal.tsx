@@ -27,13 +27,13 @@ export default function TogglePostStatusModal({ isClosed, postId }: TogglePostSt
         </H3>
         <div className="flex justify-end items-center w-full space-x-2">
           <ModalClose>
-            <Button variant="outline" color="error">
+            <Button variant="outline" color="error" type="button">
               <Text variant="subText" className="text-text-primary">
                 취소
               </Text>
             </Button>
           </ModalClose>
-          <Button color="error" onClick={handleClick}>
+          <Button color="error" onClick={handleClick} type="button">
             <Text className="text-text-on-dark" variant="subText">
               {isClosed ? "다시 열기" : "마감하기"}
             </Text>{" "}
