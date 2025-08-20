@@ -28,13 +28,6 @@ export interface UserProfileDetail {
   positions: PositionAndLevel[];
   genres: Genre[];
 }
-export interface PublicUserProfileDetail extends BaseUserProfileDetail {
-  is_public: true;
-}
-export interface PrivateUserProfileDetail extends BaseUserProfileDetail {
-  is_public: false;
-  // `recent_posts`와 `recent_comments` 없음
-}
 
 export interface MyProfile {
   image_url: string;
