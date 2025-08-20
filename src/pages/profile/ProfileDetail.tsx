@@ -172,11 +172,11 @@ export default function ProfileDetail() {
                           views_count: Math.floor(Math.random() * 500) + 10,
                           comments_count: Math.floor(Math.random() * 20),
                           is_closed: false,
-                          positions: base.positions?.map((pl) => ({
-                            position_id: pl.position.id,
-                            position_name: pl.position.name,
-                            experience_level_id: pl.experience_level.id,
-                            experience_level_name: pl.experience_level.name,
+                          positions: base.positions?.map((positionLevel) => ({
+                            position_id: positionLevel.position.id,
+                            position_name: positionLevel.position.name,
+                            experience_level_id: positionLevel.experience_level.id,
+                            experience_level_name: positionLevel.experience_level.name,
                           })),
                           genres: base.genres,
                           orientation: undefined,
@@ -193,7 +193,7 @@ export default function ProfileDetail() {
           {/* 최근 댓글 */}
           <div className="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 md:p-5 lg:p-6">
             <Section title="댓글" count={(data as PublicUserProfileDetail).recent_comments.length}>
-              <div className="flex flex-col gap-3 md:gap-4 max-w-2xl">
+              <div className="flex flex-col gap-3 md:gap-4">
                 {(data as PublicUserProfileDetail).recent_comments.map((comment) => (
                   <CommentCard
                     key={comment.id}
