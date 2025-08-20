@@ -5,6 +5,7 @@ import defaultImage from "@/assets/images/user-default-image.png";
 import type { UserProfile } from "@/types/api-res-profile";
 import { cn } from "@/libs/utils";
 import H3 from "./text/H3";
+import { Link } from "react-router";
 
 interface ProfileCardProps {
   profile: UserProfile;
@@ -76,9 +77,12 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
         </div>
 
         {/* 중앙: 닉네임 */}
-        <div className="flex-1 text-center min-w-0">
-          <H3 className="text-sm sm:text-base truncate">{nickname}</H3>
-        </div>
+        <Link
+          to={`/profile/${userId}`}
+          className="absolute top-4 left-1/2 transform -translate-x-1/2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          <H3 className="text-base text-center underline-offset-2 hover:underline">{nickname}</H3>
+        </Link>
 
         {/* 우측: 북마크 버튼 */}
         <div className="shrink-0">
