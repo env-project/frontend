@@ -29,10 +29,6 @@ export interface BaseUserProfileDetail {
 }
 export interface PublicUserProfileDetail extends BaseUserProfileDetail {
   is_public: true;
-  recent_posts: Pick<Post, "id" | "title" | "created_at">[];
-  recent_comments: (Pick<Comment, "id" | "content" | "created_at"> & {
-    post: Pick<Post, "id" | "title">;
-  })[];
 }
 export interface PrivateUserProfileDetail extends BaseUserProfileDetail {
   is_public: false;
