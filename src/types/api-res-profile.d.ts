@@ -17,8 +17,7 @@ export interface UserList {
 }
 
 // GET /api/v1/profiles/{user_id}
-export type UserProfileDetail = PublicUserProfileDetail | PrivateUserProfileDetail;
-export interface BaseUserProfileDetail {
+export interface UserProfileDetail {
   user_id?: string;
   nickname: string;
   image_url: string;
