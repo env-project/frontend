@@ -3,10 +3,15 @@ import Input from "@/components/input/Input";
 import Text from "@/components/text/Text";
 import { FcGoogle } from "react-icons/fc";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
+import { API_BASE_URL } from "@/constants/api-constants";
+import { useState } from "react";
+import InlineSpinner from "@/components/loading/InlineSpinner";
 
 const SignUpSchema = z
   .object({
@@ -29,13 +34,42 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
+    formState: { errors },
   } = useForm<TSignUpSchema>({ resolver: zodResolver(SignUpSchema) });
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    reset();
+  const [apiError, setApiError] = useState("");
+  const navigate = useNavigate();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (signUpForm: TSignUpSchema) => {
+      return axios.post(`${API_BASE_URL}/users`, {
+        email: signUpForm.email,
+        password: signUpForm.password,
+        nickname: signUpForm.nickName,
+      });
+    },
+    onSuccess: () => {
+      setApiError("");
+      navigate("/login");
+    },
+    onError: (e) => {
+      if (e instanceof AxiosError) {
+        console.error(`Error with code ${e.code} ${e.status}`);
+        if (e.status === 409) {
+          setApiError("중복된 이메일입니다.");
+        } else if (e.status === 400) {
+          setApiError("올바르지 못한 형식입니다.");
+        } else {
+          setApiError("알 수 없는 서버 에러가 발생했습니다. 잠시후 다시 시도해주세요.");
+        }
+      } else {
+        setApiError("알 수 없는 서버 에러가 발생했습니다. 잠시후 다시 시도해주세요.");
+      }
+    },
+  });
+
+  const onSubmit = async (form: TSignUpSchema) => {
+    mutate(form);
   };
 
   const handleGoogleSignUp = (): void => {};
@@ -90,14 +124,19 @@ const SignUp = () => {
               placeholder="비밀번호를 확인해주세요"
               error={errors.confirmPassword?.message}
             />
+            <Text variant="label" className="text-error">
+              {apiError}
+            </Text>
           </div>
           <div className="flex flex-col gap-6">
             <Button
               variant="default"
               className="p-3 bg-primary-thick hover:scale-100 disabled:bg-error"
-              disabled={isSubmitting}
+              disabled={isPending}
             >
-              <Text className="text-base font-semibold text-text-on-dark ">회원가입</Text>
+              <Text className="text-base font-semibold text-text-on-dark ">
+                {isPending ? <InlineSpinner /> : "회원가입"}
+              </Text>
             </Button>
             <Button
               variant="default"
