@@ -8,10 +8,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
-import { API_BASE_URL } from "@/constants/api-constants";
+import { AxiosError } from "axios";
 import { useState } from "react";
 import InlineSpinner from "@/components/loading/InlineSpinner";
+import api from "@/libs/axios";
 
 const SignUpSchema = z
   .object({
@@ -42,7 +42,7 @@ const SignUp = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: (signUpForm: TSignUpSchema) => {
-      return axios.post(`${API_BASE_URL}/users`, {
+      return api.post(`/users`, {
         email: signUpForm.email,
         password: signUpForm.password,
         nickname: signUpForm.nickName,
