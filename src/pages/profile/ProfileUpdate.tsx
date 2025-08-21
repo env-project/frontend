@@ -71,6 +71,7 @@ const MASTER_DATA: MasterData = {
     { id: "r1", name: "고정 밴드" },
     { id: "r2", name: "프로젝트 밴드" },
   ],
+  recruiting_post_types: [],
 };
 
 export default function ProfileUpdate() {
