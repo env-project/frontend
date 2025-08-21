@@ -10,6 +10,9 @@ import RecruitmentFormInputs from "@/components/recruitment-form/RecruitmentForm
 import { useMutation } from "@tanstack/react-query";
 import api from "@/libs/axios";
 import { changeRecruitmentFormToRequestData } from "@/libs/changeRecruitmentDataForm";
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router";
+import { useState } from "react";
 
 export default function RecruitmentNewPost() {
   const formData = useForm<TRecruitmentPostSchema>({
@@ -23,11 +26,31 @@ export default function RecruitmentNewPost() {
     },
   });
 
+  const navigate = useNavigate();
+  const [apiError, setApiError] = useState("");
+
   const { mutate } = useMutation({
     mutationFn: (form: TRecruitmentPostSchema) => {
       //TODO: 이미지 API 나오면 이미지도 연결
       const requestData = changeRecruitmentFormToRequestData(form);
       return api.post("/recruiting", requestData);
+    },
+    onSuccess: () => {
+      navigate("/recruitment-post");
+    },
+    onError: (e) => {
+      if (e instanceof AxiosError) {
+        if (e.status === 401) {
+          setApiError("로그인 후 이용해주세요.");
+        } else if (e.status === 400) {
+          setApiError("필수 입력 필드를 입력해주세요.");
+        } else if (e.status === 422) {
+          setApiError("잘못된 형식의 데이터입니다.");
+        } else {
+          setApiError("알 수 없는 서버 에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+        }
+      }
+      setApiError("알 수 없는 서버 에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
     },
   });
 
@@ -53,6 +76,10 @@ export default function RecruitmentNewPost() {
           formData={formData}
           className="flex flex-col items-center jsutify-start space-y-6 w-full"
         />
+
+        <Text variant="label" className="text-error">
+          {apiError}
+        </Text>
 
         <Button type="submit">
           <Text className="text-text-on-dark">제출</Text>
