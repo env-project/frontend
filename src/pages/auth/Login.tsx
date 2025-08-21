@@ -9,7 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError, type AxiosResponse } from "axios";
-import { API_BASE_URL } from "@/constants/api-constants";
+import { API_BASE_URL, TOKEN_INFO_KEY } from "@/constants/api-constants";
 import type { TokenInfo } from "@/types/api-res-auth";
 import InlineSpinner from "@/components/loading/InlineSpinner";
 import { useState } from "react";
@@ -36,7 +36,7 @@ const LogIn = () => {
     },
 
     onSuccess: (res) => {
-      localStorage.setItem("akabi-token-information", JSON.stringify(res.data));
+      localStorage.setItem(TOKEN_INFO_KEY, JSON.stringify(res.data));
       navigate("/");
     },
 
