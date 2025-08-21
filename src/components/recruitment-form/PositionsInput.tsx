@@ -1,44 +1,61 @@
 import type { ExperienceLevel, Position } from "@/types/api-res-common";
-import type { TRecruitmentPostSchema } from "@/types/zod-schema/recruitment-post-schema";
-import {
-  useFieldArray,
-  type Control,
-  type FieldErrors,
-  type UseFormRegister,
-} from "react-hook-form";
+import { type FieldErrors } from "react-hook-form";
 import Text from "@/components/text/Text";
 import Button from "@/components/Button";
 
+interface PositionItem {
+  position_id: string;
+  experienced_level_id: string;
+}
+
 interface PositionsInputProps {
-  control: Control<TRecruitmentPostSchema>;
-  register: UseFormRegister<TRecruitmentPostSchema>;
-  errors?: FieldErrors<TRecruitmentPostSchema>;
+  value: PositionItem[];
+  onChange: (items: PositionItem[]) => void;
+  errors?: FieldErrors<{ positions: PositionItem[] }>;
   positions: Position[];
   experienceLevels: ExperienceLevel[];
 }
 
 export default function PositionsInput({
-  control,
-  register,
+  value,
+  onChange,
   errors,
   positions,
   experienceLevels,
 }: PositionsInputProps) {
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "positions",
-  });
+  const handleRemove = (index: number) => {
+    const newItems = [...value];
+    newItems.splice(index, 1);
+    onChange(newItems);
+  };
+
+  const handleAppend = () => {
+    const newItems = [...value, { position_id: "", experienced_level_id: "" }];
+    onChange(newItems);
+  };
+
+  const handlePositionChange = (index: number, positionId: string) => {
+    const newItems = [...value];
+    newItems[index].position_id = positionId;
+    onChange(newItems);
+  };
+
+  const handleExperienceChange = (index: number, experienceId: string) => {
+    const newItems = [...value];
+    newItems[index].experienced_level_id = experienceId;
+    onChange(newItems);
+  };
 
   return (
-    <div className="space-y-4 w-full flex flex-col justify-start items-center">
-      <label className="w-full ">모집 포지션(복수 선택 가능)</label>
+    <div className="flex flex-col items-center justify-start w-full space-y-4">
+      <label className="w-full">모집 포지션(복수 선택 가능)</label>
 
-      {fields.map((field, index) => {
+      {value.map((item, index) => {
         const positionError = errors?.positions?.[index]?.position_id;
         const experiencedLevelError = errors?.positions?.[index]?.experienced_level_id;
 
         return (
-          <div key={field.id} className="space-y-2 border p-3 rounded">
+          <div key={index} className="p-3 space-y-2 border rounded">
             {/* 포지션 선택 */}
             <div>
               <p className="font-medium">포지션 선택</p>
@@ -48,7 +65,8 @@ export default function PositionsInput({
                     <input
                       type="radio"
                       value={position.id}
-                      {...register(`positions.${index}.position_id`)}
+                      checked={item.position_id === position.id}
+                      onChange={() => handlePositionChange(index, position.id)}
                     />
                     {position.name}
                   </label>
@@ -56,7 +74,7 @@ export default function PositionsInput({
               </div>
               {positionError && (
                 <Text className="text-error" variant="label">
-                  {positionError.message}
+                  {(positionError as any).message}
                 </Text>
               )}
             </div>
@@ -70,7 +88,8 @@ export default function PositionsInput({
                     <input
                       type="radio"
                       value={experienceLevel.id}
-                      {...register(`positions.${index}.experienced_level_id`)}
+                      checked={item.experienced_level_id === experienceLevel.id}
+                      onChange={() => handleExperienceChange(index, experienceLevel.id)}
                     />
                     {experienceLevel.name}
                   </label>
@@ -78,13 +97,13 @@ export default function PositionsInput({
               </div>
               {experiencedLevelError && (
                 <Text className="text-error" variant="label">
-                  {experiencedLevelError.message}
+                  {(experiencedLevelError as any).message}
                 </Text>
               )}
             </div>
 
             {/* 삭제 버튼 */}
-            <Button type="button" onClick={() => remove(index)} color="error">
+            <Button type="button" onClick={() => handleRemove(index)} color="error">
               <Text className="text-text-on-dark">삭제</Text>
             </Button>
           </div>
@@ -92,12 +111,7 @@ export default function PositionsInput({
       })}
 
       {/* 추가 버튼 */}
-      <Button
-        type="button"
-        onClick={() => append({ position_id: "", experienced_level_id: "" })}
-        variant="default"
-        color="primary"
-      >
+      <Button type="button" onClick={handleAppend} variant="default" color="primary">
         <Text className="text-text-on-dark">+ 포지션 추가</Text>
       </Button>
     </div>

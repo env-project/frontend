@@ -1,5 +1,5 @@
 import type { TRecruitmentPostSchema } from "@/types/zod-schema/recruitment-post-schema";
-import { type UseFormReturn } from "react-hook-form";
+import { Controller, type UseFormReturn } from "react-hook-form";
 import Input from "@/components/input/Input";
 import ImageInput from "@/components/input/ImageInput";
 import type { MasterData } from "@/types/api-res-common";
@@ -161,42 +161,86 @@ export default function RecruitmentFormInputs({
         />
       </InputWithLabelContainer>
 
-      <PositionsInput
-        register={register}
-        errors={errors}
+      <Controller
+        name="positions"
         control={control}
-        positions={MASTER_DATA.positions}
-        experienceLevels={MASTER_DATA.experience_levels}
+        render={({ field }) => (
+          <PositionsInput
+            value={field.value || []}
+            onChange={field.onChange}
+            errors={errors}
+            positions={MASTER_DATA.positions}
+            experienceLevels={MASTER_DATA.experience_levels}
+          />
+        )}
       />
 
       <InputWithLabelContainer>
         <label>밴드 성격</label>
-        <CheckboxInputs
-          register={register}
+        <Controller
           name="orientationId"
-          data={MASTER_DATA.orientations}
-          type="radio"
+          control={control}
+          render={({ field }) => (
+            <CheckboxInputs
+              name="orientationId"
+              data={MASTER_DATA.orientations}
+              value={field.value ? [field.value] : []}
+              onChange={(values) => field.onChange(values[0])}
+              type="radio"
+            />
+          )}
         />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
         <label>밴드 형태</label>
-        <CheckboxInputs
-          register={register}
+        <Controller
           name="recruitmentTypeId"
-          data={MASTER_DATA.recruitment_types}
-          type="radio"
+          control={control}
+          render={({ field }) => (
+            <CheckboxInputs
+              name={field.name}
+              data={MASTER_DATA.recruitment_types}
+              value={field.value ? [field.value] : []}
+              onChange={(values) => field.onChange(values[0])}
+              type="radio"
+            />
+          )}
         />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
         <label>선호 장르(복수 선택 가능)</label>
-        <CheckboxInputs register={register} name="genreIds" data={MASTER_DATA.genres} />
+        <Controller
+          name="genreIds"
+          control={control}
+          render={({ field }) => (
+            <CheckboxInputs
+              name={field.name}
+              data={MASTER_DATA.genres}
+              value={field.value || []}
+              onChange={field.onChange}
+              type="checkbox"
+            />
+          )}
+        />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
         <label>활동 지역(복수 선택 가능)</label>
-        <CheckboxInputs register={register} name="regionIds" data={MASTER_DATA.regions} />
+        <Controller
+          name="regionIds"
+          control={control}
+          render={({ field }) => (
+            <CheckboxInputs
+              name={field.name}
+              data={MASTER_DATA.regions}
+              value={field.value || []}
+              onChange={field.onChange}
+              type="checkbox"
+            />
+          )}
+        />
       </InputWithLabelContainer>
 
       <div className="flex flex-col justify-center items-center space-y-0.5 w-full">
@@ -210,7 +254,7 @@ export default function RecruitmentFormInputs({
         <label htmlFor="content">자세한 설명*</label>
         <textarea
           id="content"
-          className="w-full h-32 p-2 rounded-xl border focus:outline-none"
+          className="w-full h-32 p-2 border rounded-xl focus:outline-none"
           {...register("content")}
         />
         {errors.content ? (
