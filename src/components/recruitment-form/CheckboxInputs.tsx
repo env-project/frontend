@@ -1,3 +1,5 @@
+import type { TRecruitmentPostSchema } from "@/types/zod-schema/recruitment-post-schema";
+import type { UseFormRegister } from "react-hook-form";
 import BadgeCheckBox from "@/components/BadgeCheckbox";
 
 interface CheckboxInputsProps {
@@ -5,30 +7,17 @@ interface CheckboxInputsProps {
     id: string;
     name: string;
   }[];
-
-  value: string[];
-  onChange: (value: string[]) => void;
-  name: string;
+  register: UseFormRegister<TRecruitmentPostSchema>;
+  name: keyof TRecruitmentPostSchema;
   type?: "checkbox" | "radio";
 }
 
 export default function CheckboxInputs({
   data,
-  value,
-  onChange,
+  register,
   name,
   type = "checkbox",
 }: CheckboxInputsProps) {
-  const handleChange = (id: string, isChecked: boolean) => {
-    //checkbox일때
-    if (type === "checkbox") {
-      const newValues = isChecked ? [...value, id] : value.filter((item) => item !== id);
-      onChange(newValues);
-      //radio일때
-    } else if (type === "radio") {
-      onChange([id]);
-    }
-  };
   return (
     <div className="flex justify-start items-center flex-wrap gap-0.5">
       {data.map(({ name: label, id }) => (
@@ -37,8 +26,7 @@ export default function CheckboxInputs({
           label={label}
           value={id}
           type={type}
-          checked={value.includes(id)}
-          onChange={(e) => handleChange(id, e.target.checked)}
+          {...register(name)}
           className="text-text-on-dark"
         />
       ))}
