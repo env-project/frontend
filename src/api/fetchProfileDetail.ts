@@ -1,48 +1,53 @@
-import { mockProfiles } from "@/Mocks/mockProfiles";
-import type { PublicUserProfileDetail, PrivateUserProfileDetail } from "@/types/api-res-profile";
+import type { UserProfileDetail, PositionAndLevel } from "@/types/api-res-profile";
+import type { Region, Genre, Position, ExperienceLevel } from "@/types/api-res-common";
 
-/** 실제 API가 준비되기 전까지 사용하는 더미 fetcher */
-export async function fetchProfileDetail(
-  userId: string
-): Promise<PublicUserProfileDetail | PrivateUserProfileDetail> {
-  // 실제 API에서는 `await axios.get(...)` 등으로 대체
-  await new Promise((r) => setTimeout(r, 300)); // 모의 지연
+type RawProfileDetail = {
+  nickname: string;
+  image_url: string | null;
+  is_public: boolean;
+  is_bookmarked: boolean;
+  regions: Region[] | null;
+  position_links: Array<{
+    position: Position;
+    experience_level: ExperienceLevel;
+  }> | null;
+  genres: Genre[] | null;
+  email?: string | null;
+};
 
-  const base = mockProfiles.find((p) => p.user_id === userId);
-  if (!base) {
-    throw new Error("NOT_FOUND");
+function toPositions(links: RawProfileDetail["position_links"]): PositionAndLevel[] {
+  if (!Array.isArray(links)) return [];
+  return links.map(({ position, experience_level }) => ({
+    position,
+    experience_level,
+  }));
+}
+
+function arrOrEmpty<T>(v: T[] | null | undefined): T[] {
+  return Array.isArray(v) ? v : [];
+}
+
+export async function fetchProfileDetail(userId: string): Promise<UserProfileDetail> {
+  const res = await fetch(`/api/v1/profiles/${userId}`, { credentials: "include" });
+
+  if (!res.ok) {
+    // 필요시 상태별 에러 메시지 분기
+    if (res.status === 404) throw new Error("프로필을 찾을 수 없습니다.");
+    throw new Error(`프로필을 불러오는데 실패했습니다._${res.status}`);
   }
 
-  const is_public = true; // 필요시 조건으로 비공개 처리 가능
+  const raw: RawProfileDetail = await res.json();
 
-  if (!is_public) {
-    const detail: PrivateUserProfileDetail = {
-      ...base,
-      is_public: false,
-    };
-    return detail;
-  }
-
-  // 더미 최근 게시글/댓글 생성
-  const now = Date.now();
-  const recent_posts = Array.from({ length: 3 }).map((_, i) => ({
-    id: `post_${i + 1}`,
-    title: `${base.nickname}의 게시글 ${i + 1}`,
-    created_at: new Date(now - (i + 1) * 36e5).toISOString(),
-  }));
-
-  const recent_comments = Array.from({ length: 5 }).map((_, i) => ({
-    id: `comment_${i + 1}`,
-    content: `최근 댓글 내용 ${i + 1}`,
-    created_at: new Date(now - (i + 1) * 18e5).toISOString(),
-    post: { id: `post_${i + 1}`, title: `연결된 게시글 ${i + 1}` },
-  }));
-
-  const detail: PublicUserProfileDetail = {
-    ...base,
-    is_public: true,
-    recent_posts,
-    recent_comments,
+  const detail: UserProfileDetail = {
+    user_id: userId,
+    nickname: raw.nickname,
+    image_url: raw.image_url ?? "",
+    is_public: !!raw.is_public,
+    is_bookmarked: !!raw.is_bookmarked,
+    regions: arrOrEmpty(raw.regions),
+    positions: toPositions(raw.position_links),
+    genres: arrOrEmpty(raw.genres),
+    email: raw.email ?? "",
   };
 
   return detail;

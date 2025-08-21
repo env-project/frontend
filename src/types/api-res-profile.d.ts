@@ -20,13 +20,15 @@ export interface UserList {
 
 // GET /api/v1/profiles/{user_id}
 export interface UserProfileDetail {
-  user_id?: string;
+  user_id: string;
   nickname: string;
   image_url: string;
   is_public: boolean;
   regions: Region[];
   positions: PositionAndLevel[];
   genres: Genre[];
+  email: string;
+  is_bookmarked: boolean;
 }
 
 export interface MyProfile {
