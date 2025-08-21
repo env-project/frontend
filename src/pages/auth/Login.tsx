@@ -7,6 +7,11 @@ import { Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError, type AxiosResponse } from "axios";
+import { API_BASE_URL } from "@/constants/api-constants";
+import type { TokenInfo } from "@/types/api-res-auth";
+import InlineSpinner from "@/components/loading/InlineSpinner";
 
 const logInSchema = z.object({
   email: z.string().email({ message: "유효한 이메일 주소를 입력해주세요" }),
@@ -16,16 +21,38 @@ const logInSchema = z.object({
 type TLogInSchema = z.infer<typeof logInSchema>;
 
 const LogIn = () => {
+  const { mutate, isPending } = useMutation<AxiosResponse<TokenInfo>, Error, TLogInSchema>({
+    mutationFn: (form: TLogInSchema) => {
+      const params = new URLSearchParams();
+      params.append("username", form.email);
+      params.append("password", form.password);
+
+      return axios.post(`${API_BASE_URL}/auth/token`, params, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
+    },
+
+    onSuccess: (res) => {
+      console.log(res.data.access_token);
+    },
+
+    onError: (e) => {
+      if (e instanceof AxiosError) {
+        console.log(e);
+      } else {
+        console.log(e);
+      }
+    },
+  });
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
+    formState: { errors },
   } = useForm<TLogInSchema>({ resolver: zodResolver(logInSchema) });
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    reset();
+  const onSubmit = (form: TLogInSchema) => {
+    mutate(form);
   };
 
   return (
@@ -75,10 +102,10 @@ const LogIn = () => {
             <Button
               variant="default"
               className="p-3 bg-primary-thick hover:scale-100 disabled:bg-error"
-              disabled={isSubmitting}
+              disabled={isPending}
             >
               <Text className="text-base font-semibold text-text-on-dark ">
-                {isSubmitting ? "로그인 중..." : "로그인"}
+                {isPending ? <InlineSpinner /> : "로그인"}
               </Text>
             </Button>
             <Button variant="default" className="p-3 bg-bg-secondary hover:scale-100">
