@@ -29,7 +29,7 @@ function App() {
         <Route path="/profile">
           <Route index element={<ProfileList />} />
         </Route>
-        <Route>
+        <Route path="/mypage">
           <Route path="/mypage/profile-update" element={<ProfileUpdate />} />
         </Route>
       </Route>
