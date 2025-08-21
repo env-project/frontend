@@ -7,6 +7,9 @@ import {
   type TRecruitmentPostSchema,
 } from "@/types/zod-schema/recruitment-post-schema";
 import RecruitmentFormInputs from "@/components/recruitment-form/RecruitmentFormInputs";
+import { useMutation } from "@tanstack/react-query";
+import api from "@/libs/axios";
+import { changeRecruitmentFormToRequestData } from "@/libs/changeRecruitmentDataForm";
 
 export default function RecruitmentNewPost() {
   const formData = useForm<TRecruitmentPostSchema>({
@@ -20,6 +23,14 @@ export default function RecruitmentNewPost() {
     },
   });
 
+  const { mutate } = useMutation({
+    mutationFn: (form: TRecruitmentPostSchema) => {
+      //TODO: 이미지 API 나오면 이미지도 연결
+      const requestData = changeRecruitmentFormToRequestData(form);
+      return api.post("/recruiting", requestData);
+    },
+  });
+
   const { setValue, handleSubmit } = formData;
 
   const onImageChange = (imageFile: File | null) => {
@@ -28,9 +39,7 @@ export default function RecruitmentNewPost() {
   };
 
   const onSubmit = (form: TRecruitmentPostSchema) => {
-    //TODO: 실제 API 연결하기
-    //optional은 빈값을 보내는게 아니라 아예 key 값을 보내면 안 됨
-    console.log(form);
+    mutate(form);
   };
 
   return (
