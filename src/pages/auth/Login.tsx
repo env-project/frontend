@@ -3,10 +3,16 @@ import Input from "@/components/input/Input";
 import Text from "@/components/text/Text";
 import { FcGoogle } from "react-icons/fc";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError, type AxiosResponse } from "axios";
+import { API_BASE_URL } from "@/constants/api-constants";
+import type { TokenInfo } from "@/types/api-res-auth";
+import InlineSpinner from "@/components/loading/InlineSpinner";
+import { useState } from "react";
 
 const logInSchema = z.object({
   email: z.string().email({ message: "유효한 이메일 주소를 입력해주세요" }),
@@ -16,16 +22,49 @@ const logInSchema = z.object({
 type TLogInSchema = z.infer<typeof logInSchema>;
 
 const LogIn = () => {
+  const [apiError, setApiError] = useState("");
+  const navigate = useNavigate();
+  const { mutate, isPending } = useMutation<AxiosResponse<TokenInfo>, Error, TLogInSchema>({
+    mutationFn: (form: TLogInSchema) => {
+      const params = new URLSearchParams();
+      params.append("username", form.email);
+      params.append("password", form.password);
+
+      return axios.post(`${API_BASE_URL}/auth/token`, params, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
+    },
+
+    onSuccess: (res) => {
+      localStorage.setItem("akabi-token-information", JSON.stringify(res.data));
+      navigate("/");
+    },
+
+    onError: (e) => {
+      if (e instanceof AxiosError) {
+        if (e.status === 401) {
+          setApiError("비밀번호가 일치하지 않습니다.");
+        } else if (e.status === 404) {
+          setApiError("존재하지 않은 이메일입니다.");
+        } else if (e.status === 422) {
+          setApiError("옳지 않은 형식입니다.");
+        } else {
+          setApiError("알 수 없는 서버 에러가 발생했습니다. 잠시후 다시 시도해주세요.");
+        }
+      } else {
+        setApiError("알 수 없는 서버 에러가 발생했습니다. 잠시후 다시 시도해주세요.");
+      }
+    },
+  });
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
+    formState: { errors },
   } = useForm<TLogInSchema>({ resolver: zodResolver(logInSchema) });
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    reset();
+  const onSubmit = (form: TLogInSchema) => {
+    mutate(form);
   };
 
   return (
@@ -70,15 +109,18 @@ const LogIn = () => {
               placeholder="비밀번호를 입력해주세요"
               error={errors.password?.message}
             />
+            <Text variant="label" className="text-error">
+              {apiError}
+            </Text>
           </div>
           <div className="flex flex-col gap-2">
             <Button
               variant="default"
               className="p-3 bg-primary-thick hover:scale-100 disabled:bg-error"
-              disabled={isSubmitting}
+              disabled={isPending}
             >
               <Text className="text-base font-semibold text-text-on-dark ">
-                {isSubmitting ? "로그인 중..." : "로그인"}
+                {isPending ? <InlineSpinner /> : "로그인"}
               </Text>
             </Button>
             <Button variant="default" className="p-3 bg-bg-secondary hover:scale-100">
