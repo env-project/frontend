@@ -8,11 +8,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError, type AxiosResponse } from "axios";
-import { API_BASE_URL } from "@/constants/api-constants";
+import { AxiosError, type AxiosResponse } from "axios";
+import { TOKEN_INFO_KEY } from "@/constants/api-constants";
 import type { TokenInfo } from "@/types/api-res-auth";
 import InlineSpinner from "@/components/loading/InlineSpinner";
 import { useState } from "react";
+import api from "@/libs/axios";
 
 const logInSchema = z.object({
   email: z.string().email({ message: "유효한 이메일 주소를 입력해주세요" }),
@@ -30,13 +31,13 @@ const LogIn = () => {
       params.append("username", form.email);
       params.append("password", form.password);
 
-      return axios.post(`${API_BASE_URL}/auth/token`, params, {
+      return api.post(`/auth/token`, params, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
     },
 
     onSuccess: (res) => {
-      localStorage.setItem("akabi-token-information", JSON.stringify(res.data));
+      localStorage.setItem(TOKEN_INFO_KEY, JSON.stringify(res.data));
       navigate("/");
     },
 
