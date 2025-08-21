@@ -3,7 +3,7 @@ import Input from "@/components/input/Input";
 import Text from "@/components/text/Text";
 import { FcGoogle } from "react-icons/fc";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +12,7 @@ import axios, { AxiosError, type AxiosResponse } from "axios";
 import { API_BASE_URL } from "@/constants/api-constants";
 import type { TokenInfo } from "@/types/api-res-auth";
 import InlineSpinner from "@/components/loading/InlineSpinner";
+import { useState } from "react";
 
 const logInSchema = z.object({
   email: z.string().email({ message: "유효한 이메일 주소를 입력해주세요" }),
@@ -21,6 +22,8 @@ const logInSchema = z.object({
 type TLogInSchema = z.infer<typeof logInSchema>;
 
 const LogIn = () => {
+  const [apiError, setApiError] = useState("");
+  const navigate = useNavigate();
   const { mutate, isPending } = useMutation<AxiosResponse<TokenInfo>, Error, TLogInSchema>({
     mutationFn: (form: TLogInSchema) => {
       const params = new URLSearchParams();
@@ -38,9 +41,17 @@ const LogIn = () => {
 
     onError: (e) => {
       if (e instanceof AxiosError) {
-        console.log(e);
+        if (e.status === 401) {
+          setApiError("비밀번호가 일치하지 않습니다.");
+        } else if (e.status === 404) {
+          setApiError("존재하지 않은 이메일입니다.");
+        } else if (e.status === 422) {
+          setApiError("옳지 않은 형식입니다.");
+        } else {
+          setApiError("알 수 없는 서버 에러가 발생했습니다. 잠시후 다시 시도해주세요.");
+        }
       } else {
-        console.log(e);
+        setApiError("알 수 없는 서버 에러가 발생했습니다. 잠시후 다시 시도해주세요.");
       }
     },
   });
@@ -97,6 +108,9 @@ const LogIn = () => {
               placeholder="비밀번호를 입력해주세요"
               error={errors.password?.message}
             />
+            <Text variant="label" className="text-error">
+              {apiError}
+            </Text>
           </div>
           <div className="flex flex-col gap-2">
             <Button
