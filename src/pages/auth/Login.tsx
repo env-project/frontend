@@ -36,7 +36,8 @@ const LogIn = () => {
     },
 
     onSuccess: (res) => {
-      console.log(res.data.access_token);
+      localStorage.setItem("akabi-token-information", JSON.stringify(res.data));
+      navigate("/");
     },
 
     onError: (e) => {
