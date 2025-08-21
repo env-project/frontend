@@ -7,13 +7,12 @@ import type { MasterData } from "@/types/api-res-common";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-
 import {
   profileUpdateSchema,
   type TProfileUpdateSchema,
 } from "@/types/zod-schema/profile-update-schema";
 import ProfileCheckboxInputs from "@/components/profile/ProfileCheckboxInputs";
-import ProfilePositionsInput from "@/components/profile/ProfilePositionInputs";
+import ProfilePositionsInputs from "@/components/profile/ProfilePositionInputs";
 
 const MASTER_DATA: MasterData = {
   regions: [
@@ -178,7 +177,7 @@ export default function ProfileUpdate() {
           </InputWithLabelContainer>
 
           <InputWithLabelContainer>
-            <ProfilePositionsInput
+            <ProfilePositionsInputs
               register={register}
               errors={errors}
               control={control}
