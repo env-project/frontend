@@ -1,3 +1,11 @@
+import HeroBanner from "@/components/HeroBanner";
+import ProfileList from "./profile/ProfileList";
+
 export default function Home() {
-  return <div>Home</div>;
+  return (
+    <>
+      <HeroBanner />
+      <ProfileList />
+    </>
+  );
 }
