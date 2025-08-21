@@ -9,7 +9,7 @@ import ProfileList from "@/pages/profile/ProfileList";
 import RecruitmentNewPost from "@/pages/recruitment-post/RecruitmentNewPost";
 import RecruitmentDetail from "@/pages/recruitment-post/RecruitmentDetail";
 import RecruitmentFix from "@/pages/recruitment-post/RecruitmentFix";
-import ProfileUpdate from "./pages/profile/ProfileUpdate";
+import ProfileUpdate from "@/pages/profile/ProfileUpdate";
 
 function App() {
   return (
