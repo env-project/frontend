@@ -8,67 +8,12 @@ import Text from "@/components/text/Text";
 import InputWithLabelContainer from "@/components/recruitment-form/InputWithLabelContainer";
 import PositionsInput from "@/components/recruitment-form/PositionsInput";
 import CheckboxInputs from "@/components/recruitment-form/CheckboxInputs";
-
-//마스터 데이터 실제론 api로 받기
-const MASTER_DATA: MasterData = {
-  regions: [
-    { id: "1", name: "서울 서부" },
-    { id: "2", name: "서울 동부" },
-    { id: "3", name: "서울 남부" },
-    { id: "4", name: "서울 북부" },
-    { id: "5", name: "인천" },
-    { id: "6", name: "부산" },
-    { id: "7", name: "대구" },
-    { id: "8", name: "광주" },
-    { id: "9", name: "대전" },
-    { id: "10", name: "울산" },
-    { id: "11", name: "제주" },
-    { id: "12", name: "경기" },
-    { id: "13", name: "강원" },
-    { id: "14", name: "충북" },
-    { id: "15", name: "충남" },
-    { id: "16", name: "경북" },
-    { id: "17", name: "경남" },
-    { id: "18", name: "전북" },
-    { id: "19", name: "전남" },
-  ],
-  positions: [
-    { id: "p1", name: "보컬" },
-    { id: "p2", name: "일렉 기타" },
-    { id: "p3", name: "어쿠스틱 기타" },
-    { id: "p4", name: "베이스" },
-    { id: "p5", name: "드럼" },
-    { id: "p6", name: "키보드" },
-    { id: "p7", name: "그 외" },
-  ],
-  genres: [
-    { id: "g1", name: "인디락" },
-    { id: "g2", name: "K-pop" },
-    { id: "g3", name: "J-pop" },
-    { id: "g4", name: "메탈" },
-    { id: "g5", name: "하드락" },
-    { id: "g6", name: "재즈" },
-    { id: "g7", name: "그 외" },
-  ],
-  experience_levels: [
-    { id: "e1", name: "취미 1년 이하" },
-    { id: "e2", name: "취미 1~3년" },
-    { id: "e3", name: "취미 3~5년" },
-    { id: "e4", name: "취미 5년 이상" },
-    { id: "e5", name: "전공" },
-    { id: "e6", name: "프로" },
-  ],
-  orientations: [
-    { id: "o1", name: "취미" },
-    { id: "o2", name: "프로" },
-    { id: "o3", name: "프로 지향" },
-  ],
-  recruitment_types: [
-    { id: "r1", name: "고정 밴드" },
-    { id: "r2", name: "프로젝트 밴드" },
-  ],
-  recruiting_post_types: [],
-};
+import { useQuery } from "@tanstack/react-query";
+import { type AxiosResponse } from "axios";
+import api from "@/libs/axios";
+import LoadingOverlay from "../loading/LoadingOverlay";
+import H1 from "../text/H1";
+import { useEffect, useState } from "react";
 
 interface RecruitmentFormInputsProps {
   formData: UseFormReturn<TRecruitmentPostSchema>;
@@ -89,7 +34,24 @@ export default function RecruitmentFormInputs({
     control,
   } = formData;
 
-  return (
+  const [masterData, setMasterData] = useState<MasterData>();
+
+  const { isPending, data } = useQuery<AxiosResponse<MasterData>>({
+    queryKey: ["master-data"],
+    queryFn: () => {
+      return api.get("/common/master-data");
+    },
+  });
+
+  useEffect(() => {
+    if (data) {
+      setMasterData(data.data);
+    }
+  }, [setMasterData, data]);
+
+  return isPending ? (
+    <LoadingOverlay />
+  ) : masterData ? (
     <div className={className}>
       <InputWithLabelContainer>
         <label htmlFor="title">제목*</label>
@@ -165,8 +127,8 @@ export default function RecruitmentFormInputs({
         register={register}
         errors={errors}
         control={control}
-        positions={MASTER_DATA.positions}
-        experienceLevels={MASTER_DATA.experience_levels}
+        positions={masterData.positions}
+        experienceLevels={masterData.experience_levels}
       />
 
       <InputWithLabelContainer>
@@ -174,7 +136,7 @@ export default function RecruitmentFormInputs({
         <CheckboxInputs
           register={register}
           name="orientationId"
-          data={MASTER_DATA.orientations}
+          data={masterData.orientations}
           type="radio"
         />
       </InputWithLabelContainer>
@@ -184,19 +146,19 @@ export default function RecruitmentFormInputs({
         <CheckboxInputs
           register={register}
           name="recruitmentTypeId"
-          data={MASTER_DATA.recruitment_types}
+          data={masterData.recruitment_types}
           type="radio"
         />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
         <label>선호 장르(복수 선택 가능)</label>
-        <CheckboxInputs register={register} name="genreIds" data={MASTER_DATA.genres} />
+        <CheckboxInputs register={register} name="genreIds" data={masterData.genres} />
       </InputWithLabelContainer>
 
       <InputWithLabelContainer>
         <label>활동 지역(복수 선택 가능)</label>
-        <CheckboxInputs register={register} name="regionIds" data={MASTER_DATA.regions} />
+        <CheckboxInputs register={register} name="regionIds" data={masterData.regions} />
       </InputWithLabelContainer>
 
       <div className="flex flex-col justify-center items-center space-y-0.5 w-full">
@@ -220,5 +182,7 @@ export default function RecruitmentFormInputs({
         ) : null}
       </InputWithLabelContainer>
     </div>
+  ) : (
+    <H1 className="text-text-primary">데이터 로딩에 실패했습니다. 잠시후 다시 시도해주세요.</H1>
   );
 }
