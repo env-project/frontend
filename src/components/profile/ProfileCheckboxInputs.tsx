@@ -2,7 +2,7 @@ import type { TProfileUpdateSchema } from "@/types/zod-schema/profile-update-sch
 import type { UseFormRegister } from "react-hook-form";
 import BadgeCheckBox from "@/components/BadgeCheckbox";
 
-interface CheckboxInputsProps {
+interface ProfileCheckboxInputsProps {
   data: {
     id: string;
     name: string;
@@ -12,12 +12,12 @@ interface CheckboxInputsProps {
   type?: "checkbox" | "radio";
 }
 
-export default function CheckboxInputs({
+export default function ProfileCheckboxInputs({
   data,
   register,
   name,
   type = "checkbox",
-}: CheckboxInputsProps) {
+}: ProfileCheckboxInputsProps) {
   return (
     <div className="flex justify-start items-center flex-wrap gap-0.5">
       {data.map(({ name: label, id }) => (
