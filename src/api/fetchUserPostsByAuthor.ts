@@ -5,7 +5,7 @@ export async function fetchUserPostsByAuthor(userId: string, limit = 10): Promis
   const { data: body } = await api.get("/recruiting", { params: { author: userId, limit } });
 
   return {
-    next_cursor: body?.next_cursor ?? null,
+    next_cursor: body?.next_cursor ?? "",
     posts: Array.isArray(body?.posts) ? (body.posts as Post[]) : [],
   };
 }
