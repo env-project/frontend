@@ -27,11 +27,11 @@ export default function RecruitmentList() {
     refetch();
   }, [debouncedSearchParams, refetch]);
 
-  const user = useUserInfo();
+  const { data: userData } = useUserInfo();
 
   return (
     <div className="p-4 gap-2 flex flex-col items-center justify-start sm:items-start sm:justify-start sm:flex-row bg-bg-primary text-text-primary min-h-screen">
-      <Filter filterType="recruitmentPostFilter" isLogin={!!user} />
+      <Filter filterType="recruitmentPostFilter" isLogin={!!userData} />
 
       {(() => {
         let content: JSX.Element;
