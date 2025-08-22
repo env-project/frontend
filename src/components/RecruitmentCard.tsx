@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import H3 from "@/components/text/H3";
 import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
-import { getTimeDiff } from "@/libs/utils";
+import { cn, getTimeDiff } from "@/libs/utils";
 import BookmarkButton from "@/components/BookmarkBtn";
 import EyeIcon from "@/components/icons/EyeIcon";
 import CommentIcon from "@/components/icons/CommentIcon";
@@ -12,9 +12,10 @@ import type { Post } from "@/types/api-res-recruitment";
 
 interface RecruitmentCardProps {
   postData: Post;
+  className?: string;
 }
 
-export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
+export default function RecruitmentCard({ postData, className = "" }: RecruitmentCardProps) {
   const {
     id,
     title,
@@ -40,8 +41,11 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
 
   return (
     <Link
-      to="#"
-      className="flex flex-col items-start p-5 bg-bg-secondary text-text-primary transition-shadow rounded-xl w-full max-w-96 hover:shadow-lg hover:shadow-primary-thick"
+      to={`/recruitment-post/${id}`}
+      className={cn(
+        "flex flex-col items-start p-5 bg-bg-secondary text-text-primary transition-shadow rounded-xl w-full max-w-96 hover:shadow-lg hover:shadow-primary-thick",
+        className
+      )}
     >
       <div className="flex w-full justify-between items-center">
         <H3 className="truncate w-full">{title}</H3>
@@ -67,35 +71,35 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
         </div>
       </div>
 
-      <div className="flex flex-col justify-between w-full sm:flex-row">
+      <div className="flex flex-col justify-between w-full flex-1 sm:flex-row">
         <div className="flex flex-col space-y-0.5 flex-1">
-          {positions ? (
+          {positions && positions.length > 0 ? (
             <div className="flex items-center space-x-1">
               <Text variant="mainText">포지션</Text>
               {positions.slice(0, 3).map(({ position_name: positionName }, i) => (
-                <Badge size="sm" key={i}>
+                <Badge size="sm" className="text-text-on-dark" key={i}>
                   {positionName}
                 </Badge>
               ))}
             </div>
           ) : null}
 
-          {regions ? (
+          {regions && regions.length > 0 ? (
             <div className="flex items-center space-x-1">
               <Text variant="mainText">지역</Text>
               {regions.slice(0, 3).map((region, i) => (
-                <Badge size="sm" key={i}>
+                <Badge size="sm" className="text-text-on-dark" key={i}>
                   {region.name}
                 </Badge>
               ))}
             </div>
           ) : null}
 
-          {genres ? (
+          {genres && genres.length > 0 ? (
             <div className="flex items-center space-x-1">
               <Text variant="mainText">선호장르</Text>
               {genres.slice(0, 3).map((genre, i) => (
-                <Badge size="sm" key={i}>
+                <Badge size="sm" className="text-text-on-dark" key={i}>
                   {genre.name}
                 </Badge>
               ))}
@@ -105,7 +109,9 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
           {orientation ? (
             <div className="flex items-center space-x-1">
               <Text variant="mainText">지향</Text>
-              <Badge size="sm">{orientation.name}</Badge>
+              <Badge size="sm" className="text-text-on-dark">
+                {orientation.name}
+              </Badge>
             </div>
           ) : null}
         </div>

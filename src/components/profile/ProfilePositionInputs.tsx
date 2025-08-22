@@ -9,7 +9,7 @@ import {
 import Text from "@/components/text/Text";
 import Button from "@/components/Button";
 
-interface PositionsInputProps {
+interface ProfilePositionsInputsProps {
   control: Control<TProfileUpdateSchema>;
   register: UseFormRegister<TProfileUpdateSchema>;
   errors?: FieldErrors<TProfileUpdateSchema>;
@@ -17,13 +17,13 @@ interface PositionsInputProps {
   experienceLevels: ExperienceLevel[];
 }
 
-export default function PositionsInput({
+export default function ProfilePositionsInputs({
   control,
   register,
   errors,
   positions,
   experienceLevels,
-}: PositionsInputProps) {
+}: ProfilePositionsInputsProps) {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "positions",
