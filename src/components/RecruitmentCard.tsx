@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import H3 from "@/components/text/H3";
 import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
-import { getTimeDiff } from "@/libs/utils";
+import { cn, getTimeDiff } from "@/libs/utils";
 import BookmarkButton from "@/components/BookmarkBtn";
 import EyeIcon from "@/components/icons/EyeIcon";
 import CommentIcon from "@/components/icons/CommentIcon";
@@ -12,9 +12,10 @@ import type { Post } from "@/types/api-res-recruitment";
 
 interface RecruitmentCardProps {
   postData: Post;
+  className?: string;
 }
 
-export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
+export default function RecruitmentCard({ postData, className = "" }: RecruitmentCardProps) {
   const {
     id,
     title,
@@ -41,7 +42,10 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
   return (
     <Link
       to={`/recruitment-post/${id}`}
-      className="flex flex-col items-start p-5 bg-bg-secondary text-text-primary transition-shadow rounded-xl w-full max-w-96 hover:shadow-lg hover:shadow-primary-thick"
+      className={cn(
+        "flex flex-col items-start p-5 bg-bg-secondary text-text-primary transition-shadow rounded-xl w-full max-w-96 hover:shadow-lg hover:shadow-primary-thick",
+        className
+      )}
     >
       <div className="flex w-full justify-between items-center">
         <H3 className="truncate w-full">{title}</H3>
