@@ -1,70 +1,34 @@
 import Filter from "@/components/Filter";
-import type { CommentList } from "@/types/api-res-comment";
-import CommentUI from "@/components/commentUI/CommentUI";
-
-//실제론 api로 호출
-const DUMMY_COMMENT_LIST: CommentList = {
-  next_cursor: "cursor_12345",
-  comments: [
-    {
-      id: "comment_1",
-      content: "첫 번째 댓글입니다.",
-      created_at: "2025-08-12T10:30:00Z",
-      post: {
-        id: "post_1",
-        title: "첫 번째 게시글 제목",
-      },
-      children: [
-        {
-          id: "comment_1_1",
-          content: "첫 번째 댓글의 대댓글입니다.",
-          created_at: "2025-08-12T11:00:00Z",
-          post: {
-            id: "post_1",
-            title: "첫 번째 게시글 제목",
-          },
-          children: [],
-          is_owner: false,
-          author: {
-            user_id: "user_002",
-            nickname: "김한주",
-          },
-        },
-      ],
-      is_owner: true,
-      author: {
-        user_id: "user_001",
-        nickname: "유다빈",
-      },
-    },
-    {
-      id: "comment_2",
-      content: "두 번째 댓글입니다.",
-      created_at: "2025-08-12T12:15:00Z",
-      post: {
-        id: "post_2",
-        title: "두 번째 게시글 제목",
-      },
-      children: [],
-      is_owner: false,
-      author: {
-        user_id: "user_003",
-        nickname: "최웅희",
-      },
-    },
-  ],
-};
+import LoadingOverlay from "@/components/loading/LoadingOverlay";
+import RecruitmentCard from "@/components/RecruitmentCard";
+import H1 from "@/components/text/H1";
+import api from "@/libs/axios";
+import type { PostList } from "@/types/api-res-recruitment";
+import { useQuery } from "@tanstack/react-query";
+import type { AxiosResponse } from "axios";
 
 export default function RecruitmentList() {
+  const { data, isPending } = useQuery<AxiosResponse<PostList>>({
+    queryKey: ["recruiment-list"],
+    queryFn: () => {
+      return api.get("/recruiting");
+    },
+  });
+
   return (
-    <div className="p-4 gap-2 flex flex-col ">
+    <div className="p-4 gap-2 flex flex-col sm:flex-row bg-bg-primary text-text-primary">
       <Filter filterType="recruitmentPostFilter" />
-      RecruitmentList
-      <div className="flex flex-col items-start max-w-sm w-full space-y-0.5">
-        {DUMMY_COMMENT_LIST.comments.map((comment) => (
-          <CommentUI comment={comment} key={comment.id} className="w-full" />
-        ))}
-      </div>
+      {isPending ? (
+        <LoadingOverlay />
+      ) : data ? (
+        <div className="flex flex-wrap gap-2 w-full justify-start items-center">
+          {data.data.posts.map((post) => (
+            <RecruitmentCard postData={post} key={post.id} />
+          ))}
+        </div>
+      ) : (
+        <H1>데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</H1>
+      )}
     </div>
   );
 }
