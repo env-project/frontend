@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import type { MasterData } from "@/types/api-res-common";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/libs/axios";
-import type { AxiosResponse } from "axios";
 import InlineSpinner from "@/components/loading/InlineSpinner";
 import H3 from "@/components/text/H3";
 
@@ -30,10 +29,11 @@ export default function Filter({
   className = "",
   isLogin = false,
 }: FilterProps) {
-  const { isPending, data } = useQuery<AxiosResponse<MasterData>>({
+  const { isPending, data } = useQuery<MasterData>({
     queryKey: ["master-data"],
-    queryFn: () => {
-      return api.get("/common/master-data");
+    queryFn: async () => {
+      const res = await api.get("/common/master-data");
+      return res.data;
     },
   });
 
@@ -116,16 +116,16 @@ export default function Filter({
             <FilterSection queryKey="bookmarks" title={"북마크"} data={bookmarks} mode="single" />
           ) : null}
 
-          <FilterSection queryKey="region_ids" title={"지역"} data={data.data.regions} />
-          <FilterSection queryKey="genre_ids" title={"선호 장르"} data={data.data.genres} />
-          <FilterSection queryKey="position_ids" title={"포지션"} data={data.data.positions} />
+          <FilterSection queryKey="region_ids" title={"지역"} data={data.regions} />
+          <FilterSection queryKey="genre_ids" title={"선호 장르"} data={data.genres} />
+          <FilterSection queryKey="position_ids" title={"포지션"} data={data.positions} />
           <FilterSection
             queryKey="experienced_level"
             title={filterType === "recruitmentPostFilter" ? "요구 경력" : "경력"}
-            data={data.data.experience_levels}
+            data={data.experience_levels}
           />
           {!isProfile && (
-            <FilterSection queryKey="orientation" title="지향" data={data.data.orientations} />
+            <FilterSection queryKey="orientation" title="지향" data={data.orientations} />
           )}
         </div>
       ) : (
