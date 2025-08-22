@@ -6,16 +6,14 @@ import H1 from "@/components/text/H1";
 import Text from "@/components/text/Text";
 import { getTimeDiff } from "@/libs/utils";
 import type { CommentList } from "@/types/api-res-comment";
-import type { PostDetail } from "@/types/api-res-recruitment";
 import { Link, useParams } from "react-router";
 import EyeIcon from "@/components/icons/EyeIcon";
 import CommentIcon from "@/components/icons/CommentIcon";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import Button from "@/components/Button";
 import TogglePostStatusModal from "@/components/TogglePostStatusModal";
-import { useQuery } from "@tanstack/react-query";
-import api from "@/libs/axios";
 import LoadingOverlay from "@/components/loading/LoadingOverlay";
+import useRecruitmentDetail from "@/hooks/api/useRecruitmentDetail";
 
 //실제론 api로 호출
 const dummyCommenList: CommentList = {
@@ -73,18 +71,7 @@ const dummyCommenList: CommentList = {
 export default function RecruitmentDetail() {
   const { postId } = useParams();
 
-  const {
-    data: postData,
-    isPending,
-    isError,
-  } = useQuery<PostDetail>({
-    queryKey: ["recruitment", "detail", postId],
-    queryFn: async () => {
-      const res = await api.get(`/recruiting/${postId}`);
-
-      return res.data;
-    },
-  });
+  const { data: postData, isPending, isError } = useRecruitmentDetail(postId || "");
 
   if (!postId) {
     return <div>해당 게시물은 삭제되었습니다.</div>;
