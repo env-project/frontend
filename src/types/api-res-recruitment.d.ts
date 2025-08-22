@@ -56,7 +56,7 @@ export interface Post {
   positions?: {
     position_id: Position["id"];
     position_name: Position["name"];
-    experience_level_id: ExperienceLevel["id"];
-    experience_level_name: ExperienceLevel["name"];
+    experienced_level_id: ExperienceLevel["id"];
+    experienced_level_name: ExperienceLevel["name"];
   }[];
 }
