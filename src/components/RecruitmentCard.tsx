@@ -73,7 +73,7 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
             <div className="flex items-center space-x-1">
               <Text variant="mainText">포지션</Text>
               {positions.slice(0, 3).map(({ position_name: positionName }, i) => (
-                <Badge size="sm" key={i}>
+                <Badge size="sm" className="text-text-on-dark" key={i}>
                   {positionName}
                 </Badge>
               ))}
@@ -84,7 +84,7 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
             <div className="flex items-center space-x-1">
               <Text variant="mainText">지역</Text>
               {regions.slice(0, 3).map((region, i) => (
-                <Badge size="sm" key={i}>
+                <Badge size="sm" className="text-text-on-dark" key={i}>
                   {region.name}
                 </Badge>
               ))}
@@ -95,7 +95,7 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
             <div className="flex items-center space-x-1">
               <Text variant="mainText">선호장르</Text>
               {genres.slice(0, 3).map((genre, i) => (
-                <Badge size="sm" key={i}>
+                <Badge size="sm" className="text-text-on-dark" key={i}>
                   {genre.name}
                 </Badge>
               ))}
@@ -105,7 +105,9 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
           {orientation ? (
             <div className="flex items-center space-x-1">
               <Text variant="mainText">지향</Text>
-              <Badge size="sm">{orientation.name}</Badge>
+              <Badge size="sm" className="text-text-on-dark">
+                {orientation.name}
+              </Badge>
             </div>
           ) : null}
         </div>
