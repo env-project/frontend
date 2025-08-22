@@ -1,11 +1,11 @@
 import HeroBanner from "@/components/HeroBanner";
-import RecruitmentList from "./recruitment-post/RecruitmentList";
+import PopularRecruitmentList from "./recruitment-post/PopularRecruitmentList";
 
 export default function Home() {
   return (
     <>
       <HeroBanner />
-      <RecruitmentList />
+      <PopularRecruitmentList />
     </>
   );
 }
