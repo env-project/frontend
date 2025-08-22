@@ -29,7 +29,6 @@
 + 텍스트를 사용할 때 항상 \<Text\> 혹은 \<H1\>,\<H2\>, \<H3\> 컴포넌트를 사용한다.
 + 단 커스텀 컴포너넌트를 사용할 때 자체적으로 위 텍스트 컴포넌트를 사용하고 있으면 제외한다.
 
-❌ 안 좋은 예시
 ```jsx
 <button>버튼</button>
 ```
@@ -39,24 +38,26 @@
 ```
 
 ### axios 데이터 리턴
-+ axios를 사용할 때 데이터만 리턴하는 것이 아니라 AxiosResponse로 감싼 값을 리턴한다.
++ axios를 사용할 때 AxiosResponse로 감싼 값이 아니라 데이터만 리턴한다.
+
 
 ❌ 안 좋은 예시
+```typescript
+  const { isPending, data } = useQuery<AxiosResponse<MasterData>>({
+    queryKey: ["master-data"],
+    queryFn: () => {
+      return api.get("/common/master-data");
+    },
+  });
+```
+
+✅ 좋은 예시
 ```typescript
   const { isPending, data } = useQuery<MasterData>({
     queryKey: ["master-data"],
     queryFn: () => {
       const res = api.get("/common/master-data");
       return res.data;
-    },
-  });
-```
-✅ 좋은 예시
-```typescript
-  const { isPending, data } = useQuery<AxiosResponse<MasterData>>({
-    queryKey: ["master-data"],
-    queryFn: () => {
-      return api.get("/common/master-data");
     },
   });
 ```
