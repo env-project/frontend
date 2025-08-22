@@ -2,6 +2,7 @@ import Filter from "@/components/Filter";
 import LoadingOverlay from "@/components/loading/LoadingOverlay";
 import RecruitmentCard from "@/components/RecruitmentCard";
 import H1 from "@/components/text/H1";
+import { useUserInfo } from "@/hooks/api/useUserInfo";
 import api from "@/libs/axios";
 import type { PostList } from "@/types/api-res-recruitment";
 import { useQuery } from "@tanstack/react-query";
@@ -15,15 +16,17 @@ export default function RecruitmentList() {
     },
   });
 
+  const user = useUserInfo();
+
   return (
-    <div className="p-4 gap-2 flex flex-col sm:flex-row bg-bg-primary text-text-primary">
-      <Filter filterType="recruitmentPostFilter" />
+    <div className="p-4 gap-2 flex flex-col items-start sm:flex-row bg-bg-primary text-text-primary">
+      <Filter filterType="recruitmentPostFilter" isLogin={!!user} />
       {isPending ? (
         <LoadingOverlay />
       ) : data ? (
         <div className="flex flex-wrap gap-2 w-full justify-start items-center">
           {data.data.posts.map((post) => (
-            <RecruitmentCard postData={post} key={post.id} />
+            <RecruitmentCard postData={post} key={post.id} className="h-64" />
           ))}
         </div>
       ) : (
