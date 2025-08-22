@@ -7,7 +7,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import api from "@/libs/axios";
 import type { PostList } from "@/types/api-res-recruitment";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, type JSX } from "react";
 import { useSearchParams } from "react-router";
 
 export default function RecruitmentList() {
@@ -30,19 +30,32 @@ export default function RecruitmentList() {
   const user = useUserInfo();
 
   return (
-    <div className="p-4 gap-2 flex flex-col items-start sm:flex-row bg-bg-primary text-text-primary">
+    <div className="p-4 gap-2 flex flex-col items-center justify-start sm:items-start sm:justify-start sm:flex-row bg-bg-primary text-text-primary min-h-screen">
       <Filter filterType="recruitmentPostFilter" isLogin={!!user} />
-      {isPending ? (
-        <LoadingOverlay />
-      ) : data ? (
-        <div className="flex flex-wrap gap-2 w-full justify-start items-center">
-          {data.posts.map((post) => (
-            <RecruitmentCard postData={post} key={post.id} className="h-64" />
-          ))}
-        </div>
-      ) : (
-        <H1>데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</H1>
-      )}
+
+      {(() => {
+        let content: JSX.Element;
+
+        if (isPending) {
+          content = <LoadingOverlay />;
+        } else if (data) {
+          if (data.posts.length > 0) {
+            content = (
+              <div className="flex flex-wrap gap-2 w-full justify-center items-center">
+                {data.posts.map((post) => (
+                  <RecruitmentCard postData={post} key={post.id} className="h-64" />
+                ))}
+              </div>
+            );
+          } else {
+            content = <H1>조건에 맞는 글이 없습니다.</H1>;
+          }
+        } else {
+          content = <H1>데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</H1>;
+        }
+
+        return content;
+      })()}
     </div>
   );
 }
