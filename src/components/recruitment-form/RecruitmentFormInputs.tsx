@@ -2,18 +2,15 @@ import type { TRecruitmentPostSchema } from "@/types/zod-schema/recruitment-post
 import { type UseFormReturn } from "react-hook-form";
 import Input from "@/components/input/Input";
 import ImageInput from "@/components/input/ImageInput";
-import type { MasterData } from "@/types/api-res-common";
 
 import Text from "@/components/text/Text";
 import InputWithLabelContainer from "@/components/recruitment-form/InputWithLabelContainer";
 import PositionsInput from "@/components/recruitment-form/PositionsInput";
 import CheckboxInputs from "@/components/recruitment-form/CheckboxInputs";
-import { useQuery } from "@tanstack/react-query";
-import { type AxiosResponse } from "axios";
-import api from "@/libs/axios";
+
 import LoadingOverlay from "../loading/LoadingOverlay";
 import H1 from "../text/H1";
-import { useEffect, useState } from "react";
+import useMasterData from "@/hooks/api/useMasterData";
 
 interface RecruitmentFormInputsProps {
   formData: UseFormReturn<TRecruitmentPostSchema>;
@@ -34,20 +31,7 @@ export default function RecruitmentFormInputs({
     control,
   } = formData;
 
-  const [masterData, setMasterData] = useState<MasterData>();
-
-  const { isPending, data } = useQuery<AxiosResponse<MasterData>>({
-    queryKey: ["master-data"],
-    queryFn: () => {
-      return api.get("/common/master-data");
-    },
-  });
-
-  useEffect(() => {
-    if (data) {
-      setMasterData(data.data);
-    }
-  }, [setMasterData, data]);
+  const { isPending, data: masterData } = useMasterData();
 
   return isPending ? (
     <LoadingOverlay />

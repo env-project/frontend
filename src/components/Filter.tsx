@@ -5,12 +5,10 @@ import { useSearchParams } from "react-router";
 import { cn } from "@/libs/utils";
 import useSelectQuery from "@/hooks/useSelectQuery";
 import useWindowWidth from "@/hooks/useWindowWidth";
-import { useEffect, useState } from "react";
-import type { MasterData } from "@/types/api-res-common";
-import { useQuery } from "@tanstack/react-query";
-import api from "@/libs/axios";
 import InlineSpinner from "@/components/loading/InlineSpinner";
 import H3 from "@/components/text/H3";
+import useMasterData from "@/hooks/api/useMasterData";
+import { useEffect, useState } from "react";
 
 const NICKNAME_QUERY_KEY = "nickname";
 const SEARCH_QUERY_KEY = "search_query";
@@ -29,13 +27,7 @@ export default function Filter({
   className = "",
   isLogin = false,
 }: FilterProps) {
-  const { isPending, data } = useQuery<MasterData>({
-    queryKey: ["master-data"],
-    queryFn: async () => {
-      const res = await api.get("/common/master-data");
-      return res.data;
-    },
-  });
+  const { isPending, data } = useMasterData();
 
   const sortBys = [
     { id: "latest", name: "최신순" },
