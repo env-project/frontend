@@ -12,7 +12,7 @@ export async function fetchMyBookmarkPosts(limit = 4): Promise<BookmarkPostList>
       posts: Array.isArray(body?.posts) ? body.posts : [],
     };
   } catch (err: any) {
-    return { next_cursor: "", posts: [] }; // 미구현/404/네트워크 → 안전 복구
+    return { next_cursor: "", posts: [] };
   }
 }
 
@@ -25,6 +25,6 @@ export async function fetchMyBookmarkProfiles(limit = 4): Promise<BookmarkUserLi
       profiles: Array.isArray(body?.profiles) ? body.profiles : [],
     };
   } catch (err: any) {
-    return { next_cursor: "", profiles: [] }; // 미구현/404/네트워크 → 안전 복구
+    return { next_cursor: "", profiles: [] };
   }
 }

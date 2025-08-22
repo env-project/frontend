@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import H1 from "@/components/text/H1";
 import H2 from "@/components/text/H2";
@@ -18,6 +18,9 @@ import { useMemo } from "react";
 import type { PositionAndLevel } from "@/types/api-res-profile";
 import type { Position, ExperienceLevel } from "@/types/api-res-common";
 import { fetchUserPostsByAuthor } from "@/api/fetchUserPostsByAuthor";
+import { fetchMyBookmarkPosts, fetchMyBookmarkProfiles } from "@/api/bookmark";
+import type { BookmarkPostList, BookmarkUserList } from "@/types/api-res-bookmark";
+import ProfileCard from "@/components/ProfileCard";
 
 type RawPositionLink = { position: Position; experience_level: ExperienceLevel };
 function toPositions(links: RawPositionLink[] | null | undefined): PositionAndLevel[] {
@@ -28,20 +31,33 @@ function toPositions(links: RawPositionLink[] | null | undefined): PositionAndLe
 function Section({
   title,
   count,
+  to,
   children,
 }: {
   title: string;
   count?: number;
+  to?: string;
   children: React.ReactNode;
 }) {
   return (
     <section className="space-y-3">
-      <div className="flex items-end justify-between gap-2 flex-wrap">
-        <H3 className="text-text-primary">{title}</H3>
-        {typeof count === "number" ? (
-          <Text variant="subText" className="text-text-primary">
-            ({count})
-          </Text>
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div className="flex items-end gap-2">
+          <H3 className="text-text-primary">{title}</H3>
+          {typeof count === "number" ? (
+            <Text variant="subText" className="text-text-primary">
+              ({count})
+            </Text>
+          ) : null}
+        </div>
+        {to ? (
+          <Link to={to} aria-label={`${title} 더보기`} className="shrink-0">
+            <span className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-gray-300 hover:bg-bg-secondary transition">
+              <Text variant="label" className="text-text-primary">
+                +
+              </Text>
+            </span>
+          </Link>
         ) : null}
       </div>
       {children}
@@ -53,7 +69,7 @@ export default function ProfileDetail() {
   const { userId } = useParams();
 
   // -----------------------------------------------------------------------------------------------------------------------------
-  const DUMMY = true;
+  const DUMMY = false;
 
   if (DUMMY) {
     const base: UserProfileDetail = {
@@ -302,6 +318,16 @@ export default function ProfileDetail() {
     enabled: !!userId && isPublic,
   });
 
+  const myBookMarkPostsQuery = useQuery<BookmarkPostList>({
+    queryKey: ["my-bookmark-posts", 4],
+    queryFn: () => fetchMyBookmarkPosts(4),
+  });
+
+  const myBookMarkUserQuery = useQuery<BookmarkUserList>({
+    queryKey: ["my-bookmark-users", 4],
+    queryFn: () => fetchMyBookmarkProfiles(4),
+  });
+
   if (isLoading) {
     return (
       <div className="mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8 py-5 sm:py-6 md:py-8">
@@ -406,7 +432,7 @@ export default function ProfileDetail() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
           {/* 최근 게시글 */}
           <div className="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 md:p-5 lg:p-6">
-            <Section title="게시글" count={postsData?.posts?.length ?? 0}>
+            <Section title="게시글" count={postsData?.posts?.length ?? 0} to="/recruitment-post">
               {postsLoading ? (
                 <div className="h-32 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
               ) : postsError ? (
@@ -427,11 +453,41 @@ export default function ProfileDetail() {
                 </div>
               )}
             </Section>
+
+            <Section
+              title="북마크한 게시글"
+              to="/recruitment-post?bookmark=bookmark"
+              count={myBookMarkPostsQuery.data?.posts.length ?? 0}
+            >
+              {myBookMarkPostsQuery.isLoading ? (
+                <div className="h-24 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
+              ) : !myBookMarkPostsQuery.data?.posts?.length ? (
+                <Text variant="subText" className="text-text-primary">
+                  북마크한 게시글이 없습니다.
+                </Text>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+                  {myBookMarkPostsQuery.data!.posts.map((bp) => {
+                    const asPost: Post = { ...(bp as any), is_bookmarked: true };
+                    const key = (bp as any).bookmark_id ?? (bp as any).id; // 왜 any??
+                    return (
+                      <div key={key} className="[&>*]:!w-full">
+                        <RecruitmentCard postData={asPost} />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </Section>
           </div>
 
           {/* 최근 댓글 */}
           <div className="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 sm:p-5 lg:p-6 lg:sticky lg:top-4 h-fit">
-            <Section title="댓글" count={commentsData?.comments?.length ?? 0}>
+            <Section
+              title="댓글"
+              count={commentsData?.comments?.length ?? 0}
+              to="/recruitment-post?view=comments"
+            >
               {commentsLoading ? (
                 <div className="h-24 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
               ) : commentsError ? (
@@ -462,6 +518,27 @@ export default function ProfileDetail() {
                       }}
                     />
                   ))}
+                </div>
+              )}
+            </Section>
+            <Section
+              title="북마크한 사용자"
+              to="/profile?bookmark=bookmark"
+              count={myBookMarkUserQuery.data?.profiles.length ?? 0}
+            >
+              {myBookMarkUserQuery.isLoading ? (
+                <div className="h-24 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
+              ) : !myBookMarkUserQuery.data?.profiles?.length ? (
+                <Text variant="subText" className="text-text-primary">
+                  북마크한 사용자가 없습니다.
+                </Text>
+              ) : (
+                <div className="grid grid-cols-1 gap-4">
+                  {myBookMarkUserQuery.data!.profiles.map((bu) => {
+                    const userForCard: any = { ...(bu as any), is_bookmarked: true };
+                    const key = (bu as any).bookmark_id ?? bu.user_id;
+                    return <ProfileCard key={key} profile={userForCard} />;
+                  })}
                 </div>
               )}
             </Section>
