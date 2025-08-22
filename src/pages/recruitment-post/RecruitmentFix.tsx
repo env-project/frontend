@@ -2,16 +2,22 @@ import Button from "@/components/Button";
 import RecruitmentFormInputs from "@/components/recruitment-form/RecruitmentFormInputs";
 import Text from "@/components/text/Text";
 import TogglePostStatusModal from "@/components/TogglePostStatusModal";
+import useRecruitmentDetail from "@/hooks/api/useRecruitmentDetail";
+import { mapDefaultDataToFormValues } from "@/libs/utils";
 import {
   recruitmentPostSchema,
   type TRecruitmentPostSchema,
 } from "@/types/zod-schema/recruitment-post-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
 
 export default function RecruitmentFix() {
   const { postId } = useParams();
+
+  const { data: defaultData } = useRecruitmentDetail(postId || "");
+
   const formData = useForm<TRecruitmentPostSchema>({
     resolver: zodResolver(recruitmentPostSchema),
     defaultValues: {
@@ -22,6 +28,13 @@ export default function RecruitmentFix() {
       recruitmentTypeId: "",
     },
   });
+
+  //값 기본값 넣기
+  useEffect(() => {
+    if (defaultData) {
+      formData.reset(mapDefaultDataToFormValues(defaultData));
+    }
+  }, [defaultData, formData]);
 
   const { setValue, handleSubmit } = formData;
 
