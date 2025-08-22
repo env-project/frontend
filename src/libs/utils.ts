@@ -55,13 +55,13 @@ export const mapDefaultDataToFormValues = (defaultData: PostDetail): TRecruitmen
 
   return {
     title,
-    bandName: band_name,
-    bandComposition: band_composition,
-    activityTime: activity_time,
-    practiceFrequencyTime: practice_frequency_time,
-    applicationMethod: application_method,
-    contactInfo: contact_info,
-    otherConditions: other_conditions,
+    bandName: band_name || "",
+    bandComposition: band_composition || "",
+    activityTime: activity_time || "",
+    practiceFrequencyTime: practice_frequency_time || "",
+    applicationMethod: application_method || "",
+    contactInfo: contact_info || "",
+    otherConditions: other_conditions || "",
     content,
 
     recruitmentTypeId: recruitment_type?.id ?? "",
