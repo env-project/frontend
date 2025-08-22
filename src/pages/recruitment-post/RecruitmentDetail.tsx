@@ -5,7 +5,6 @@ import CommentUI from "@/components/commentUI/CommentUI";
 import H1 from "@/components/text/H1";
 import Text from "@/components/text/Text";
 import { getTimeDiff } from "@/libs/utils";
-import type { CommentList } from "@/types/api-res-comment";
 import type { PostDetail } from "@/types/api-res-recruitment";
 import { Link, useParams } from "react-router";
 import EyeIcon from "@/components/icons/EyeIcon";
@@ -16,59 +15,8 @@ import TogglePostStatusModal from "@/components/TogglePostStatusModal";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/libs/axios";
 import LoadingOverlay from "@/components/loading/LoadingOverlay";
-
-//실제론 api로 호출
-const dummyCommenList: CommentList = {
-  next_cursor: "cursor_12345",
-  comments: [
-    {
-      id: "comment_1",
-      content: "첫 번째 댓글입니다.",
-      created_at: "2025-08-12T10:30:00Z",
-      post: {
-        id: "post_1",
-        title: "첫 번째 게시글 제목",
-      },
-      children: [
-        {
-          id: "comment_1_1",
-          content: "첫 번째 댓글의 대댓글입니다.",
-          created_at: "2025-08-12T11:00:00Z",
-          post: {
-            id: "post_1",
-            title: "첫 번째 게시글 제목",
-          },
-          children: [],
-          is_owner: false,
-          author: {
-            user_id: "user_002",
-            nickname: "김한주",
-          },
-        },
-      ],
-      is_owner: true,
-      author: {
-        user_id: "user_001",
-        nickname: "유다빈",
-      },
-    },
-    {
-      id: "comment_2",
-      content: "두 번째 댓글입니다.",
-      created_at: "2025-08-12T12:15:00Z",
-      post: {
-        id: "post_2",
-        title: "두 번째 게시글 제목",
-      },
-      children: [],
-      is_owner: false,
-      author: {
-        user_id: "user_003",
-        nickname: "최웅희",
-      },
-    },
-  ],
-};
+import useComment from "@/hooks/api/useComment";
+import InlineSpinner from "@/components/loading/InlineSpinner";
 
 export default function RecruitmentDetail() {
   const { postId } = useParams();
@@ -85,6 +33,8 @@ export default function RecruitmentDetail() {
       return res.data;
     },
   });
+
+  const { data: commentList, isPending: isCommentListPending } = useComment(postId || "");
 
   if (!postId) {
     return <div>해당 게시물은 삭제되었습니다.</div>;
@@ -267,8 +217,10 @@ export default function RecruitmentDetail() {
 
         <div className="flex flex-col items-start w-full max-w-[512px] space-y-1">
           <CommentInput postId={postId} className="w-full" />
-          {dummyCommenList.comments.length > 0 ? (
-            dummyCommenList.comments.map((comment) => (
+          {isCommentListPending ? (
+            <InlineSpinner />
+          ) : commentList && commentList.comments.length > 0 ? (
+            commentList.comments.map((comment) => (
               <CommentUI comment={comment} key={comment.id} className="w-full" />
             ))
           ) : (
