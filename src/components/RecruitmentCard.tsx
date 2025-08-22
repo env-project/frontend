@@ -40,7 +40,7 @@ export default function RecruitmentCard({ postData }: RecruitmentCardProps) {
 
   return (
     <Link
-      to="#"
+      to={`/recruitment-post/${id}`}
       className="flex flex-col items-start p-5 bg-bg-secondary text-text-primary transition-shadow rounded-xl w-full max-w-96 hover:shadow-lg hover:shadow-primary-thick"
     >
       <div className="flex w-full justify-between items-center">
