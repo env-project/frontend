@@ -9,18 +9,15 @@ import BookmarkBtn from "@/components/BookmarkBtn";
 import defaultImage from "@/assets/images/user-default-image.png";
 import RecruitmentCard from "@/components/RecruitmentCard";
 import CommentCard from "@/components/CommentCard";
-import type { Post } from "@/types/api-res-recruitment";
+import type { Post, PostList } from "@/types/api-res-recruitment";
 import type { UserProfileDetail } from "@/types/api-res-profile";
 import { fetchProfileDetail, type RawProfileDetail } from "@/api/fetchProfileDetail";
-import {
-  fetchUserPostsByAuthor,
-  type RecruitingCursorResponse,
-} from "@/api/fetchUserPostsByAuthor";
 import { fetchUserCommentsByAuthor } from "@/api/fetchUserCommentsByAuthor";
 import type { CommentList } from "@/types/api-res-comment";
 import { useMemo } from "react";
 import type { PositionAndLevel } from "@/types/api-res-profile";
 import type { Position, ExperienceLevel } from "@/types/api-res-common";
+import { fetchUserPostsByAuthor } from "@/api/fetchUserPostsByAuthor";
 
 type RawPositionLink = { position: Position; experience_level: ExperienceLevel };
 function toPositions(links: RawPositionLink[] | null | undefined): PositionAndLevel[] {
@@ -289,7 +286,7 @@ export default function ProfileDetail() {
     data: postsData,
     isLoading: postsLoading,
     isError: postsError,
-  } = useQuery<RecruitingCursorResponse>({
+  } = useQuery<PostList>({
     queryKey: ["profile-posts", userId],
     queryFn: () => fetchUserPostsByAuthor(userId!, 10),
     enabled: !!userId && isPublic,

@@ -1,15 +1,7 @@
 import api from "@/libs/axios";
-import type { Post } from "@/types/api-res-recruitment";
+import type { Post, PostList } from "@/types/api-res-recruitment";
 
-export type RecruitingCursorResponse = {
-  next_cursor: string | null;
-  posts: Post[];
-};
-
-export async function fetchUserPostsByAuthor(
-  userId: string,
-  limit = 10
-): Promise<RecruitingCursorResponse> {
+export async function fetchUserPostsByAuthor(userId: string, limit = 10): Promise<PostList> {
   const { data: body } = await api.get("/recruiting", { params: { author: userId, limit } });
 
   return {
