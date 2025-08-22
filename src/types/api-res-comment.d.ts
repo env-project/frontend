@@ -3,7 +3,7 @@ import { Post } from "@/types/api-res-recruitment";
 /* --------------- 댓글 --------------- */
 //GET /api/v1/comments
 export interface CommentList {
-  next_cursor: string;
+  next_cursor: string | null;
   comments: Comment[];
 }
 

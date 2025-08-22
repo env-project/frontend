@@ -11,15 +11,22 @@ import RecruitmentCard from "@/components/RecruitmentCard";
 import CommentCard from "@/components/CommentCard";
 import type { Post } from "@/types/api-res-recruitment";
 import type { UserProfileDetail } from "@/types/api-res-profile";
-import { fetchProfileDetail } from "@/api/fetchProfileDetail";
+import { fetchProfileDetail, type RawProfileDetail } from "@/api/fetchProfileDetail";
 import {
   fetchUserPostsByAuthor,
   type RecruitingCursorResponse,
 } from "@/api/fetchUserPostsByAuthor";
-import {
-  fetchUserCommentsByAuthor,
-  type CommentsListResponse,
-} from "@/api/fetchUserCommentsByAuthor";
+import { fetchUserCommentsByAuthor } from "@/api/fetchUserCommentsByAuthor";
+import type { CommentList } from "@/types/api-res-comment";
+import { useMemo } from "react";
+import type { PositionAndLevel } from "@/types/api-res-profile";
+import type { Position, ExperienceLevel } from "@/types/api-res-common";
+
+type RawPositionLink = { position: Position; experience_level: ExperienceLevel };
+function toPositions(links: RawPositionLink[] | null | undefined): PositionAndLevel[] {
+  if (!Array.isArray(links)) return [];
+  return links.map(({ position, experience_level }) => ({ position, experience_level }));
+}
 
 function Section({
   title,
@@ -47,6 +54,8 @@ function Section({
 
 export default function ProfileDetail() {
   const { userId } = useParams();
+
+  // -----------------------------------------------------------------------------------------------------------------------------
   const DUMMY = true;
 
   if (DUMMY) {
@@ -249,15 +258,30 @@ export default function ProfileDetail() {
     ); // ← 여기서 컴포넌트 반환하고 종료
   } // FIX: 하드코드 분기 블록 닫기(아래 훅 호출이 조건부가 되지 않게 함)
 
+  // -----------------------------------------------------------------------------------------------------------------------------
+
   const {
-    data: base,
+    data: raw,
     isLoading,
     isError,
-  } = useQuery<UserProfileDetail>({
+  } = useQuery<RawProfileDetail>({
     queryKey: ["profile-detail", userId],
     queryFn: () => fetchProfileDetail(userId!),
     enabled: !!userId,
   });
+
+  const base = useMemo(() => {
+    if (!raw || !userId) return null;
+    return {
+      ...raw,
+      user_id: userId, // ← 라우트에서 주입
+      image_url: raw.image_url ?? "",
+      email: raw.email ?? "",
+      regions: raw.regions ?? [],
+      genres: raw.genres ?? [],
+      positions: toPositions(raw.position_links), // ← 링크 → positions
+    };
+  }, [raw, userId]);
 
   const isPublic = !!base?.is_public;
 
@@ -275,7 +299,7 @@ export default function ProfileDetail() {
     data: commentsData,
     isLoading: commentsLoading,
     isError: commentsError,
-  } = useQuery<CommentsListResponse>({
+  } = useQuery<CommentList>({
     queryKey: ["profile-comments", userId],
     queryFn: () => fetchUserCommentsByAuthor(userId!, 10),
     enabled: !!userId && isPublic,
@@ -326,7 +350,7 @@ export default function ProfileDetail() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <H1 className="text-text-primary tracking-tight">{base.nickname}</H1>
               <div className="self-start sm:self-auto">
-                <BookmarkBtn userId={base.user_id} isBookmarked={base.is_bookmarked} />
+                <BookmarkBtn userId={userId!} isBookmarked={base.is_bookmarked} />
               </div>
             </div>
 
