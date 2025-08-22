@@ -1,70 +1,61 @@
 import Filter from "@/components/Filter";
-import type { CommentList } from "@/types/api-res-comment";
-import CommentUI from "@/components/commentUI/CommentUI";
-
-//실제론 api로 호출
-const DUMMY_COMMENT_LIST: CommentList = {
-  next_cursor: "cursor_12345",
-  comments: [
-    {
-      id: "comment_1",
-      content: "첫 번째 댓글입니다.",
-      created_at: "2025-08-12T10:30:00Z",
-      post: {
-        id: "post_1",
-        title: "첫 번째 게시글 제목",
-      },
-      children: [
-        {
-          id: "comment_1_1",
-          content: "첫 번째 댓글의 대댓글입니다.",
-          created_at: "2025-08-12T11:00:00Z",
-          post: {
-            id: "post_1",
-            title: "첫 번째 게시글 제목",
-          },
-          children: [],
-          is_owner: false,
-          author: {
-            user_id: "user_002",
-            nickname: "김한주",
-          },
-        },
-      ],
-      is_owner: true,
-      author: {
-        user_id: "user_001",
-        nickname: "유다빈",
-      },
-    },
-    {
-      id: "comment_2",
-      content: "두 번째 댓글입니다.",
-      created_at: "2025-08-12T12:15:00Z",
-      post: {
-        id: "post_2",
-        title: "두 번째 게시글 제목",
-      },
-      children: [],
-      is_owner: false,
-      author: {
-        user_id: "user_003",
-        nickname: "최웅희",
-      },
-    },
-  ],
-};
+import LoadingOverlay from "@/components/loading/LoadingOverlay";
+import RecruitmentCard from "@/components/RecruitmentCard";
+import H1 from "@/components/text/H1";
+import { useUserInfo } from "@/hooks/api/useUserInfo";
+import { useDebounce } from "@/hooks/useDebounce";
+import api from "@/libs/axios";
+import type { PostList } from "@/types/api-res-recruitment";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, type JSX } from "react";
+import { useSearchParams } from "react-router";
 
 export default function RecruitmentList() {
+  const [searchParams] = useSearchParams();
+  const debouncedSearchParams = useDebounce(searchParams);
+
+  const { data, isPending, refetch } = useQuery<PostList>({
+    queryKey: ["recruiment-list", debouncedSearchParams.toString()],
+    queryFn: async () => {
+      const res = await api.get("/recruiting", { params: debouncedSearchParams });
+      return res.data;
+    },
+  });
+
+  useEffect(() => {
+    console.log(debouncedSearchParams.toString());
+    refetch();
+  }, [debouncedSearchParams, refetch]);
+
+  const user = useUserInfo();
+
   return (
-    <div className="p-4 gap-2 flex flex-col ">
-      <Filter filterType="recruitmentPostFilter" />
-      RecruitmentList
-      <div className="flex flex-col items-start max-w-sm w-full space-y-0.5">
-        {DUMMY_COMMENT_LIST.comments.map((comment) => (
-          <CommentUI comment={comment} key={comment.id} className="w-full" />
-        ))}
-      </div>
+    <div className="p-4 gap-2 flex flex-col items-center justify-start sm:items-start sm:justify-start sm:flex-row bg-bg-primary text-text-primary min-h-screen">
+      <Filter filterType="recruitmentPostFilter" isLogin={!!user} />
+
+      {(() => {
+        let content: JSX.Element;
+
+        if (isPending) {
+          content = <LoadingOverlay />;
+        } else if (data) {
+          if (data.posts.length > 0) {
+            content = (
+              <div className="flex flex-wrap gap-2 w-full justify-center items-center">
+                {data.posts.map((post) => (
+                  <RecruitmentCard postData={post} key={post.id} className="h-64" />
+                ))}
+              </div>
+            );
+          } else {
+            content = <H1>조건에 맞는 글이 없습니다.</H1>;
+          }
+        } else {
+          content = <H1>데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</H1>;
+        }
+
+        return content;
+      })()}
     </div>
   );
 }
