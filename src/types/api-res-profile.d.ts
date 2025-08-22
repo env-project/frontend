@@ -1,5 +1,7 @@
 import { Genre, Region, Position, ExperienceLevel } from "@/types/api-res-common";
-import { Post } from "@/types/api-res-recruitment";
+import type { Post } from "./api-res-recruitment";
+
+type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 
 /* --------------- 프로필 --------------- */
 // GET /api/v1/users/me
@@ -18,13 +20,15 @@ export interface UserList {
 
 // GET /api/v1/profiles/{user_id}
 export interface UserProfileDetail {
-  user_id?: string;
+  user_id: string;
   nickname: string;
   image_url: string;
   is_public: boolean;
   regions: Region[];
   positions: PositionAndLevel[];
   genres: Genre[];
+  email: string;
+  is_bookmarked: boolean;
 }
 
 export interface MyProfile {
