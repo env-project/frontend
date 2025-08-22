@@ -71,7 +71,7 @@ export default function RecruitmentCard({ postData, className = "" }: Recruitmen
         </div>
       </div>
 
-      <div className="flex flex-col justify-between w-full sm:flex-row">
+      <div className="flex flex-col justify-between w-full flex-1 sm:flex-row">
         <div className="flex flex-col space-y-0.5 flex-1">
           {positions && positions.length > 0 ? (
             <div className="flex items-center space-x-1">
