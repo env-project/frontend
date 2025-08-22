@@ -116,16 +116,16 @@ export default function Filter({
             <FilterSection queryKey="bookmarks" title={"북마크"} data={bookmarks} mode="single" />
           ) : null}
 
-          <FilterSection queryKey="region_ids" title={"지역"} data={data.data.genres} />
+          <FilterSection queryKey="region_ids" title={"지역"} data={data.data.regions} />
           <FilterSection queryKey="genre_ids" title={"선호 장르"} data={data.data.genres} />
-          <FilterSection queryKey="positions_id" title={"포지션"} data={data.data.positions} />
+          <FilterSection queryKey="position_ids" title={"포지션"} data={data.data.positions} />
           <FilterSection
-            queryKey="experience_level_ids"
+            queryKey="experienced_level"
             title={filterType === "recruitmentPostFilter" ? "요구 경력" : "경력"}
             data={data.data.experience_levels}
           />
           {!isProfile && (
-            <FilterSection queryKey="orientation_ids" title="지향" data={data.data.orientations} />
+            <FilterSection queryKey="orientation" title="지향" data={data.data.orientations} />
           )}
         </div>
       ) : (
