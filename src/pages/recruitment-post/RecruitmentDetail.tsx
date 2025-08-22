@@ -130,8 +130,8 @@ export default function RecruitmentDetail() {
 
   return (
     <div className="bg-bg-primary text-text-primary p-2 flex justify-center">
-      <div className="flex flex-col gap-3 items-center max-w-full min-w-0 ">
-        <div className="flex flex-col max-w-2xl min-w-0">
+      <div className="flex flex-col gap-3 items-center w-full">
+        <div className="flex flex-col max-w-2xl w-full ">
           <div className="flex max-w-full min-w-0 justify-between items-center">
             <H1 className="truncate  min-w-0 flex-1">{title}</H1>
             <BookmarkButton
