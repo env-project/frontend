@@ -11,7 +11,7 @@ export default function HeroBanner() {
       <img
         src="src/assets/images/banner.jpg"
         alt="Band on Stage"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 object-cover w-full h-full"
       />
 
       {/* 오버레이 */}
@@ -26,11 +26,11 @@ export default function HeroBanner() {
           "px-4"
         )}
       >
-        <H1 className="text-text-secondary text-4xl sm:text-5xl md:text-6xl">
+        <H1 className="text-2xl sm:py-6 text-text-secondary sm:text-5xl md:text-6xl">
           모이는 밴드 울리는 무대
         </H1>
-        <Text variant="subText" className="mt-4 text-text-secondary">
-          지금 바로 시작해보세요. 당신의 음악 여정이 여기서 시작됩니다.
+        <Text className="mt-2 text-sm sm:py-6 sm:text-xl md:text-3xl text-text-secondary">
+          지금 바로 시작해보세요. <br /> 당신의 음악 여정이 여기서 시작됩니다.
         </Text>
       </div>
     </div>
