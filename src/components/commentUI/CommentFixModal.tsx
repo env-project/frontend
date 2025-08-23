@@ -6,10 +6,14 @@ import Text from "@/components/text/Text";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import api from "@/libs/axios";
 
 const commentFixSchema = z.object({
   newComment: z.string().min(1, { message: "최소 1글자 이상 입력해주세요." }),
 });
+
+type TCommentFixScheama = z.infer<typeof commentFixSchema>;
 
 interface CommentFixModalProps {
   commentId: string;
@@ -20,13 +24,26 @@ export default function CommentFixModal({ commentId }: CommentFixModalProps) {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<z.infer<typeof commentFixSchema>>({
     resolver: zodResolver(commentFixSchema),
   });
 
+  const { mutate } = useMutation({
+    mutationFn: (form: TCommentFixScheama) => {
+      return api.patch(`/comments/${commentId}`, { content: form.newComment });
+    },
+    onSuccess: () => {
+      console.log("sucess");
+    },
+    onError: () => {
+      setError("newComment", { message: "error" });
+    },
+  });
+
   //TODO: 실제 api 연결
-  const onSubmit = ({ newComment }: z.infer<typeof commentFixSchema>) => {
-    console.log(`Fix ${commentId} to ${newComment}`);
+  const onSubmit = (form: TCommentFixScheama) => {
+    mutate(form);
   };
 
   return (
