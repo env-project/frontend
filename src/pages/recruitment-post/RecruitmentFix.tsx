@@ -25,12 +25,11 @@ export default function RecruitmentFix() {
   const navigate = useNavigate();
   const [apiError, setApiError] = useState("");
 
-  //TODO: 요청 잘 가고 응답도 200으로 오는데 수정이 반영이 안 됨
   const { mutate } = useMutation({
     mutationFn: (form: TRecruitmentPostSchema) => {
       //TODO: 이미지 API 나오면 이미지도 연결
       const requestData = changeRecruitmentFormToRequestData(form);
-      return api.patch(`/recruiting/${postId}`, { requestData });
+      return api.patch(`/recruiting/${postId}`, requestData);
     },
     onSuccess: () => {
       navigate(`/recruitment-post/${postId}`);
