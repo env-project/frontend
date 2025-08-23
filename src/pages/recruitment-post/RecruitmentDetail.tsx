@@ -241,7 +241,7 @@ export default function RecruitmentDetail() {
 
             {isOwner ? (
               <div className="flex items-center justify-center space-x-2 w-full">
-                <Link to="#">
+                <Link to={`/recruitment-post/${postId}/fix`}>
                   <Button color="secondary" variant="outline">
                     <Text>수정하기</Text>
                   </Button>
