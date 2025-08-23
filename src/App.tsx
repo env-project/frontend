@@ -12,7 +12,6 @@ import RecruitmentFix from "@/pages/recruitment-post/RecruitmentFix";
 import ProfileDetail from "@/pages/profile/ProfileDetail";
 import ProfileUpdate from "@/pages/profile/ProfileUpdate";
 
-
 function App() {
   return (
     <Routes>
@@ -30,6 +29,7 @@ function App() {
 
         <Route path="/profile">
           <Route index element={<ProfileList />} />
+          <Route path="me" element={<ProfileDetail />} />
           <Route path=":userId" element={<ProfileDetail />} />
         </Route>
         <Route path="/mypage">

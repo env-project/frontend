@@ -70,7 +70,7 @@ const Header: FC = () => {
         )}
       >
         <NavigationLink title="Profile List" to="/profile" />
-        <NavigationLink title="Find People" to="recruitment-post" />
+        <NavigationLink title="Find People" to="/recruitment-post" />
       </div>
       <div className="flex items-center gap-8 ">
         {/* 다크 모드 토글 버튼 */}

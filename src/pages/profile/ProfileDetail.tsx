@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import H1 from "@/components/text/H1";
 import H2 from "@/components/text/H2";
@@ -10,17 +10,18 @@ import defaultImage from "@/assets/images/user-default-image.png";
 import RecruitmentCard from "@/components/RecruitmentCard";
 import CommentCard from "@/components/CommentCard";
 import type { Post, PostList } from "@/types/api-res-recruitment";
-import type { UserProfileDetail } from "@/types/api-res-profile";
 import { fetchProfileDetail, type RawProfileDetail } from "@/api/fetchProfileDetail";
 import { fetchUserCommentsByAuthor } from "@/api/fetchUserCommentsByAuthor";
 import type { CommentList } from "@/types/api-res-comment";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import type { PositionAndLevel } from "@/types/api-res-profile";
 import type { Position, ExperienceLevel } from "@/types/api-res-common";
 import { fetchUserPostsByAuthor } from "@/api/fetchUserPostsByAuthor";
 import { fetchMyBookmarkPosts, fetchMyBookmarkProfiles } from "@/api/bookmark";
 import type { BookmarkPostList, BookmarkUserList } from "@/types/api-res-bookmark";
 import ProfileCard from "@/components/ProfileCard";
+import type { AxiosError } from "axios";
+import api from "@/libs/axios";
 
 type RawPositionLink = { position: Position; experience_level: ExperienceLevel };
 function toPositions(links: RawPositionLink[] | null | undefined): PositionAndLevel[] {
@@ -67,245 +68,71 @@ function Section({
 
 export default function ProfileDetail() {
   const { userId } = useParams();
-
-  // -----------------------------------------------------------------------------------------------------------------------------
-  const DUMMY = true;
-
-  if (DUMMY) {
-    const base: UserProfileDetail = {
-      user_id: userId ?? "11111111-1111-1111-1111-111111111111",
-      nickname: "테스터",
-      image_url: "",
-      is_public: true,
-      is_bookmarked: false,
-      regions: [{ id: "7", name: "대구" }],
-      positions: [
-        { position: { id: "p1", name: "보컬" }, experience_level: { id: "e2", name: "중급" } },
-      ],
-      genres: [
-        { id: "g1", name: "록" },
-        { id: "g2", name: "메탈" },
-      ],
-      email: "tester@example.com",
-    };
-
-    const posts: Post[] = [
-      {
-        id: "post-1",
-        author: {
-          user_id: base.user_id!,
-          nickname: base.nickname,
-          image_url: base.image_url,
-        },
-        title: "기타/보컬 구합니다",
-        is_closed: false,
-        created_at: "2025-08-10T12:00:00Z",
-        is_owner: false,
-        is_bookmarked: false,
-        views_count: 132,
-        comments_count: 3,
-        bookmarks_count: 9,
-        orientation: { id: "o1", name: "밴드 지향" },
-        recruitment_type: { id: "r1", name: "정규" },
-        regions: base.regions,
-        genres: [{ id: "g1", name: "록" }],
-        positions: [
-          {
-            position_id: "p1",
-            position_name: "보컬",
-            experience_level_id: "e2",
-            experience_level_name: "중급",
-          },
-        ],
-        image_url: undefined,
-        band_name: undefined,
-        band_composition: undefined,
-        activity_time: undefined,
-        contact_info: undefined,
-        application_method: undefined,
-        practice_frequency_time: undefined,
-        other_conditions: undefined,
-      } as unknown as Post,
-    ];
-
-    const comments = [
-      {
-        id: "c-1",
-        content: "연락 드렸습니다. 함께 해요!",
-        created_at: "2025-08-11T09:30:00Z",
-        post: { id: "post-1", title: "기타/보컬 구합니다 " },
-      },
-      {
-        id: "c-2",
-        content: "연습실은 어디인가요?",
-        created_at: "2025-08-11T10:00:00Z",
-        post: { id: "post-1", title: "기타/보컬 구합니다" },
-      },
-    ];
-
-    // FIX: 하드코드 모드에서는 여기서 바로 렌더 후 return.
-    //        (아래에서 React Query 훅을 호출하지 않도록 분기 종료)
-    return (
-      <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-6 space-y-8 md:space-y-10">
-        {/* 헤더 카드 */}
-        <div className="rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 sm:p-5 md:p-6 lg:p-8">
-          <div className="grid grid-cols-1 md:grid-cols-[minmax(140px,180px)_1fr] xl:grid-cols-[minmax(180px,220px)_1fr] gap-5 sm:gap-6 md:gap-8 items-center">
-            <div className="mx-auto md:mx-0">
-              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden ring-1 ring-black/10 dark:ring-white/10 shadow-sm">
-                <img
-                  src={base.image_url || (defaultImage as unknown as string)}
-                  alt={`${base.nickname}의 프로필 이미지`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              {/* 이름 + 북마크 */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <H1 className="text-text-primary tracking-tight">{base.nickname}</H1>
-                <div className="self-start sm:self-auto">
-                  <BookmarkBtn userId={base.user_id!} isBookmarked={base.is_bookmarked} />{" "}
-                  {/* FIX: non-null 보증 */}
-                </div>
-              </div>
-
-              {/* 메타 배지 */}
-              <div className="flex items-center gap-1.5 sm:gap-2 md:gap-2.5 overflow-x-auto md:overflow-visible whitespace-nowrap [-webkit-overflow-scrolling:touch]">
-                {base.positions?.[0] ? (
-                  <>
-                    <Badge color="primarySoft">
-                      <Text variant="label" className="text-text-primary">
-                        {base.positions[0].position.name}
-                      </Text>
-                    </Badge>
-                    <Badge color="primarySoft">
-                      <Text variant="label" className="text-text-primary">
-                        {base.positions[0].experience_level.name}
-                      </Text>
-                    </Badge>
-                  </>
-                ) : null}
-
-                {base.regions.map((region) => (
-                  <Badge key={region.id} color="primarySoft" className="shrink-0">
-                    <Text variant="label" className="text-text-primary">
-                      {region.name}
-                    </Text>
-                  </Badge>
-                ))}
-
-                {base.genres.map((genre) => (
-                  <Badge key={genre.id} color="primarySoft" className="shrink-0">
-                    <Text variant="label" className="text-text-primary">
-                      {genre.name}
-                    </Text>
-                  </Badge>
-                ))}
-              </div>
-
-              {/* 이메일 */}
-              {base.email ? (
-                <Text variant="subText" className="text-text-primary/80 break-words sm:break-all">
-                  email: {base.email}
-                </Text>
-              ) : null}
-            </div>
-          </div>
-        </div>
-
-        {/* 본문: 게시글 + 댓글 */}
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] xl:grid-cols-[1.6fr_1fr] gap-5 md:gap-6">
-          {/* 게시글 */}
-          <div className="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 sm:p-5 lg:p-6">
-            <Section title="게시글" count={posts.length}>
-              {!posts.length ? (
-                <Text variant="subText" className="text-text-primary">
-                  작성한 게시글이 없습니다.
-                </Text>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
-                  {posts.map((post) => (
-                    <div key={post.id} className="[&>*]:!w-full">
-                      <RecruitmentCard postData={post} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Section>
-          </div>
-
-          {/* 댓글 */}
-          <div className="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 md:p-5 lg:p-6">
-            <Section title="댓글" count={comments.length}>
-              {!comments.length ? (
-                <Text variant="subText" className="text-text-primary">
-                  작성한 댓글이 없습니다.
-                </Text>
-              ) : (
-                <div className="flex flex-col gap-3 md:gap-4">
-                  {comments.map((c) => (
-                    <CommentCard
-                      key={c.id}
-                      comment={{
-                        id: c.id,
-                        content: c.content,
-                        created_at: c.created_at,
-                        post: c.post,
-                        children: [],
-                        is_owner: false,
-                        author: {
-                          user_id: base.user_id!,
-                          nickname: base.nickname,
-                          image_url: base.image_url,
-                        },
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </Section>
-          </div>
-        </div>
-      </div>
-    ); // ← 여기서 컴포넌트 반환하고 종료
-  } // FIX: 하드코드 분기 블록 닫기(아래 훅 호출이 조건부가 되지 않게 함)
-
-  // -----------------------------------------------------------------------------------------------------------------------------
+  const navigate = useNavigate();
+  const isMine = userId === "me";
 
   const {
     data: raw,
-    isLoading,
-    isError,
+    isLoading: rawLoading,
+    isError: rawError,
   } = useQuery<RawProfileDetail>({
     queryKey: ["profile-detail", userId],
     queryFn: () => fetchProfileDetail(userId!),
-    enabled: !!userId,
+    enabled: !!userId && !isMine,
   });
 
-  const base = useMemo(() => {
-    if (!raw || !userId) return null;
-    return {
-      ...raw,
-      user_id: userId, // ← 라우트에서 주입
-      image_url: raw.image_url ?? "",
-      email: raw.email ?? "",
-      regions: raw.regions ?? [],
-      genres: raw.genres ?? [],
-      positions: toPositions(raw.position_links), // ← 링크 → positions
-    };
-  }, [raw, userId]);
+  // 내 userId 조회
+  const meQuery = useQuery<{ user_id: string }, AxiosError>({
+    queryKey: ["me"],
+    enabled: isMine,
+    retry: false,
+    queryFn: async () => (await api.get("/users/me")).data,
+  });
 
-  const isPublic = !!base?.is_public;
+  // 내 프로필 조회
+  const myProfileQuery = useQuery<any, AxiosError>({
+    queryKey: ["my-profile", meQuery.data?.user_id],
+    enabled: isMine && !!meQuery.data?.user_id,
+    retry: false,
+    queryFn: async () => (await api.get(`/profiles/${meQuery.data!.user_id}`)).data,
+  });
+
+  // 404면 업데이트로 이동
+  useEffect(() => {
+    if (!isMine) return;
+    const status = myProfileQuery.error?.response?.status;
+    if (status === 404) navigate("/mypage/profile-update", { replace: true });
+  }, [isMine, myProfileQuery.error, navigate]);
+
+  const resolvedUserId = isMine ? (meQuery.data?.user_id ?? null) : (userId ?? null);
+  const loading = isMine ? meQuery.isLoading || myProfileQuery.isLoading : rawLoading;
+  const loadError = isMine ? myProfileQuery.isError : rawError;
+
+  const base = useMemo(() => {
+    const source = isMine ? myProfileQuery.data : raw;
+    const id = resolvedUserId;
+    if (!source || !id) return null;
+    return {
+      ...source,
+      user_id: id, // ← 라우트에서 주입
+      image_url: source.image_url ?? "",
+      email: source.email ?? "",
+      regions: source.regions ?? [],
+      genres: source.genres ?? [],
+      positions: toPositions(source.position_links), // ← 링크 → positions
+    };
+  }, [raw, isMine, myProfileQuery.data, meQuery.data, resolvedUserId]);
+
+  const canShowLists = isMine ? true : !!base?.is_public; // 내 프로필은 공개 여부 무시하고 노출
 
   const {
     data: postsData,
     isLoading: postsLoading,
     isError: postsError,
   } = useQuery<PostList>({
-    queryKey: ["profile-posts", userId],
-    queryFn: () => fetchUserPostsByAuthor(userId!, 10),
-    enabled: !!userId && isPublic,
+    queryKey: ["profile-posts", resolvedUserId],
+    queryFn: () => fetchUserPostsByAuthor(resolvedUserId!, 10),
+    enabled: !!resolvedUserId && canShowLists,
   });
 
   const {
@@ -313,9 +140,9 @@ export default function ProfileDetail() {
     isLoading: commentsLoading,
     isError: commentsError,
   } = useQuery<CommentList>({
-    queryKey: ["profile-comments", userId],
-    queryFn: () => fetchUserCommentsByAuthor(userId!, 10),
-    enabled: !!userId && isPublic,
+    queryKey: ["profile-comments", resolvedUserId],
+    queryFn: () => fetchUserCommentsByAuthor(resolvedUserId!, 10),
+    enabled: !!resolvedUserId && canShowLists,
   });
 
   const myBookMarkPostsQuery = useQuery<BookmarkPostList>({
@@ -328,7 +155,7 @@ export default function ProfileDetail() {
     queryFn: () => fetchMyBookmarkProfiles(4),
   });
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8 py-5 sm:py-6 md:py-8">
         <div className="animate-pulse space-y-6">
@@ -342,7 +169,7 @@ export default function ProfileDetail() {
     );
   }
 
-  if (isError || !base) {
+  if (loadError || !base) {
     return (
       <div className="mx-auto max-w-4xl px-4 md:px-6 lg:px-8 py-8">
         <H2 className="text-text-primary">프로필을 불러오지 못했습니다.</H2>
@@ -358,19 +185,31 @@ export default function ProfileDetail() {
       {/* 헤더 카드 */}
       <div className="rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 sm:p-5 md:p-6 lg:p-8">
         <div className="grid grid-cols-1 md:grid-cols-[minmax(140px,180px)_1fr] xl:grid-cols-[minmax(180px,220px)_1fr] gap-5 sm:gap-6 md:gap-8 items-center">
-          <Link
-            to="/mypage/profile-update"
-            aria-label="프로필 수정으로 이동"
-            className="mx-auto md:mx-0 group outline-none focus:ring-2 focus:ring-primary/40 rounded-full"
-          >
-            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden ring-1 ring-black/10 dark:ring-white/10 group-hover:ring-primary/40 transition-shadow shadow-sm cursor-pointer">
-              <img
-                src={base.image_url || (defaultImage as unknown as string)}
-                alt={`${base.nickname}의 프로필 이미지`}
-                className="w-full h-full object-cover"
-              />
+          {isMine ? (
+            <Link
+              to="/mypage/profile-update"
+              aria-label="프로필 수정으로 이동"
+              className="mx-auto md:mx-0 group outline-none focus:ring-2 focus:ring-primary/40 rounded-full"
+            >
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden ring-1 ring-black/10 dark:ring-white/10 group-hover:ring-primary/40 transition-shadow shadow-sm cursor-pointer">
+                <img
+                  src={base.image_url || (defaultImage as unknown as string)}
+                  alt={`${base.nickname}의 프로필 이미지`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </Link>
+          ) : (
+            <div className="mx-auto md:mx-0">
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden ring-1 ring-black/10 dark:ring-white/10 shadow-sm">
+                <img
+                  src={base.image_url || (defaultImage as unknown as string)}
+                  alt={`${base.nickname}의 프로필 이미지`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
-          </Link>
+          )}
 
           <div className="flex flex-col gap-4">
             {/* 이름 + 북마크 */}
@@ -425,7 +264,7 @@ export default function ProfileDetail() {
         </div>
       </div>
 
-      {!base.is_public ? (
+      {!isMine && !base.is_public ? (
         <div className="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 md:p-6">
           <H3 className="text-text-primary mb-1.5">비공개 계정입니다</H3>
           <Text variant="subText" className="text-text-primary">
@@ -458,31 +297,33 @@ export default function ProfileDetail() {
               )}
             </Section>
 
-            <Section
-              title="북마크한 게시글"
-              to="/recruitment-post?bookmark=bookmark"
-              count={myBookMarkPostsQuery.data?.posts.length ?? 0}
-            >
-              {myBookMarkPostsQuery.isLoading ? (
-                <div className="h-24 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
-              ) : !myBookMarkPostsQuery.data?.posts?.length ? (
-                <Text variant="subText" className="text-text-primary">
-                  북마크한 게시글이 없습니다.
-                </Text>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
-                  {myBookMarkPostsQuery.data!.posts.map((bp) => {
-                    const asPost: Post = { ...(bp as any), is_bookmarked: true };
-                    const key = (bp as any).bookmark_id ?? (bp as any).id; // 왜 any??
-                    return (
-                      <div key={key} className="[&>*]:!w-full">
-                        <RecruitmentCard postData={asPost} />
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </Section>
+            {isMine && (
+              <Section
+                title="북마크한 게시글"
+                to="/recruitment-post?bookmark=bookmark"
+                count={myBookMarkPostsQuery.data?.posts.length ?? 0}
+              >
+                {myBookMarkPostsQuery.isLoading ? (
+                  <div className="h-24 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
+                ) : !myBookMarkPostsQuery.data?.posts?.length ? (
+                  <Text variant="subText" className="text-text-primary">
+                    북마크한 게시글이 없습니다.
+                  </Text>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+                    {myBookMarkPostsQuery.data!.posts.map((bp) => {
+                      const asPost: Post = { ...(bp as any), is_bookmarked: true };
+                      const key = (bp as any).bookmark_id ?? (bp as any).id; // 왜 any??
+                      return (
+                        <div key={key} className="[&>*]:!w-full">
+                          <RecruitmentCard postData={asPost} />
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </Section>
+            )}
           </div>
 
           {/* 최근 댓글 */}
@@ -525,27 +366,29 @@ export default function ProfileDetail() {
                 </div>
               )}
             </Section>
-            <Section
-              title="북마크한 사용자"
-              to="/profile?bookmark=bookmark"
-              count={myBookMarkUserQuery.data?.profiles.length ?? 0}
-            >
-              {myBookMarkUserQuery.isLoading ? (
-                <div className="h-24 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
-              ) : !myBookMarkUserQuery.data?.profiles?.length ? (
-                <Text variant="subText" className="text-text-primary">
-                  북마크한 사용자가 없습니다.
-                </Text>
-              ) : (
-                <div className="grid grid-cols-1 gap-4">
-                  {myBookMarkUserQuery.data!.profiles.map((bu) => {
-                    const userForCard: any = { ...(bu as any), is_bookmarked: true };
-                    const key = (bu as any).bookmark_id ?? bu.user_id;
-                    return <ProfileCard key={key} profile={userForCard} />;
-                  })}
-                </div>
-              )}
-            </Section>
+            {isMine && (
+              <Section
+                title="북마크한 사용자"
+                to="/profile?bookmark=bookmark"
+                count={myBookMarkUserQuery.data?.profiles.length ?? 0}
+              >
+                {myBookMarkUserQuery.isLoading ? (
+                  <div className="h-24 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
+                ) : !myBookMarkUserQuery.data?.profiles?.length ? (
+                  <Text variant="subText" className="text-text-primary">
+                    북마크한 사용자가 없습니다.
+                  </Text>
+                ) : (
+                  <div className="grid grid-cols-1 gap-4">
+                    {myBookMarkUserQuery.data!.profiles.map((bu) => {
+                      const userForCard: any = { ...(bu as any), is_bookmarked: true };
+                      const key = (bu as any).bookmark_id ?? bu.user_id;
+                      return <ProfileCard key={key} profile={userForCard} />;
+                    })}
+                  </div>
+                )}
+              </Section>
+            )}
           </div>
         </div>
       )}
