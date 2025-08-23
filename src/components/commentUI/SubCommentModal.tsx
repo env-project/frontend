@@ -18,7 +18,6 @@ type TSubCommentSchema = z.infer<typeof SubCommentSchema>;
 
 interface SubCommentModalProps {
   parentCommentId: string;
-  postId: string;
 }
 
 export default function SubCommentModal({ parentCommentId }: SubCommentModalProps) {
