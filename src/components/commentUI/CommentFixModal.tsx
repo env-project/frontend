@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import api from "@/libs/axios";
+import { AxiosError } from "axios";
 
 const commentFixSchema = z.object({
   newComment: z.string().min(1, { message: "최소 1글자 이상 입력해주세요." }),
@@ -34,10 +35,24 @@ export default function CommentFixModal({ commentId }: CommentFixModalProps) {
       return api.patch(`/comments/${commentId}`, { content: form.newComment });
     },
     onSuccess: () => {
-      console.log("sucess");
+      window.location.reload();
     },
-    onError: () => {
-      setError("newComment", { message: "error" });
+    onError: (e) => {
+      if (e instanceof AxiosError) {
+        if (e.status === 401) {
+          setError("newComment", { message: "로그인 후 이용해주세요." });
+        } else if (e.status === 403) {
+          setError("newComment", { message: "작성자 본인만 수정 할 수 있습니다." });
+        } else {
+          setError("newComment", {
+            message: "작성 중 에러가 발생 했습니다. 잠시후 다시 시도해주세요.",
+          });
+        }
+      } else {
+        setError("newComment", {
+          message: "작성 중 에러가 발생 했습니다. 잠시후 다시 시도해주세요.",
+        });
+      }
     },
   });
 
