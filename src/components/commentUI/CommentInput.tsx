@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import api from "@/libs/axios";
+import useComment from "@/hooks/api/useComment";
+import { AxiosError } from "axios";
 
 const commentSchema = z.object({
   comment: z.string().min(1, "한 글자 이상 입력해주세요."),
@@ -24,7 +26,11 @@ export default function CommentInput({ postId, className = "", ...rest }: Commen
     register,
     handleSubmit,
     formState: { errors },
+    setError,
+    setValue,
   } = useForm<TCommentSchema>({ resolver: zodResolver(commentSchema) });
+
+  const { refetch: refetchComments } = useComment(postId);
 
   const { mutate } = useMutation({
     mutationFn: (form: TCommentSchema) => {
@@ -33,10 +39,19 @@ export default function CommentInput({ postId, className = "", ...rest }: Commen
       });
     },
     onSuccess: () => {
-      console.log("success");
+      setValue("comment", "");
+      refetchComments();
     },
     onError: (e) => {
-      console.log(e);
+      if (e instanceof AxiosError) {
+        if (e.status === 401) {
+          setError("comment", { message: "로그인 후 이용해주세요." });
+        } else {
+          setError("comment", { message: "댓글 작성 중 에러가 발생했습니다." });
+        }
+      } else {
+        setError("comment", { message: "댓글 작성 중 에러가 발생했습니다." });
+      }
     },
   });
 
