@@ -1,11 +1,11 @@
-import LoadingOverlay from "@/components/loading/LoadingOverlay";
 import ProfileCard from "@/components/ProfileCard";
-import { UsePopularProfiles } from "@/hooks/queries/usePopularProfile";
+import { usePopularProfiles } from "@/hooks/queries/usePopularProfile";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
+import InlineSpinner from "./loading/InlineSpinner";
 
 export default function PopularProfileList() {
-  const { data, isPending } = UsePopularProfiles({ sortBy: "views", limit: 20 });
+  const { data, isPending } = usePopularProfiles({ sortBy: "views", limit: 20 });
 
   const [sliderRef, slider] = useKeenSlider<HTMLDivElement>({
     loop: true,
@@ -19,7 +19,7 @@ export default function PopularProfileList() {
   });
 
   if (isPending) {
-    return <LoadingOverlay />;
+    return <InlineSpinner />;
   }
 
   if (!data || !data.profiles || data.profiles.length === 0) {

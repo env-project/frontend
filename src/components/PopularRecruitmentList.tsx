@@ -1,11 +1,11 @@
 import RecruitmentCard from "@/components/RecruitmentCard";
-import LoadingOverlay from "@/components/loading/LoadingOverlay";
-import { UsePopularRecruitment } from "@/hooks/queries/usePopularRecruitment";
+import { usePopularRecruitment } from "@/hooks/queries/usePopularRecruitment";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
+import InlineSpinner from "./loading/InlineSpinner";
 
 export default function PopularRecruitmentList() {
-  const { data, isPending } = UsePopularRecruitment({ sortBy: "views", limit: 20 });
+  const { data, isPending } = usePopularRecruitment({ sortBy: "views", limit: 20 });
 
   const [sliderRef, slider] = useKeenSlider<HTMLDivElement>({
     loop: true,
@@ -19,7 +19,7 @@ export default function PopularRecruitmentList() {
   });
 
   if (isPending) {
-    return <LoadingOverlay />;
+    return <InlineSpinner />;
   }
 
   if (!data || !data.posts || data.posts.length === 0) {

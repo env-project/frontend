@@ -7,7 +7,7 @@ interface useRecruitmentOptions {
   limit?: number;
 }
 
-export function UsePopularRecruitment({
+export function usePopularRecruitment({
   sortBy = "views",
   limit = 20,
 }: useRecruitmentOptions = {}) {

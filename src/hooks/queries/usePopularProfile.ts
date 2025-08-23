@@ -7,7 +7,7 @@ interface useProfilesOptions {
   limit?: number;
 }
 
-export function UsePopularProfiles({ sortBy = "views", limit = 20 }: useProfilesOptions = {}) {
+export function usePopularProfiles({ sortBy = "views", limit = 20 }: useProfilesOptions = {}) {
   return useQuery<UserList>({
     queryKey: ["popular-Profile-list", { sortBy, limit }],
     queryFn: async () => {
