@@ -115,7 +115,9 @@ export default function ProfileDetail() {
 
   const resolvedUserId = isMine ? (meQuery.data?.user_id ?? null) : (userId ?? null);
   const loading = isMine ? meQuery.isLoading || myProfileQuery.isLoading : rawLoading;
-  const loadError = isMine ? myProfileQuery.isError : rawError;
+  const loadError = isMine
+    ? myProfileQuery.isError && myProfileQuery.error?.response?.status !== 404
+    : rawError;
 
   const base = useMemo(() => {
     const source = isMine ? myProfileQuery.data : raw;
@@ -157,11 +159,13 @@ export default function ProfileDetail() {
   const myBookMarkPostsQuery = useQuery<BookmarkPostList>({
     queryKey: ["my-bookmark-posts", 4],
     queryFn: () => fetchMyBookmarkPosts(4),
+    enabled: isMine,
   });
 
   const myBookMarkUserQuery = useQuery<BookmarkUserList>({
     queryKey: ["my-bookmark-users", 4],
     queryFn: () => fetchMyBookmarkProfiles(4),
+    enabled: isMine,
   });
 
   if (loading) {
@@ -225,7 +229,9 @@ export default function ProfileDetail() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <H1 className="text-text-primary tracking-tight">{base.nickname}</H1>
               <div className="self-start sm:self-auto">
-                {!isMine && <BookmarkBtn userId={base.userId!} isBookmarked={base.is_bookmarked} />}
+                {!isMine && (
+                  <BookmarkBtn userId={base.user_id!} isBookmarked={base.is_bookmarked} />
+                )}
               </div>
             </div>
 
