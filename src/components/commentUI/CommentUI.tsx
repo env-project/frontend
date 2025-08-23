@@ -72,15 +72,17 @@ export default function CommentUI({
           </Text>
         </div>
       </div>
-      {children.map((child) => (
-        <CommentUI
-          isChild={true}
-          comment={child}
-          key={child.id}
-          className={className}
-          rootId={id}
-        />
-      ))}
+      {children
+        ? children.map((child) => (
+            <CommentUI
+              isChild={true}
+              comment={child}
+              key={child.id}
+              className={className}
+              rootId={id}
+            />
+          ))
+        : null}
     </>
   );
 }

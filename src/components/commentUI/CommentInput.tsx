@@ -6,6 +6,8 @@ import Button from "../Button";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import api from "@/libs/axios";
 
 const commentSchema = z.object({
   comment: z.string().min(1, "한 글자 이상 입력해주세요."),
@@ -24,8 +26,22 @@ export default function CommentInput({ postId, className = "", ...rest }: Commen
     formState: { errors },
   } = useForm<TCommentSchema>({ resolver: zodResolver(commentSchema) });
 
+  const { mutate } = useMutation({
+    mutationFn: (form: TCommentSchema) => {
+      return api.post(`/recruiting/${postId}/comments`, {
+        content: form.comment,
+      });
+    },
+    onSuccess: () => {
+      console.log("success");
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
   const onSubmit = (form: TCommentSchema) => {
-    console.log(form);
+    mutate(form);
   };
 
   return (
