@@ -69,7 +69,7 @@ export default function ProfileDetail() {
   const { userId } = useParams();
 
   // -----------------------------------------------------------------------------------------------------------------------------
-  const DUMMY = false;
+  const DUMMY = true;
 
   if (DUMMY) {
     const base: UserProfileDetail = {
@@ -358,15 +358,19 @@ export default function ProfileDetail() {
       {/* 헤더 카드 */}
       <div className="rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 sm:p-5 md:p-6 lg:p-8">
         <div className="grid grid-cols-1 md:grid-cols-[minmax(140px,180px)_1fr] xl:grid-cols-[minmax(180px,220px)_1fr] gap-5 sm:gap-6 md:gap-8 items-center">
-          <div className="mx-auto md:mx-0">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full overflow-hidden ring-1 ring-black/10 dark:ring-white/10 shadow-sm">
+          <Link
+            to="/mypage/profile-update"
+            aria-label="프로필 수정으로 이동"
+            className="mx-auto md:mx-0 group outline-none focus:ring-2 focus:ring-primary/40 rounded-full"
+          >
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden ring-1 ring-black/10 dark:ring-white/10 group-hover:ring-primary/40 transition-shadow shadow-sm cursor-pointer">
               <img
                 src={base.image_url || (defaultImage as unknown as string)}
                 alt={`${base.nickname}의 프로필 이미지`}
                 className="w-full h-full object-cover"
               />
             </div>
-          </div>
+          </Link>
 
           <div className="flex flex-col gap-4">
             {/* 이름 + 북마크 */}
