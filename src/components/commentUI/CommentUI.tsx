@@ -7,6 +7,7 @@ import CommentDeleteModal from "@/components/commentUI/CommentDeleteModal";
 import CommentFixModal from "@/components/commentUI/CommentFixModal";
 import SubCommentModal from "@/components/commentUI/SubCommentModal";
 import { cn } from "@/libs/utils";
+import { useUserInfo } from "@/hooks/api/useUserInfo";
 
 interface CommentUIProps {
   comment: Comment;
@@ -28,6 +29,8 @@ export default function CommentUI({
     children,
     id,
   } = comment;
+
+  const { data: user } = useUserInfo();
 
   return (
     <>
@@ -58,7 +61,8 @@ export default function CommentUI({
               ) : null}
             </div>
             <div className="flex justify-center items-center space-x-0.5">
-              <SubCommentModal parentCommentId={rootId || id} />
+              {user ? <SubCommentModal parentCommentId={rootId || id} /> : null}
+
               {isOwner ? (
                 <>
                   <CommentFixModal commentId={id} />
@@ -72,15 +76,17 @@ export default function CommentUI({
           </Text>
         </div>
       </div>
-      {children.map((child) => (
-        <CommentUI
-          isChild={true}
-          comment={child}
-          key={child.id}
-          className={className}
-          rootId={id}
-        />
-      ))}
+      {children
+        ? children.map((child) => (
+            <CommentUI
+              isChild={true}
+              comment={child}
+              key={child.id}
+              className={className}
+              rootId={id}
+            />
+          ))
+        : null}
     </>
   );
 }

@@ -2,6 +2,8 @@ import { Modal, ModalClose, ModalContent, ModalTrigger } from "@/components/Moda
 import Button from "@/components/Button";
 import H3 from "@/components/text/H3";
 import Text from "@/components/text/Text";
+import { useMutation } from "@tanstack/react-query";
+import api from "@/libs/axios";
 
 interface CommentDeleteModalProps {
   commentId: string;
@@ -9,8 +11,18 @@ interface CommentDeleteModalProps {
 
 export default function CommentDeleteModal({ commentId }: CommentDeleteModalProps) {
   //TODO: 실제 api 연결
+
+  const { mutate } = useMutation({
+    mutationFn: () => {
+      return api.delete(`/comments/${commentId}`);
+    },
+    onSuccess: () => {
+      window.location.reload();
+    },
+  });
+
   const handleDeleteClick = () => {
-    console.log(`${commentId} 삭제`);
+    mutate();
   };
 
   return (
