@@ -23,6 +23,15 @@ import ProfileCard from "@/components/ProfileCard";
 import type { AxiosError } from "axios";
 import api from "@/libs/axios";
 
+type Tag = { id: string; name: string };
+
+const normTags = (xs: unknown): Tag[] =>
+  (Array.isArray(xs) ? xs : []).map((it: any) => {
+    const id = it?.id ?? it?.region_id ?? it?.genre_id ?? it;
+    const name = it?.name ?? it?.region_name ?? it?.genre_name ?? it;
+    return { id: String(id), name: String(name) };
+  });
+
 type RawPositionLink = { position: Position; experience_level: ExperienceLevel };
 function toPositions(links: RawPositionLink[] | null | undefined): PositionAndLevel[] {
   if (!Array.isArray(links)) return [];
@@ -114,11 +123,11 @@ export default function ProfileDetail() {
     if (!source || !id) return null;
     return {
       ...source,
-      user_id: id, // ← 라우트에서 주입
+      user_id: id,
       image_url: source.image_url ?? "",
       email: source.email ?? "",
-      regions: source.regions ?? [],
-      genres: source.genres ?? [],
+      regions: normTags((source as any).regions),
+      genres: normTags((source as any).genres),
       positions: toPositions(source.position_links), // ← 링크 → positions
     };
   }, [raw, isMine, myProfileQuery.data, meQuery.data, resolvedUserId]);
@@ -216,7 +225,7 @@ export default function ProfileDetail() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <H1 className="text-text-primary tracking-tight">{base.nickname}</H1>
               <div className="self-start sm:self-auto">
-                <BookmarkBtn userId={userId!} isBookmarked={base.is_bookmarked} />
+                {!isMine && <BookmarkBtn userId={base.userId!} isBookmarked={base.is_bookmarked} />}
               </div>
             </div>
 
@@ -237,7 +246,7 @@ export default function ProfileDetail() {
                 </>
               ) : null}
 
-              {(base.regions ?? []).map((region) => (
+              {(base.regions ?? []).map((region: Tag) => (
                 <Badge key={region.id} color="primarySoft">
                   <Text variant="label" className="text-text-primary">
                     {region.name}
@@ -245,7 +254,7 @@ export default function ProfileDetail() {
                 </Badge>
               ))}
 
-              {(base.genres ?? []).map((genre) => (
+              {(base.genres ?? []).map((genre: Tag) => (
                 <Badge key={genre.id} color="primarySoft">
                   <Text variant="label" className="text-text-primary">
                     {genre.name}
