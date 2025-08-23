@@ -56,7 +56,10 @@ export default function CommentFixModal({ commentId }: CommentFixModalProps) {
       <ModalContent>
         <div className="flex flex-col p-2 space-y-5">
           <H3 className="text-text-primary">수정할 내용을 작성해주세요</H3>
-          <form className="flex flex-col w-full space-x-2" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="flex flex-col w-full space-x-2 space-y-2"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Input {...register("newComment")} error={errors.newComment?.message} />
             <div className="flex  w-full justify-end space-x-2">
               <ModalClose>
