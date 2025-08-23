@@ -5,34 +5,27 @@ import CommentUI from "@/components/commentUI/CommentUI";
 import H1 from "@/components/text/H1";
 import Text from "@/components/text/Text";
 import { getTimeDiff } from "@/libs/utils";
+
 import type { PostDetail } from "@/types/api-res-recruitment";
+
+import type { CommentList } from "@/types/api-res-comment";
+
 import { Link, useParams } from "react-router";
 import EyeIcon from "@/components/icons/EyeIcon";
 import CommentIcon from "@/components/icons/CommentIcon";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import Button from "@/components/Button";
 import TogglePostStatusModal from "@/components/TogglePostStatusModal";
-import { useQuery } from "@tanstack/react-query";
-import api from "@/libs/axios";
 import LoadingOverlay from "@/components/loading/LoadingOverlay";
 import useComment from "@/hooks/api/useComment";
 import InlineSpinner from "@/components/loading/InlineSpinner";
+import useRecruitmentDetail from "@/hooks/api/useRecruitmentDetail";
+
 
 export default function RecruitmentDetail() {
   const { postId } = useParams();
 
-  const {
-    data: postData,
-    isPending,
-    isError,
-  } = useQuery<PostDetail>({
-    queryKey: ["recruitment", "detail", postId],
-    queryFn: async () => {
-      const res = await api.get(`/recruiting/${postId}`);
-
-      return res.data;
-    },
-  });
+  const { data: postData, isPending, isError } = useRecruitmentDetail(postId || "");
 
   const { data: commentList, isPending: isCommentListPending } = useComment(postId || "");
 
@@ -204,7 +197,7 @@ export default function RecruitmentDetail() {
 
             {isOwner ? (
               <div className="flex items-center justify-center space-x-2 w-full">
-                <Link to="#">
+                <Link to={`/recruitment-post/${postId}/fix`}>
                   <Button color="secondary" variant="outline">
                     <Text>수정하기</Text>
                   </Button>
