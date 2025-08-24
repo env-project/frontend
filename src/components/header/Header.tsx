@@ -96,7 +96,7 @@ const Header: FC = () => {
         {/* 데스크톱 인증 버튼 (PC에서만 보임) */}
         {isLogin ? (
           <div className="items-center justify-end hidden gap-1 sm:flex">
-            <Link to="/my-page">
+            <Link to="/profile/me">
               <Button variant="link-primary">
                 <Text variant="mainText">MyPage</Text>
               </Button>
@@ -136,7 +136,7 @@ const Header: FC = () => {
           </div>
           {isLogin ? (
             <>
-              <Link to="/my-page">
+              <Link to="/profile/me">
                 <Button variant="link-primary" className="w-full" onClick={toggleBurger}>
                   <Text variant="button">MyPage</Text>
                 </Button>

@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import H1 from "@/components/text/H1";
 import H2 from "@/components/text/H2";
@@ -173,7 +173,7 @@ export default function ProfileDetail() {
     if (isMine404) navigate("/mypage/profile-update", { replace: true });
   }, [isMine404, navigate]);
 
-  if (isMine404) return InlineSpinner;
+  if (isMine404) return <InlineSpinner />;
 
   const loadError = isMine ? myProfileQuery.isError && !isMine404 : rawError;
 
