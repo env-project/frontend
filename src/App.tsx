@@ -29,7 +29,6 @@ function App() {
 
         <Route path="/profile">
           <Route index element={<ProfileList />} />
-          <Route path="me" element={<ProfileDetail />} />
           <Route path=":userId" element={<ProfileDetail />} />
         </Route>
         <Route path="/mypage">

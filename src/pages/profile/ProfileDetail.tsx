@@ -1,5 +1,4 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import H1 from "@/components/text/H1";
 import H2 from "@/components/text/H2";
 import H3 from "@/components/text/H3";
@@ -9,35 +8,14 @@ import BookmarkBtn from "@/components/BookmarkBtn";
 import defaultImage from "@/assets/images/user-default-image.png";
 import RecruitmentCard from "@/components/RecruitmentCard";
 import CommentCard from "@/components/CommentCard";
-import type { Post, PostList } from "@/types/api-res-recruitment";
-import { fetchProfileDetail, type RawProfileDetail } from "@/api/fetchProfileDetail";
-import { fetchUserCommentsByAuthor } from "@/api/fetchUserCommentsByAuthor";
-import type { CommentList } from "@/types/api-res-comment";
-import { useEffect, useMemo } from "react";
-import type { PositionAndLevel } from "@/types/api-res-profile";
-import type { Position, ExperienceLevel } from "@/types/api-res-common";
-import { fetchUserPostsByAuthor } from "@/api/fetchUserPostsByAuthor";
-import { fetchMyBookmarkPosts, fetchMyBookmarkProfiles } from "@/api/bookmark";
-import type { BookmarkPostList, BookmarkUserList } from "@/types/api-res-bookmark";
+import type { Post } from "@/types/api-res-recruitment";
+import { useEffect } from "react";
 import ProfileCard from "@/components/ProfileCard";
-import type { AxiosError } from "axios";
-import api from "@/libs/axios";
 import InlineSpinner from "@/components/loading/InlineSpinner";
-
-type Tag = { id: string; name: string };
-
-const normTags = (xs: unknown): Tag[] =>
-  (Array.isArray(xs) ? xs : []).map((it: any) => {
-    const id = it?.id ?? it?.region_id ?? it?.genre_id ?? it;
-    const name = it?.name ?? it?.region_name ?? it?.genre_name ?? it;
-    return { id: String(id), name: String(name) };
-  });
-
-type RawPositionLink = { position: Position; experience_level: ExperienceLevel };
-function toPositions(links: RawPositionLink[] | null | undefined): PositionAndLevel[] {
-  if (!Array.isArray(links)) return [];
-  return links.map(({ position, experience_level }) => ({ position, experience_level }));
-}
+import { useMyBookmarks } from "@/hooks/api/useMyBookmark";
+import { useProfileLists } from "@/hooks/api/useProfileLists";
+import { useProfileBase } from "@/hooks/api/useProfileBase";
+import { hasProfile, type Tag } from "@/libs/profileNormalizers";
 
 function Section({
   title,
@@ -79,103 +57,29 @@ function Section({
 export default function ProfileDetail() {
   const { userId } = useParams();
   const navigate = useNavigate();
-  const isMine = userId === "me";
 
-  const {
-    data: raw,
-    isLoading: rawLoading,
-    isError: rawError,
-  } = useQuery<RawProfileDetail>({
-    queryKey: ["profile-detail", userId],
-    queryFn: () => fetchProfileDetail(userId!),
-    enabled: !!userId && !isMine,
-  });
+  const { isMine, resolvedUserId, base, loading, error, isMine404, sourceRaw } =
+    useProfileBase(userId);
 
-  // 내 userId 조회
-  const meQuery = useQuery<{ user_id: string }, AxiosError>({
-    queryKey: ["me"],
-    enabled: isMine,
-    retry: false,
-    queryFn: async () => (await api.get("/users/me")).data,
-  });
-
-  // 내 프로필 조회
-  const myProfileQuery = useQuery<any, AxiosError>({
-    queryKey: ["my-profile", meQuery.data?.user_id],
-    enabled: isMine && !!meQuery.data?.user_id,
-    retry: false,
-    queryFn: async () => (await api.get(`/profiles/${meQuery.data!.user_id}`)).data,
-  });
+  const canShowLists = isMine ? true : !!base?.is_public;
+  const { postsQuery, commentsQuery } = useProfileLists(resolvedUserId, canShowLists);
+  const { bookmarkPostsQuery, bookmarkUsersQuery } = useMyBookmarks(isMine);
 
   // 404면 업데이트로 이동
   useEffect(() => {
     if (!isMine) return;
-    const status = myProfileQuery.error?.response?.status;
-    if (status === 404) navigate("/mypage/profile-update", { replace: true });
-  }, [isMine, myProfileQuery.error, navigate]);
-
-  const resolvedUserId = isMine ? (meQuery.data?.user_id ?? null) : (userId ?? null);
-  const loading = isMine ? meQuery.isLoading || myProfileQuery.isLoading : rawLoading;
-
-  const base = useMemo(() => {
-    const source = isMine ? myProfileQuery.data : raw;
-    const id = resolvedUserId;
-    if (!source || !id) return null;
-    return {
-      ...source,
-      user_id: id,
-      image_url: source.image_url ?? "",
-      email: source.email ?? "",
-      regions: normTags((source as any).regions),
-      genres: normTags((source as any).genres),
-      positions: toPositions(source.position_links), // ← 링크 → positions
-    };
-  }, [raw, isMine, myProfileQuery.data, meQuery.data, resolvedUserId]);
-
-  const canShowLists = isMine ? true : !!base?.is_public; // 내 프로필은 공개 여부 무시하고 노출
-
-  const {
-    data: postsData,
-    isLoading: postsLoading,
-    isError: postsError,
-  } = useQuery<PostList>({
-    queryKey: ["profile-posts", resolvedUserId],
-    queryFn: () => fetchUserPostsByAuthor(resolvedUserId!, 10),
-    enabled: !!resolvedUserId && canShowLists,
-  });
-
-  const {
-    data: commentsData,
-    isLoading: commentsLoading,
-    isError: commentsError,
-  } = useQuery<CommentList>({
-    queryKey: ["profile-comments", resolvedUserId],
-    queryFn: () => fetchUserCommentsByAuthor(resolvedUserId!, 10),
-    enabled: !!resolvedUserId && canShowLists,
-  });
-
-  const myBookMarkPostsQuery = useQuery<BookmarkPostList>({
-    queryKey: ["my-bookmark-posts", 4],
-    queryFn: () => fetchMyBookmarkPosts(4),
-    enabled: isMine,
-  });
-
-  const myBookMarkUserQuery = useQuery<BookmarkUserList>({
-    queryKey: ["my-bookmark-users", 4],
-    queryFn: () => fetchMyBookmarkProfiles(4),
-    enabled: isMine,
-  });
-
-  const isMine404 =
-    isMine && myProfileQuery.isError && myProfileQuery.error?.response?.status === 404;
-
-  useEffect(() => {
-    if (isMine404) navigate("/mypage/profile-update", { replace: true });
-  }, [isMine404, navigate]);
+    if (isMine404) {
+      navigate("/mypage/profile-update", { replace: true });
+      return;
+    }
+    if (sourceRaw && !hasProfile(sourceRaw)) {
+      navigate("/mypage/profile-update", { replace: true });
+    }
+  }, [isMine, isMine404, sourceRaw, navigate]);
 
   if (isMine404) return <InlineSpinner />;
 
-  const loadError = isMine ? myProfileQuery.isError && !isMine404 : rawError;
+  const loadError = error;
 
   if (loading) {
     return (
@@ -238,9 +142,7 @@ export default function ProfileDetail() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <H1 className="text-text-primary tracking-tight">{base.nickname}</H1>
               <div className="self-start sm:self-auto">
-                {!isMine && (
-                  <BookmarkBtn userId={base.user_id!} isBookmarked={base.is_bookmarked} />
-                )}
+                {!isMine && <BookmarkBtn userId={base.user_id} isBookmarked={base.is_bookmarked} />}
               </div>
             </div>
 
@@ -299,20 +201,24 @@ export default function ProfileDetail() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
           {/* 최근 게시글 */}
           <div className="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 md:p-5 lg:p-6">
-            <Section title="게시글" count={postsData?.posts?.length ?? 0} to="/recruitment-post">
-              {postsLoading ? (
+            <Section
+              title="게시글"
+              count={postsQuery.data?.posts?.length ?? 0}
+              to="/recruitment-post"
+            >
+              {postsQuery.isLoading ? (
                 <div className="h-32 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
-              ) : postsError ? (
+              ) : postsQuery.isError ? (
                 <Text variant="subText" className="text-text-primary">
                   게시글을 불러오지 못했습니다.
                 </Text>
-              ) : !postsData?.posts?.length ? (
+              ) : !postsQuery.data?.posts?.length ? (
                 <Text variant="subText" className="text-text-primary">
                   작성한 게시글이 없습니다.
                 </Text>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
-                  {postsData!.posts.map((post: Post) => (
+                  {postsQuery.data!.posts.map((post: Post) => (
                     <div key={post.id} className="[&>*]:!w-full">
                       <RecruitmentCard postData={post} />
                     </div>
@@ -325,17 +231,17 @@ export default function ProfileDetail() {
               <Section
                 title="북마크한 게시글"
                 to="/recruitment-post?bookmark=bookmark"
-                count={myBookMarkPostsQuery.data?.posts.length ?? 0}
+                count={bookmarkPostsQuery.data?.posts.length ?? 0}
               >
-                {myBookMarkPostsQuery.isLoading ? (
+                {bookmarkPostsQuery.isLoading ? (
                   <div className="h-24 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
-                ) : !myBookMarkPostsQuery.data?.posts?.length ? (
+                ) : !bookmarkPostsQuery.data?.posts?.length ? (
                   <Text variant="subText" className="text-text-primary">
                     북마크한 게시글이 없습니다.
                   </Text>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
-                    {myBookMarkPostsQuery.data!.posts.map((bp) => {
+                    {bookmarkPostsQuery.data!.posts.map((bp) => {
                       const asPost: Post = { ...(bp as any), is_bookmarked: true };
                       const key = (bp as any).bookmark_id ?? (bp as any).id; // 왜 any??
                       return (
@@ -354,22 +260,22 @@ export default function ProfileDetail() {
           <div className="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 sm:p-5 lg:p-6 lg:sticky lg:top-4 h-fit">
             <Section
               title="댓글"
-              count={commentsData?.comments?.length ?? 0}
+              count={commentsQuery.data?.comments?.length ?? 0}
               to="/recruitment-post?view=comments"
             >
-              {commentsLoading ? (
+              {commentsQuery.isLoading ? (
                 <div className="h-24 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
-              ) : commentsError ? (
+              ) : commentsQuery.isError ? (
                 <Text variant="subText" className="text-text-primary">
                   댓글을 불러오지 못했습니다.
                 </Text>
-              ) : !commentsData?.comments?.length ? (
+              ) : !commentsQuery.data?.comments?.length ? (
                 <Text variant="subText" className="text-text-primary">
                   작성한 댓글이 없습니다.
                 </Text>
               ) : (
                 <div className="flex flex-col gap-3 md:gap-4">
-                  {commentsData!.comments.map((comment) => (
+                  {commentsQuery.data!.comments.map((comment) => (
                     <CommentCard
                       key={comment.id}
                       comment={{
@@ -394,17 +300,17 @@ export default function ProfileDetail() {
               <Section
                 title="북마크한 사용자"
                 to="/profile?bookmark=bookmark"
-                count={myBookMarkUserQuery.data?.profiles.length ?? 0}
+                count={bookmarkUsersQuery.data?.profiles.length ?? 0}
               >
-                {myBookMarkUserQuery.isLoading ? (
+                {bookmarkUsersQuery.isLoading ? (
                   <div className="h-24 rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse" />
-                ) : !myBookMarkUserQuery.data?.profiles?.length ? (
+                ) : !bookmarkUsersQuery.data?.profiles?.length ? (
                   <Text variant="subText" className="text-text-primary">
                     북마크한 사용자가 없습니다.
                   </Text>
                 ) : (
                   <div className="grid grid-cols-1 gap-4">
-                    {myBookMarkUserQuery.data!.profiles.map((bu) => {
+                    {bookmarkUsersQuery.data!.profiles.map((bu) => {
                       const userForCard: any = { ...(bu as any), is_bookmarked: true };
                       const key = (bu as any).bookmark_id ?? bu.user_id;
                       return <ProfileCard key={key} profile={userForCard} />;
