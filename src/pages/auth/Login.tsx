@@ -40,7 +40,8 @@ const LogIn = () => {
     },
 
     onSuccess: (res) => {
-      localStorage.setItem(TOKEN_INFO_KEY, JSON.stringify(res.data));
+      const accessToken = res.data.access_token;
+      localStorage.setItem(TOKEN_INFO_KEY, accessToken);
       refetch();
       navigate("/");
     },

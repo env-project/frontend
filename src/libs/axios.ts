@@ -1,5 +1,4 @@
 import { API_BASE_URL, TOKEN_INFO_KEY } from "@/constants/api-constants";
-import type { TokenInfo } from "@/types/api-res-auth";
 import axios from "axios";
 
 const api = axios.create({
@@ -7,11 +6,10 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const tokenStr = localStorage.getItem(TOKEN_INFO_KEY);
+  const accessToken = localStorage.getItem(TOKEN_INFO_KEY);
 
-  if (tokenStr) {
-    const tokenInfo: TokenInfo = JSON.parse(tokenStr);
-    config.headers.Authorization = `Bearer ${tokenInfo.access_token}`;
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
 
   return config;
