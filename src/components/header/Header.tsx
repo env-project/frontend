@@ -8,6 +8,9 @@ import Button from "@/components/Button";
 import Text from "@/components/text/Text";
 import { cn } from "@/libs/utils";
 import { useUserInfo } from "@/hooks/api/useUserInfo";
+import { useMutation } from "@tanstack/react-query";
+import api from "@/libs/axios";
+import { TOKEN_INFO_KEY } from "@/constants/api-constants";
 
 const Header: FC = () => {
   const [isBurgerOpen, setBurgerOpen] = useState<boolean>(false);
@@ -18,6 +21,16 @@ const Header: FC = () => {
   const isAuthPage = location.pathname === "/login" || location.pathname === "/sign-up";
 
   const { data: user } = useUserInfo();
+
+  const { mutate: logout } = useMutation({
+    mutationFn: () => {
+      return api.delete("/auth/token");
+    },
+    onSuccess: () => {
+      localStorage.removeItem(TOKEN_INFO_KEY);
+      window.location.reload();
+    },
+  });
 
   // 버거버튼 클릭 시 상태 변경
   const toggleBurger = useCallback(() => {
@@ -36,6 +49,7 @@ const Header: FC = () => {
       setIsLogin(false);
     }
   }, [user]);
+
   return (
     <header
       className={cn(
@@ -88,7 +102,12 @@ const Header: FC = () => {
               </Button>
             </Link>
             <Link to="/">
-              <Button variant="link-secondary">
+              <Button
+                variant="link-secondary"
+                onClick={() => {
+                  logout();
+                }}
+              >
                 <Text variant="mainText">Logout</Text>
               </Button>
             </Link>
@@ -127,6 +146,7 @@ const Header: FC = () => {
                   variant="link-secondary"
                   className="w-full"
                   onClick={() => {
+                    logout();
                     toggleBurger();
                   }}
                 >
