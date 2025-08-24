@@ -22,6 +22,7 @@ import type { BookmarkPostList, BookmarkUserList } from "@/types/api-res-bookmar
 import ProfileCard from "@/components/ProfileCard";
 import type { AxiosError } from "axios";
 import api from "@/libs/axios";
+import InlineSpinner from "@/components/loading/InlineSpinner";
 
 type Tag = { id: string; name: string };
 
@@ -115,9 +116,6 @@ export default function ProfileDetail() {
 
   const resolvedUserId = isMine ? (meQuery.data?.user_id ?? null) : (userId ?? null);
   const loading = isMine ? meQuery.isLoading || myProfileQuery.isLoading : rawLoading;
-  const loadError = isMine
-    ? myProfileQuery.isError && myProfileQuery.error?.response?.status !== 404
-    : rawError;
 
   const base = useMemo(() => {
     const source = isMine ? myProfileQuery.data : raw;
@@ -167,6 +165,17 @@ export default function ProfileDetail() {
     queryFn: () => fetchMyBookmarkProfiles(4),
     enabled: isMine,
   });
+
+  const isMine404 =
+    isMine && myProfileQuery.isError && myProfileQuery.error?.response?.status === 404;
+
+  useEffect(() => {
+    if (isMine404) navigate("/mypage/profile-update", { replace: true });
+  }, [isMine404, navigate]);
+
+  if (isMine404) return InlineSpinner;
+
+  const loadError = isMine ? myProfileQuery.isError && !isMine404 : rawError;
 
   if (loading) {
     return (
