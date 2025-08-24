@@ -1,4 +1,4 @@
-import { useState, useCallback, type FC } from "react";
+import { useState, useCallback, type FC, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import DarkModeToggle from "@/components/darkMode/DarkModeToggle";
 
@@ -7,6 +7,10 @@ import NavigationLink from "@/components/header/NavigationLink";
 import Button from "@/components/Button";
 import Text from "@/components/text/Text";
 import { cn } from "@/libs/utils";
+import { useUserInfo } from "@/hooks/api/useUserInfo";
+import { useMutation } from "@tanstack/react-query";
+import api from "@/libs/axios";
+import { TOKEN_INFO_KEY } from "@/constants/api-constants";
 
 const Header: FC = () => {
   const [isBurgerOpen, setBurgerOpen] = useState<boolean>(false);
@@ -15,6 +19,18 @@ const Header: FC = () => {
 
   const location = useLocation();
   const isAuthPage = location.pathname === "/login" || location.pathname === "/sign-up";
+
+  const { data: user } = useUserInfo();
+
+  const { mutate: logout } = useMutation({
+    mutationFn: () => {
+      return api.delete("/auth/token");
+    },
+    onSuccess: () => {
+      localStorage.removeItem(TOKEN_INFO_KEY);
+      window.location.reload();
+    },
+  });
 
   // 버거버튼 클릭 시 상태 변경
   const toggleBurger = useCallback(() => {
@@ -26,10 +42,13 @@ const Header: FC = () => {
     setIsDarkMode((prev) => !prev);
   }, []);
 
-  // 로그인 클릭 시 상태 변경
-  const toggleLogin = useCallback(() => {
-    setIsLogin((prev) => !prev);
-  }, []);
+  useEffect(() => {
+    if (user) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }, [user]);
 
   return (
     <header
@@ -83,7 +102,12 @@ const Header: FC = () => {
               </Button>
             </Link>
             <Link to="/">
-              <Button variant="link-secondary" onClick={toggleLogin}>
+              <Button
+                variant="link-secondary"
+                onClick={() => {
+                  logout();
+                }}
+              >
                 <Text variant="mainText">Logout</Text>
               </Button>
             </Link>
@@ -122,7 +146,7 @@ const Header: FC = () => {
                   variant="link-secondary"
                   className="w-full"
                   onClick={() => {
-                    toggleLogin();
+                    logout();
                     toggleBurger();
                   }}
                 >

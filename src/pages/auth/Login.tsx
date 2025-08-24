@@ -14,6 +14,7 @@ import type { TokenInfo } from "@/types/api-res-auth";
 import InlineSpinner from "@/components/loading/InlineSpinner";
 import { useState } from "react";
 import api from "@/libs/axios";
+import { useUserInfo } from "@/hooks/api/useUserInfo";
 
 const logInSchema = z.object({
   email: z.string().email({ message: "유효한 이메일 주소를 입력해주세요" }),
@@ -25,6 +26,8 @@ type TLogInSchema = z.infer<typeof logInSchema>;
 const LogIn = () => {
   const [apiError, setApiError] = useState("");
   const navigate = useNavigate();
+
+  const { refetch } = useUserInfo();
   const { mutate, isPending } = useMutation<AxiosResponse<TokenInfo>, Error, TLogInSchema>({
     mutationFn: (form: TLogInSchema) => {
       const params = new URLSearchParams();
@@ -38,6 +41,7 @@ const LogIn = () => {
 
     onSuccess: (res) => {
       localStorage.setItem(TOKEN_INFO_KEY, JSON.stringify(res.data));
+      refetch();
       navigate("/");
     },
 
