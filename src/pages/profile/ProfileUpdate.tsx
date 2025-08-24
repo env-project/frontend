@@ -3,7 +3,6 @@ import Input from "@/components/input/Input";
 import ImageInput from "@/components/input/ImageInput";
 import Text from "@/components/text/Text";
 import InputWithLabelContainer from "@/components/recruitment-form/InputWithLabelContainer";
-import type { MasterData } from "@/types/api-res-common";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -13,69 +12,43 @@ import {
 } from "@/types/zod-schema/profile-update-schema";
 import ProfileCheckboxInputs from "@/components/profile/ProfileCheckboxInputs";
 import ProfilePositionsInputs from "@/components/profile/ProfilePositionInputs";
-
-const MASTER_DATA: MasterData = {
-  regions: [
-    { id: "1", name: "서울 서부" },
-    { id: "2", name: "서울 동부" },
-    { id: "3", name: "서울 남부" },
-    { id: "4", name: "서울 북부" },
-    { id: "5", name: "인천" },
-    { id: "6", name: "부산" },
-    { id: "7", name: "대구" },
-    { id: "8", name: "광주" },
-    { id: "9", name: "대전" },
-    { id: "10", name: "울산" },
-    { id: "11", name: "제주" },
-    { id: "12", name: "경기" },
-    { id: "13", name: "강원" },
-    { id: "14", name: "충북" },
-    { id: "15", name: "충남" },
-    { id: "16", name: "경북" },
-    { id: "17", name: "경남" },
-    { id: "18", name: "전북" },
-    { id: "19", name: "전남" },
-  ],
-  positions: [
-    { id: "p1", name: "보컬" },
-    { id: "p2", name: "일렉 기타" },
-    { id: "p3", name: "어쿠스틱 기타" },
-    { id: "p4", name: "베이스" },
-    { id: "p5", name: "드럼" },
-    { id: "p6", name: "키보드" },
-    { id: "p7", name: "그 외" },
-  ],
-  genres: [
-    { id: "g1", name: "인디락" },
-    { id: "g2", name: "K-pop" },
-    { id: "g3", name: "J-pop" },
-    { id: "g4", name: "메탈" },
-    { id: "g5", name: "하드락" },
-    { id: "g6", name: "재즈" },
-    { id: "g7", name: "그 외" },
-  ],
-  experience_levels: [
-    { id: "e1", name: "취미 1년 이하" },
-    { id: "e2", name: "취미 1~3년" },
-    { id: "e3", name: "취미 3~5년" },
-    { id: "e4", name: "취미 5년 이상" },
-    { id: "e5", name: "전공" },
-    { id: "e6", name: "프로" },
-  ],
-  orientations: [
-    { id: "o1", name: "취미" },
-    { id: "o2", name: "프로" },
-    { id: "o3", name: "프로 지향" },
-  ],
-  recruitment_types: [
-    { id: "r1", name: "고정 밴드" },
-    { id: "r2", name: "프로젝트 밴드" },
-  ],
-  recruiting_post_types: [],
-};
+import useMasterData from "@/hooks/api/useMasterData";
+import LoadingOverlay from "@/components/loading/LoadingOverlay";
+import H1 from "@/components/text/H1";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import api from "@/libs/axios";
 
 export default function ProfileUpdate() {
   const navigate = useNavigate();
+  const [apiError, setApiError] = useState("");
+  const { isPending, data: masterData } = useMasterData();
+
+  const { mutate } = useMutation({
+    mutationFn: (form: TProfileUpdateSchema) => {
+      const requestData = {
+        ...form,
+      };
+      return api.put("/profile", requestData);
+    },
+    onSuccess: () => {
+      navigate("/profile");
+    },
+    onError: (e) => {
+      if (e instanceof AxiosError) {
+        if (e.status === 400) {
+          setApiError("잘못된 입력 값입니다.");
+        } else if (e.status === 401) {
+          setApiError("로그인이 필요합니다.");
+        } else {
+          setApiError("알 수 없는 오류가 발생했습니다.");
+        }
+      } else {
+        setApiError("서버에 연결할 수 없습니다.");
+      }
+    },
+  });
 
   const {
     register,
@@ -100,6 +73,7 @@ export default function ProfileUpdate() {
 
   const onSubmit = (form: TProfileUpdateSchema) => {
     console.log(form);
+    mutate(form);
   };
 
   const onCancel = () => {
@@ -107,7 +81,9 @@ export default function ProfileUpdate() {
     navigate("/profile");
   };
 
-  return (
+  return isPending ? (
+    <LoadingOverlay />
+  ) : masterData ? (
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -164,7 +140,7 @@ export default function ProfileUpdate() {
         <section className="grid grid-cols-1 gap-10 my-20">
           <InputWithLabelContainer>
             <label>선호 장르(복수 선택 가능)</label>
-            <ProfileCheckboxInputs register={register} name="genreIds" data={MASTER_DATA.genres} />
+            <ProfileCheckboxInputs register={register} name="genreIds" data={masterData.genres} />
           </InputWithLabelContainer>
 
           <InputWithLabelContainer>
@@ -173,7 +149,7 @@ export default function ProfileUpdate() {
               register={register}
               type="radio"
               name="regionIds"
-              data={MASTER_DATA.regions}
+              data={masterData.regions}
             />
           </InputWithLabelContainer>
 
@@ -182,11 +158,14 @@ export default function ProfileUpdate() {
               register={register}
               errors={errors}
               control={control}
-              positions={MASTER_DATA.positions}
-              experienceLevels={MASTER_DATA.experience_levels}
+              positions={masterData.positions}
+              experienceLevels={masterData.experience_levels}
             />
           </InputWithLabelContainer>
         </section>
+        <Text variant="label" className="text-error">
+          {apiError}
+        </Text>
         <div className="flex gap-4 ">
           <Button type="button" color="error" onClick={onCancel}>
             <Text className="text-text-on-dark">취소</Text>
@@ -197,5 +176,7 @@ export default function ProfileUpdate() {
         </div>
       </form>
     </>
+  ) : (
+    <H1 className="text-text-primary">데이터 로딩에 실패했습니다. 잠시후 다시 시도해주세요.</H1>
   );
 }
