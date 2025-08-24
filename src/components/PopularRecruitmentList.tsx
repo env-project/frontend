@@ -38,7 +38,7 @@ export default function PopularRecruitmentList() {
       <div ref={sliderRef} className="w-full px-4 keen-slider">
         {data.posts.map((post) => (
           <div key={post.id} className="keen-slider__slide">
-            <RecruitmentCard postData={post} className="h-64" />
+            <RecruitmentCard postData={post} className="h-68 w-full" />
           </div>
         ))}
       </div>
