@@ -22,6 +22,7 @@ function setAccessToken(accessToken: string) {
 function willExpireSoon(accessToken: string, skewSecond = 60): boolean {
   try {
     const { exp: expireSecond } = jwtDecode<JwtPayload>(accessToken);
+
     if (!expireSecond) return true; // exp가 없다면 안전하게 "곧 만료" 취급 -> 사전 refresh
     const currentSecond = Math.floor(Date.now() / 1000);
     return expireSecond - currentSecond <= skewSecond; // 60초 이내면 갱신
@@ -48,7 +49,7 @@ async function ensureFreshAccessToken(): Promise<string | null> {
     try {
       // 주의: 여기서는 전역 axios(기본 인스턴스) 사용하여 인터셉터 루프 방지
       const { data } = await axios.post<TokenInfo>(
-        `${API_BASE_URL}/auth/refresh`,
+        `${API_BASE_URL}/auth/token/refresh`,
         {},
         { withCredentials: true }
       );
