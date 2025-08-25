@@ -1,10 +1,9 @@
 import Button from "@/components/Button";
-import Input from "@/components/input/Input";
 // import ImageInput from "@/components/input/ImageInput";
 import Text from "@/components/text/Text";
 import InputWithLabelContainer from "@/components/recruitment-form/InputWithLabelContainer";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type Control, type UseFormRegister } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import {
   profileUpdateSchema,
@@ -34,11 +33,9 @@ export default function ProfileUpdate() {
     formState: { errors }, // 각 필드의 유효성 검사 에러 정보 담고 있는 객체
     reset, // 폼 전체를 초기값으로 리셋할 때 사용
     setValue,
-  } = useForm({
+  } = useForm<TProfileUpdateSchema>({
     resolver: zodResolver(profileUpdateSchema), // resolver는 외부 라이브러리 스키마 기반 검증과 리액트훅폼을 연결해주는 다리
     defaultValues: {
-      nickname: "",
-      email: "",
       positions: [],
       regions: [],
       genres: [],
@@ -54,8 +51,6 @@ export default function ProfileUpdate() {
     mutationFn: (payload: TProfileUpdateSchema) => {
       // 서버에 보낼 최종 데이터만 뽑아서 객체로 생성
       const dataToSend = {
-        nickname: payload.nickname,
-        email: payload.email,
         //image_url: payload.image_url,
         is_public: payload.is_public,
         regions: payload.regions,
@@ -120,28 +115,6 @@ export default function ProfileUpdate() {
       <section className="flex flex-col items-center justify-center w-full gap-24 sm:flex-row">
         <ImageInput id="image_file" onChange={handleImageChange} className="w-[300px]" />
         <div className="flex flex-col gap-5 flex-grow w-full sm:max-w-[500px]">
-          <InputWithLabelContainer>
-            <label htmlFor="name">이름:</label>
-            <Input
-              id="name"
-              placeholder="이름을 입력해주세요"
-              {...register("nickname")}
-              error={errors.nickname?.message}
-              className="w-full"
-            />
-          </InputWithLabelContainer>
-
-          <InputWithLabelContainer>
-            <label htmlFor="email">이메일:</label>
-            <Input
-              id="email"
-              {...register("email")}
-              error={errors.email?.message}
-              placeholder="이메일을 입력해주세요"
-              className="w-full"
-            />
-          </InputWithLabelContainer>
-
           {/* <InputWithLabelContainer>
             <label htmlFor="content">한 줄 소개:</label>
             <Input
@@ -152,17 +125,6 @@ export default function ProfileUpdate() {
               className="w-full"
             />
           </InputWithLabelContainer> */}
-
-          <InputWithLabelContainer>
-            <label htmlFor="professional_experience">경력:</label>
-            <Input
-              id="professional_experience"
-              {...register("professional_experience")}
-              error={errors.professional_experience?.message}
-              placeholder="ex) 5개월"
-              className="w-full"
-            />
-          </InputWithLabelContainer>
         </div>
       </section>
 
@@ -170,8 +132,8 @@ export default function ProfileUpdate() {
         <InputWithLabelContainer>
           <label>선호 장르(복수 선택 가능)</label>
           <ProfileCheckboxInputs
-            register={register as UseFormRegister<any>} // any로 캐스팅
-            nickname="genre_ids"
+            register={register} // any로 캐스팅
+            name="genres"
             data={masterData.genres}
           />
         </InputWithLabelContainer>
@@ -179,18 +141,18 @@ export default function ProfileUpdate() {
         <InputWithLabelContainer>
           <label>활동 지역(복수 선택 가능)</label>
           <ProfileCheckboxInputs
-            register={register as UseFormRegister<any>}
+            register={register}
             type="checkbox"
-            name="region_ids"
+            name="regions"
             data={masterData.regions}
           />
         </InputWithLabelContainer>
 
         <InputWithLabelContainer>
           <ProfilePositionsInputs
-            register={register as UseFormRegister<any>}
+            register={register}
             errors={errors}
-            control={control as Control<any>}
+            control={control}
             positions={masterData.positions}
             experienceLevels={masterData.experience_levels}
           />
