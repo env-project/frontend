@@ -2,6 +2,7 @@ import Button from "@/components/Button";
 import RecruitmentFormInputs from "@/components/recruitment-form/RecruitmentFormInputs";
 import Text from "@/components/text/Text";
 import TogglePostStatusModal from "@/components/TogglePostStatusModal";
+import useMutateImage from "@/hooks/api/useMutateImage";
 import useRecruitmentDetail from "@/hooks/api/useRecruitmentDetail";
 import api from "@/libs/axios";
 import { changeRecruitmentFormToRequestData } from "@/libs/changeRecruitmentDataForm";
@@ -25,11 +26,13 @@ export default function RecruitmentFix() {
   const navigate = useNavigate();
   const [apiError, setApiError] = useState("");
 
-  const { mutate } = useMutation({
-    mutationFn: (form: TRecruitmentPostSchema) => {
+  const { mutate: mutateImage } = useMutateImage();
+
+  const { mutate: mutateForm } = useMutation({
+    mutationFn: (form: TRecruitmentPostSchema & { image_url?: string }) => {
       //TODO: 이미지 API 나오면 이미지도 연결
       const requestData = changeRecruitmentFormToRequestData(form);
-      return api.patch(`/recruiting/${postId}`, requestData);
+      return api.patch(`/recruiting/${postId}`, { ...requestData, image_url: form.image_url });
     },
     onSuccess: () => {
       navigate(`/recruitment-post/${postId}`);
@@ -79,7 +82,18 @@ export default function RecruitmentFix() {
   };
 
   const onSubmit = (form: TRecruitmentPostSchema) => {
-    mutate(form);
+    if (form.image) {
+      mutateImage(form.image, {
+        onSuccess: (data) => {
+          mutateForm({ ...form, image_url: data.image_url });
+        },
+        onError: () => {
+          setApiError("이미지 업로드에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        },
+      });
+    } else {
+      mutateForm(form);
+    }
   };
 
   if (!postId) {
@@ -95,6 +109,7 @@ export default function RecruitmentFix() {
           onImageChange={onImageChange}
           formData={formData}
           className="flex flex-col items-center jsutify-start space-y-6 w-full"
+          defaultImageUrl={defaultData?.image_url}
         />
         <Text variant="label" className="text-error">
           {apiError}
