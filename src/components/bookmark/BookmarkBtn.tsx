@@ -1,8 +1,7 @@
-import { useState, type ComponentPropsWithoutRef } from "react";
+import { type ComponentPropsWithoutRef } from "react";
 import { cn } from "@/libs/utils";
 
-interface BookmarkButtonProps extends ComponentPropsWithoutRef<"button"> {
-  userId: string;
+export interface BookmarkButtonProps extends ComponentPropsWithoutRef<"button"> {
   isBookmarked: boolean;
   size?: "sm" | "md" | "lg";
   className?: string;
@@ -12,9 +11,8 @@ export default function BookmarkButton({
   isBookmarked,
   size = "md",
   className = "",
+  ...rest
 }: BookmarkButtonProps) {
-  const [bookmarked, setBookmarked] = useState(isBookmarked);
-
   // 크기에 따라 클래스 지정
   const sizeClass = {
     sm: "text-sm p-1",
@@ -25,7 +23,7 @@ export default function BookmarkButton({
   return (
     <button
       type="button"
-      onClick={() => setBookmarked((prev) => !prev)}
+      {...rest}
       className={cn(
         "flex items-center gap-1 rounded-full transition-colors text-primary hover:text-primary-thick hover:opacity-80 disabled:opacity-50",
         sizeClass,
@@ -37,8 +35,8 @@ export default function BookmarkButton({
         width="24"
         height="24"
         viewBox="0 0 24 24"
-        fill={bookmarked ? "var(--color-primary)" : "none"}
-        stroke={bookmarked ? "none" : "currentColor"}
+        fill={isBookmarked ? "var(--color-primary)" : "none"}
+        stroke={isBookmarked ? "none" : "currentColor"}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
