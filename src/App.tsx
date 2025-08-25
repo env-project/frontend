@@ -12,7 +12,6 @@ import RecruitmentFix from "@/pages/recruitment-post/RecruitmentFix";
 import ProfileDetail from "@/pages/profile/ProfileDetail";
 import ProfileUpdate from "@/pages/profile/ProfileUpdate";
 
-
 function App() {
   return (
     <Routes>

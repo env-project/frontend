@@ -6,16 +6,16 @@ function normalizeComments(body: any): CommentList {
   // { next_cursor, comments: [...] }
   if (body && Array.isArray(body.comments)) {
     return {
-      next_cursor: body.next_cursor ?? null,
+      next_cursor: body.next_cursor ?? "",
       comments: body.comments as Comment[],
     };
   }
   // 배열만 오는 경우
   if (Array.isArray(body)) {
-    return { next_cursor: null, comments: body as Comment[] };
+    return { next_cursor: "", comments: body as Comment[] };
   }
   // 알 수 없는 경우
-  return { next_cursor: null, comments: [] };
+  return { next_cursor: "", comments: [] };
 }
 
 export async function fetchUserCommentsByAuthor(userId: string, limit = 10): Promise<CommentList> {
