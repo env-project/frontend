@@ -60,7 +60,7 @@ export default function ProfileList() {
   // const profiles = pages.flatMap((p) => p.items);
 
   const { data, isPending, refetch } = useQuery<UserList>({
-    queryKey: ["profile", debouncedSearchParams],
+    queryKey: ["profile", debouncedSearchParams.toString()],
     queryFn: async () => {
       const res = await api.get("/profiles", { params: debouncedSearchParams });
       return res.data;

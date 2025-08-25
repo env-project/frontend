@@ -1,13 +1,15 @@
 import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
-import BookmarkBtn from "@/components/bookmark/BookmarkBtn";
 import defaultImage from "@/assets/images/user-default-image.png";
 import type { UserProfile } from "@/types/api-res-profile";
 import { cn } from "@/libs/utils";
 import H3 from "./text/H3";
 import { Link } from "react-router";
+import { useUserInfo } from "@/hooks/api/useUserInfo";
+import ProfileBookmark from "./bookmark/ProfileBookmark";
+import type { ComponentProps } from "react";
 
-interface ProfileCardProps {
+interface ProfileCardProps extends ComponentProps<"div"> {
   profile: UserProfile;
 }
 
@@ -41,7 +43,7 @@ function renderLimitedBadges(
   );
 }
 
-export default function ProfileCard({ profile }: ProfileCardProps) {
+export default function ProfileCard({ profile, className, ...rest }: ProfileCardProps) {
   const {
     user_id: userId,
     nickname,
@@ -56,6 +58,8 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
   const positionName = firstPosition?.position.name ?? "포지션 없음";
   const experienceName = firstPosition?.experience_level.name ?? "미정";
 
+  const { data: myUserInfo } = useUserInfo();
+
   return (
     <div
       className={cn(
@@ -63,8 +67,10 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
         "w-full rounded-xl",
         "p-4 sm:p-5",
         "border border-gray-300 shadow-sm hover:shadow-lg hover:shadow-primary-soft hover:z-10",
-        "transition-all duration-300 ease-in-out"
+        "transition-all duration-300 ease-in-out",
+        className
       )}
+      {...rest}
     >
       <div className="flex items-center justify-between gap-2 sm:gap-4">
         {/* 좌측: 프로필 이미지 */}
@@ -79,53 +85,62 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
         {/* 중앙: 닉네임 */}
         <Link
           to={`/profile/${userId}`}
-          className="absolute top-4 left-1/2 transform -translate-x-1/2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
           <H3 className="text-base text-center underline-offset-2 hover:underline">{nickname}</H3>
         </Link>
 
         {/* 우측: 북마크 버튼 */}
         <div className="shrink-0">
-          <BookmarkBtn isBookmarked={isBookmarked} />
+          {myUserInfo?.id === userId ? null : (
+            <ProfileBookmark userId={userId} initialIsBookmark={isBookmarked} />
+          )}
         </div>
       </div>
 
       <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-left">
         {/* 포지션 */}
-        <div className="flex items-center gap-1">
-          <Text variant="label" className="whitespace-nowrap">
-            포지션:
-          </Text>
-          <Badge label={positionName} color="primarySoft" size="sm" />
-        </div>
-        {/* 경력 */}
-        <div className="flex items-center gap-1">
-          <Text variant="label" className="whitespace-nowrap">
-            경력:
-          </Text>
-          <Text variant="label">{experienceName}</Text>
-        </div>
+        <Text variant="label" className="whitespace-nowrap">
+          포지션:
+        </Text>
+        <Badge label={positionName} color="primarySoft" size="sm" />
+      </div>
+      {/* 경력 */}
+      <div className="flex items-center gap-1">
+        <Text variant="label" className="whitespace-nowrap">
+          경력:
+        </Text>
+        <Text variant="label">{experienceName}</Text>
       </div>
 
       <div className="mt-4 flex flex-col gap-2 text-left">
         {/* 선호 장르 */}
         <div className="grid grid-cols-[auto_1fr] items-start gap-x-1">
-          <Text variant="label" className="self-center whitespace-nowrap leading-6">
-            선호 장르:
-          </Text>
-          <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 min-w-0">
-            {renderLimitedBadges(genres)}
-          </div>
+          {genres.length > 0 ? (
+            <>
+              <Text variant="label" className="self-center whitespace-nowrap leading-6">
+                선호 장르:
+              </Text>
+              <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 min-w-0">
+                {renderLimitedBadges(genres)}
+              </div>
+            </>
+          ) : null}
         </div>
+
         <div className="grid grid-cols-[auto_1fr] items-start gap-x-1">
-          <Text variant="label" className="self-center whitespace-nowrap leading-6">
-            지역:
-          </Text>
-          <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 min-w-0">
-            {regions.map((regions) => (
-              <Badge key={regions.id} label={regions.name} color="primarySoft" size="sm" />
-            ))}
-          </div>
+          {regions.length > 0 ? (
+            <>
+              <Text variant="label" className="self-center whitespace-nowrap leading-6">
+                지역:
+              </Text>
+              <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 min-w-0">
+                {regions.map((regions) => (
+                  <Badge key={regions.id} label={regions.name} color="primarySoft" size="sm" />
+                ))}
+              </div>
+            </>
+          ) : null}
         </div>
       </div>
 
