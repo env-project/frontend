@@ -81,6 +81,11 @@ export default function RecruitmentCard({ postData, className = "" }: Recruitmen
                   {positionName}
                 </Badge>
               ))}
+              {positions.length > 2 ? (
+                <Badge size="sm" color="secondary" className="text-text-on-dark">
+                  {`+${positions.length - 2}`}
+                </Badge>
+              ) : null}
             </div>
           ) : null}
 
@@ -92,6 +97,11 @@ export default function RecruitmentCard({ postData, className = "" }: Recruitmen
                   {region.name}
                 </Badge>
               ))}
+              {regions.length > 2 ? (
+                <Badge size="sm" color="secondary" className="text-text-on-dark">
+                  {`+${regions.length - 2}`}
+                </Badge>
+              ) : null}
             </div>
           ) : null}
 
@@ -103,6 +113,11 @@ export default function RecruitmentCard({ postData, className = "" }: Recruitmen
                   {genre.name}
                 </Badge>
               ))}
+              {genres.length > 2 ? (
+                <Badge size="sm" color="secondary" className="text-text-on-dark">
+                  {`+${genres.length - 2}`}
+                </Badge>
+              ) : null}
             </div>
           ) : null}
 
