@@ -1,4 +1,5 @@
 import Button from "@/components/Button";
+import DeletePostModal from "@/components/DeletePostModal";
 import RecruitmentFormInputs from "@/components/recruitment-form/RecruitmentFormInputs";
 import Text from "@/components/text/Text";
 import TogglePostStatusModal from "@/components/TogglePostStatusModal";
@@ -120,6 +121,7 @@ export default function RecruitmentFix() {
             <Text className="text-text-on-dark">수정하기</Text>
           </Button>
           <TogglePostStatusModal postId={postId} isClosed={false} />
+          <DeletePostModal postId={postId} />
         </div>
       </form>
     </div>
