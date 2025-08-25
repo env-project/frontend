@@ -175,7 +175,7 @@ export default function ProfileUpdate() {
           id="image_file"
           onChange={handleImageChange}
           className="w-[250px] sm:max-w-[500px]"
-          defaultImage={myUserInfo?.profile.image_url || ""}
+          defaultImage={myUserInfo?.profile ? myUserInfo?.profile.image_url : ""}
         />
       </section>
 
