@@ -19,13 +19,15 @@ function setAccessToken(accessToken: string) {
   localStorage.setItem(TOKEN_INFO_KEY, accessToken);
 }
 
-function willExpireSoon(accessToken: string, skewSecond = 60): boolean {
+const SKEW_SECOND = 5 * 60;
+
+function willExpireSoon(accessToken: string, skewSecond = SKEW_SECOND): boolean {
   try {
     const { exp: expireSecond } = jwtDecode<JwtPayload>(accessToken);
 
     if (!expireSecond) return true; // exp가 없다면 안전하게 "곧 만료" 취급 -> 사전 refresh
     const currentSecond = Math.floor(Date.now() / 1000);
-    return expireSecond - currentSecond <= skewSecond; // 60초 이내면 갱신
+    return expireSecond - currentSecond <= skewSecond; // 5분 이내면 갱신
   } catch {
     return true; // 디코드 실패 시도 "만료" 취급
   }
