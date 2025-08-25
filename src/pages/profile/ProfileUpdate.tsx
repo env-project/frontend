@@ -142,19 +142,11 @@ export default function ProfileUpdate() {
       className="flex flex-col items-center justify-center w-full p-10 mb-20"
     >
       <section className="flex flex-col items-center justify-center w-full gap-24 sm:flex-row">
-        <ImageInput id="image_file" onChange={handleImageChange} className="w-[300px]" />
-        <div className="flex flex-col gap-5 flex-grow w-full sm:max-w-[500px]">
-          {/* <InputWithLabelContainer>
-            <label htmlFor="content">한 줄 소개:</label>
-            <Input
-              id="content"
-              {...register("content")}
-              error={errors.content?.message}
-              placeholder="안녕하세요, 잘 부탁드립니다"
-              className="w-full"
-            />
-          </InputWithLabelContainer> */}
-        </div>
+        <ImageInput
+          id="image_file"
+          onChange={handleImageChange}
+          className="w-[250px] sm:max-w-[500px]"
+        />
       </section>
 
       <section className="grid grid-cols-1 gap-10 my-20">
