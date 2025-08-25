@@ -6,6 +6,7 @@ import type { UserProfile } from "@/types/api-res-profile";
 import { cn } from "@/libs/utils";
 import H3 from "./text/H3";
 import { Link } from "react-router";
+import { useUserInfo } from "@/hooks/api/useUserInfo";
 
 interface ProfileCardProps {
   profile: UserProfile;
@@ -56,6 +57,8 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
   const positionName = firstPosition?.position.name ?? "포지션 없음";
   const experienceName = firstPosition?.experience_level.name ?? "미정";
 
+  const { data: myUserInfo } = useUserInfo();
+
   return (
     <div
       className={cn(
@@ -86,7 +89,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
 
         {/* 우측: 북마크 버튼 */}
         <div className="shrink-0">
-          <BookmarkBtn isBookmarked={isBookmarked} />
+          {myUserInfo?.id === userId ? null : <BookmarkBtn isBookmarked={isBookmarked} />}
         </div>
       </div>
 
