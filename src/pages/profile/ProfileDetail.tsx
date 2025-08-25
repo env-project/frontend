@@ -149,8 +149,7 @@ export default function ProfileDetail() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <H1 className="text-text-primary tracking-tight">{base.nickname}</H1>
                 <div className="self-start sm:self-auto">
-                  <BookmarkBtn userId={base.user_id!} isBookmarked={base.is_bookmarked} />{" "}
-                  {/* FIX: non-null 보증 */}
+                  <BookmarkBtn isBookmarked={base.is_bookmarked} /> {/* FIX: non-null 보증 */}
                 </div>
               </div>
 
@@ -347,7 +346,7 @@ export default function ProfileDetail() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <H1 className="text-text-primary tracking-tight">{base.nickname}</H1>
               <div className="self-start sm:self-auto">
-                <BookmarkBtn userId={userId!} isBookmarked={base.is_bookmarked} />
+                <BookmarkBtn isBookmarked={base.is_bookmarked} />
               </div>
             </div>
 
