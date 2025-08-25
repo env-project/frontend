@@ -10,6 +10,8 @@ import CommentIcon from "@/components/icons/CommentIcon";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import type { Post } from "@/types/api-res-recruitment";
 
+const MAX_BADGE = 2;
+
 interface RecruitmentCardProps {
   postData: Post;
   className?: string;
@@ -76,14 +78,14 @@ export default function RecruitmentCard({ postData, className = "" }: Recruitmen
           {positions && positions.length > 0 ? (
             <div className="flex items-center space-x-1">
               <Text variant="mainText">포지션</Text>
-              {positions.slice(0, 3).map(({ position_name: positionName }, i) => (
+              {positions.slice(0, MAX_BADGE).map(({ position_name: positionName }, i) => (
                 <Badge size="sm" className="text-text-on-dark" key={i}>
                   {positionName}
                 </Badge>
               ))}
-              {positions.length > 2 ? (
+              {positions.length > MAX_BADGE ? (
                 <Badge size="sm" color="secondary" className="text-text-on-dark">
-                  {`+${positions.length - 2}`}
+                  {`+${positions.length - MAX_BADGE}`}
                 </Badge>
               ) : null}
             </div>
@@ -92,14 +94,14 @@ export default function RecruitmentCard({ postData, className = "" }: Recruitmen
           {regions && regions.length > 0 ? (
             <div className="flex items-center space-x-1">
               <Text variant="mainText">지역</Text>
-              {regions.slice(0, 3).map((region, i) => (
+              {regions.slice(0, MAX_BADGE).map((region, i) => (
                 <Badge size="sm" className="text-text-on-dark" key={i}>
                   {region.name}
                 </Badge>
               ))}
-              {regions.length > 2 ? (
+              {regions.length > MAX_BADGE ? (
                 <Badge size="sm" color="secondary" className="text-text-on-dark">
-                  {`+${regions.length - 2}`}
+                  {`+${regions.length - MAX_BADGE}`}
                 </Badge>
               ) : null}
             </div>
@@ -108,14 +110,14 @@ export default function RecruitmentCard({ postData, className = "" }: Recruitmen
           {genres && genres.length > 0 ? (
             <div className="flex items-center space-x-1">
               <Text variant="mainText">선호장르</Text>
-              {genres.slice(0, 3).map((genre, i) => (
+              {genres.slice(0, MAX_BADGE).map((genre, i) => (
                 <Badge size="sm" className="text-text-on-dark" key={i}>
                   {genre.name}
                 </Badge>
               ))}
-              {genres.length > 2 ? (
+              {genres.length > MAX_BADGE ? (
                 <Badge size="sm" color="secondary" className="text-text-on-dark">
-                  {`+${genres.length - 2}`}
+                  {`+${genres.length - MAX_BADGE}`}
                 </Badge>
               ) : null}
             </div>
