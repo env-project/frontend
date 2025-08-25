@@ -7,6 +7,7 @@ import { cn } from "@/libs/utils";
 import H3 from "./text/H3";
 import { Link } from "react-router";
 import { useUserInfo } from "@/hooks/api/useUserInfo";
+import ProfileBookmark from "./bookmark/ProfileBookmark";
 
 interface ProfileCardProps {
   profile: UserProfile;
@@ -89,7 +90,9 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
 
         {/* 우측: 북마크 버튼 */}
         <div className="shrink-0">
-          {myUserInfo?.id === userId ? null : <BookmarkBtn isBookmarked={isBookmarked} />}
+          {myUserInfo?.id === userId ? null : (
+            <ProfileBookmark userId={userId} initialIsBookmark={isBookmarked} />
+          )}
         </div>
       </div>
 
