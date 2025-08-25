@@ -5,7 +5,7 @@ import H2 from "@/components/text/H2";
 import H3 from "@/components/text/H3";
 import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
-import BookmarkBtn from "@/components/BookmarkBtn";
+import BookmarkBtn from "@/components/bookmark/BookmarkBtn";
 import defaultImage from "@/assets/images/user-default-image.png";
 import RecruitmentCard from "@/components/RecruitmentCard";
 import CommentCard from "@/components/CommentCard";

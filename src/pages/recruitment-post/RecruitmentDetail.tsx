@@ -1,5 +1,5 @@
 import Badge from "@/components/Badge";
-import BookmarkButton from "@/components/BookmarkBtn";
+import BookmarkButton from "@/components/bookmark/BookmarkBtn";
 import CommentInput from "@/components/commentUI/CommentInput";
 import CommentUI from "@/components/commentUI/CommentUI";
 import H1 from "@/components/text/H1";

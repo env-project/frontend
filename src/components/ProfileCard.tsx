@@ -1,6 +1,6 @@
 import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
-import BookmarkBtn from "@/components/BookmarkBtn";
+import BookmarkBtn from "@/components/bookmark/BookmarkBtn";
 import defaultImage from "@/assets/images/user-default-image.png";
 import type { UserProfile } from "@/types/api-res-profile";
 import { cn } from "@/libs/utils";

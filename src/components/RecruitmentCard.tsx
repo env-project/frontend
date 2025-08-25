@@ -4,7 +4,7 @@ import H3 from "@/components/text/H3";
 import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
 import { cn, getTimeDiff } from "@/libs/utils";
-import BookmarkButton from "@/components/BookmarkBtn";
+import BookmarkButton from "@/components/bookmark/BookmarkBtn";
 import EyeIcon from "@/components/icons/EyeIcon";
 import CommentIcon from "@/components/icons/CommentIcon";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
