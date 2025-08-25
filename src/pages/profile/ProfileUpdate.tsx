@@ -19,6 +19,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import api from "@/libs/axios";
+import ImageInput from "@/components/input/ImageInput";
 
 // -------------------- 컴포넌트 --------------------
 export default function ProfileUpdate() {
@@ -32,6 +33,7 @@ export default function ProfileUpdate() {
     control, //s useFieldArray, controller 같은 고급 기능에서 폼 상태 제어시 사용
     formState: { errors }, // 각 필드의 유효성 검사 에러 정보 담고 있는 객체
     reset, // 폼 전체를 초기값으로 리셋할 때 사용
+    setValue,
   } = useForm({
     resolver: zodResolver(profileUpdateSchema), // resolver는 외부 라이브러리 스키마 기반 검증과 리액트훅폼을 연결해주는 다리
     defaultValues: {
@@ -41,7 +43,6 @@ export default function ProfileUpdate() {
       regions: [],
       genres: [],
       is_public: true,
-      image_url: "",
     },
   });
 
@@ -55,7 +56,7 @@ export default function ProfileUpdate() {
       const dataToSend = {
         nickname: payload.nickname,
         email: payload.email,
-        image_url: payload.image_url,
+        //image_url: payload.image_url,
         is_public: payload.is_public,
         regions: payload.regions,
         genres: payload.genres,
@@ -88,12 +89,18 @@ export default function ProfileUpdate() {
 
   const onSubmit = (form: TProfileUpdateSchema) => {
     console.log("유효성 검사 통과, API 요청 시작:", form);
-    mutate(form);
+    //mutate(form);
   };
 
   const onCancel = () => {
     reset();
     navigate("/profile");
+  };
+
+  const handleImageChange: ((file: File | null) => void) | undefined = (file) => {
+    if (!file) return;
+
+    setValue("image", file);
   };
 
   if (isPending) return <LoadingOverlay />;
@@ -111,7 +118,7 @@ export default function ProfileUpdate() {
       className="flex flex-col items-center justify-center w-full p-10 mb-20"
     >
       <section className="flex flex-col items-center justify-center w-full gap-24 sm:flex-row">
-        {/* <ImageInput id="image_file" onChange={onImageChange} className="w-[300px]" /> */}
+        <ImageInput id="image_file" onChange={handleImageChange} className="w-[300px]" />
         <div className="flex flex-col gap-5 flex-grow w-full sm:max-w-[500px]">
           <InputWithLabelContainer>
             <label htmlFor="name">이름:</label>
