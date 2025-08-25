@@ -23,11 +23,11 @@ export default function BookmarkButton({
   return (
     <button
       type="button"
+      {...rest}
       className={cn(
         "flex items-center gap-1 rounded-full transition-colors text-primary hover:text-primary-thick hover:opacity-80 disabled:opacity-50",
         sizeClass,
-        className,
-        { rest }
+        className
       )}
     >
       {/* 아이콘 직접 렌더링 */}

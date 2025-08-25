@@ -32,6 +32,7 @@ export default function RecruitmentBookmark({
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
+    e.stopPropagation(); // 이벤트 전파 중단
 
     if (isBookmarked) {
       deleteBookmark();
