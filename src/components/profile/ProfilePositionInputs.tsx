@@ -31,11 +31,11 @@ export default function ProfilePositionsInputs({
 
   return (
     <div className="flex flex-col items-center justify-start w-full space-y-4">
-      <label className="w-full ">모집 포지션(복수 선택 가능)</label>
+      <label className="w-full ">포지션(복수 선택 가능)</label>
 
       {fields.map((field, index) => {
-        const positionError = errors?.positions?.[index]?.position_id;
-        const experiencedLevelError = errors?.positions?.[index]?.experienced_level_id;
+        const positionError = errors?.positions?.[index]?.position?.id;
+        const experiencedLevelError = errors?.positions?.[index]?.experience_level?.id;
 
         return (
           <div key={field.id} className="p-3 space-y-2 border rounded">
@@ -48,7 +48,7 @@ export default function ProfilePositionsInputs({
                     <input
                       type="radio"
                       value={position.id}
-                      {...register(`positions.${index}.position_id`)}
+                      {...register(`positions.${index}.position.id`)}
                     />
                     {position.name}
                   </label>
@@ -70,7 +70,7 @@ export default function ProfilePositionsInputs({
                     <input
                       type="radio"
                       value={experienceLevel.id}
-                      {...register(`positions.${index}.experienced_level_id`)}
+                      {...register(`positions.${index}.experience_level.id`)}
                     />
                     {experienceLevel.name}
                   </label>
@@ -94,7 +94,7 @@ export default function ProfilePositionsInputs({
       {/* 추가 버튼 */}
       <Button
         type="button"
-        onClick={() => append({ position_id: "", experienced_level_id: "" })}
+        onClick={() => append({ position: { id: "" }, experience_level: { id: "" } })}
         variant="default"
         color="primary"
       >
