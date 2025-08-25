@@ -33,7 +33,7 @@ export default function Filter({
     { id: "latest", name: "최신순" },
     { id: "comments", name: "댓글순" },
     { id: "views", name: "인기순" },
-    { id: "boomark", name: "북마크순" },
+    { id: "bookmark", name: "북마크순" },
   ];
 
   const orderBys = [
