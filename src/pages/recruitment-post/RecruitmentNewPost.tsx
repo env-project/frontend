@@ -13,6 +13,7 @@ import { changeRecruitmentFormToRequestData } from "@/libs/changeRecruitmentData
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import useMutateImage from "@/hooks/api/useMutateImage";
 
 export default function RecruitmentNewPost() {
   const formData = useForm<TRecruitmentPostSchema>({
@@ -29,11 +30,14 @@ export default function RecruitmentNewPost() {
   const navigate = useNavigate();
   const [apiError, setApiError] = useState("");
 
-  const { mutate } = useMutation({
-    mutationFn: (form: TRecruitmentPostSchema) => {
+  const { mutate: mutateImage } = useMutateImage();
+
+  const { mutate: mutateForm } = useMutation({
+    mutationFn: (form: TRecruitmentPostSchema & { image_url?: string }) => {
       //TODO: 이미지 API 나오면 이미지도 연결
       const requestData = changeRecruitmentFormToRequestData(form);
-      return api.post("/recruiting", requestData);
+
+      return api.post("/recruiting", { ...requestData, image_url: form.image_url });
     },
     onSuccess: () => {
       navigate("/recruitment-post");
@@ -62,7 +66,18 @@ export default function RecruitmentNewPost() {
   };
 
   const onSubmit = (form: TRecruitmentPostSchema) => {
-    mutate(form);
+    if (form.image) {
+      mutateImage(form.image, {
+        onSuccess: (data) => {
+          mutateForm({ ...form, image_url: data.image_url });
+        },
+        onError: () => {
+          setApiError("이미지 업로드에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        },
+      });
+    } else {
+      mutateForm(form);
+    }
   };
 
   return (
