@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { BookmarkButtonProps } from "./BookmarkBtn";
-import BookmarkButton from "./BookmarkBtn";
+import type { BookmarkButtonProps } from "@/components/bookmark/BookmarkBtn";
+import BookmarkButton from "@/components/bookmark/BookmarkBtn";
 import { useMutation } from "@tanstack/react-query";
 import api from "@/libs/axios";
 import { cn } from "@/libs/utils";
