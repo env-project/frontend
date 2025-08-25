@@ -87,4 +87,32 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
+// ===== 응답 인터셉터 =====
+api.interceptors.response.use(
+  (response) => response, // 성공은 그대로 반환
+  async (error) => {
+    const originalRequest = error.config;
+
+    // 401이고, 재시도한 적 없는 경우만 refresh 시도
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true; // 무한 루프 방지용 플래그
+
+      try {
+        const newAccessToken = await ensureFreshAccessToken();
+
+        if (newAccessToken) {
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return api(originalRequest); // 원래 요청 다시 보내기
+        }
+      } catch (e) {
+        // refresh 실패 → 로그인 해제
+        localStorage.removeItem(TOKEN_INFO_KEY);
+        return Promise.reject(e);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export default api;
