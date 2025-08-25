@@ -4,11 +4,11 @@ import H3 from "@/components/text/H3";
 import Text from "@/components/text/Text";
 import Badge from "@/components/Badge";
 import { cn, getTimeDiff } from "@/libs/utils";
-import BookmarkButton from "@/components/bookmark/BookmarkBtn";
 import EyeIcon from "@/components/icons/EyeIcon";
 import CommentIcon from "@/components/icons/CommentIcon";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import type { Post } from "@/types/api-res-recruitment";
+import RecruitmentBookmark from "@/components/bookmark/RecruitmentBookmark";
 
 const MAX_BADGE = 2;
 
@@ -34,7 +34,6 @@ export default function RecruitmentCard({ postData, className = "" }: Recruitmen
     bookmarks_count,
   } = postData;
 
-  const [isBookmarked] = useState(isInitialBookmarked);
   const [timeDiff, setTimeDiff] = useState("");
 
   useEffect(() => {
@@ -51,7 +50,12 @@ export default function RecruitmentCard({ postData, className = "" }: Recruitmen
     >
       <div className="flex w-full justify-between items-center">
         <H3 className="truncate w-full">{title}</H3>
-        <BookmarkButton isBookmarked={isBookmarked} size="sm" userId={id} />
+        <RecruitmentBookmark
+          initialIsBookmark={isInitialBookmarked}
+          size="sm"
+          postId={id}
+          className="z-50"
+        />
       </div>
 
       <div className="flex justify-between items-start w-full mt-2 mb-3 flex-col">

@@ -86,7 +86,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
 
         {/* 우측: 북마크 버튼 */}
         <div className="shrink-0">
-          <BookmarkBtn userId={userId} isBookmarked={isBookmarked} />
+          <BookmarkBtn isBookmarked={isBookmarked} />
         </div>
       </div>
 

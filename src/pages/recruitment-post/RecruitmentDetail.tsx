@@ -1,5 +1,4 @@
 import Badge from "@/components/Badge";
-import BookmarkButton from "@/components/bookmark/BookmarkBtn";
 import CommentInput from "@/components/commentUI/CommentInput";
 import CommentUI from "@/components/commentUI/CommentUI";
 import H1 from "@/components/text/H1";
@@ -15,6 +14,7 @@ import LoadingOverlay from "@/components/loading/LoadingOverlay";
 import useComment from "@/hooks/api/useComment";
 import InlineSpinner from "@/components/loading/InlineSpinner";
 import useRecruitmentDetail from "@/hooks/api/useRecruitmentDetail";
+import RecruitmentBookmark from "@/components/bookmark/RecruitmentBookmark";
 
 export default function RecruitmentDetail() {
   const { postId } = useParams();
@@ -42,7 +42,7 @@ export default function RecruitmentDetail() {
   const {
     title,
     is_bookmarked: isBookmarked,
-    author: { id: userId, nickname },
+    author: { nickname },
     created_at: createdAt,
     is_closed: isClosed,
     band_name: bandName,
@@ -71,11 +71,11 @@ export default function RecruitmentDetail() {
         <div className="flex flex-col max-w-2xl w-full ">
           <div className="flex max-w-full min-w-0 justify-between items-center">
             <H1 className="truncate  min-w-0 flex-1">{title}</H1>
-            <BookmarkButton
-              isBookmarked={isBookmarked}
+            <RecruitmentBookmark
+              initialIsBookmark={isBookmarked}
               className="shrink-0"
               size="sm"
-              userId={userId}
+              postId={postId}
             />
           </div>
 
