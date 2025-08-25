@@ -6,8 +6,11 @@ import InlineDots from "@/components/loading/InlineDots";
 import { useInfinite } from "@/hooks/useInfinite";
 import { useSearchParams } from "react-router";
 import { buildProfilesQueryFromSearchParams } from "@/libs/buildProfilesquery";
-import type { UserProfile } from "@/types/api-res-profile";
+import { type UserList, type UserProfile } from "@/types/api-res-profile";
 import { fetchProfilesInfinitePage } from "@/api/fetchProfilesInfinite";
+import { useQuery } from "@tanstack/react-query";
+import { useDebounce } from "@/hooks/useDebounce";
+import api from "@/libs/axios";
 
 const GRID =
   "grid gap-4 sm:gap-6 lg:gap-8 justify-items-center [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]";
@@ -27,6 +30,7 @@ function TwoColLayout({ children }: { children: React.ReactNode }) {
 
 export default function ProfileList() {
   const [searchParams] = useSearchParams();
+  const debouncedSearchParams = useDebounce(searchParams);
   const query = buildProfilesQueryFromSearchParams(searchParams);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfinite<UserProfile>({
@@ -56,6 +60,14 @@ export default function ProfileList() {
 
   const pages = data?.pages ?? [];
   const profiles = pages.flatMap((p) => p.items);
+
+  const {} = useQuery<UserList>({
+    queryKey: ["profile", debouncedSearchParams],
+    queryFn: async () => {
+      const res = await api.get("/profiles", { params: debouncedSearchParams });
+      return res.data;
+    },
+  });
 
   return (
     <TwoColLayout>

@@ -1,5 +1,4 @@
 import { Genre, Region, Position, ExperienceLevel } from "@/types/api-res-common";
-import type { Post } from "./api-res-recruitment";
 
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 
