@@ -14,12 +14,13 @@ import ProfilePositionsInputs from "@/components/profile/ProfilePositionInputs";
 import useMasterData from "@/hooks/api/useMasterData";
 import LoadingOverlay from "@/components/loading/LoadingOverlay";
 import H1 from "@/components/text/H1";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import api from "@/libs/axios";
 import ImageInput from "@/components/input/ImageInput";
 import useMutateImage from "@/hooks/api/useMutateImage";
+import { useUserInfo } from "@/hooks/api/useUserInfo";
 
 // -------------------- 컴포넌트 --------------------
 export default function ProfileUpdate() {
@@ -43,6 +44,34 @@ export default function ProfileUpdate() {
       is_public: true,
     },
   });
+
+  const { data: myUserInfo } = useUserInfo();
+
+  useEffect(() => {
+    if (myUserInfo?.profile) {
+      console.log(myUserInfo.profile);
+      const { positions, regions, genres, is_public: isPublic } = myUserInfo.profile;
+      const regionIds: string[] = regions.map((region) => region.id);
+      const genreIds: string[] = genres.map((genre) => genre.id);
+      const positionData: TProfileUpdateSchema["positions"] = [];
+
+      positions.map((position) => {
+        if (position.position && position.experience_level) {
+          positionData.push({
+            position: { id: position.position.id },
+            experience_level: { id: position.experience_level.id },
+          });
+        }
+      });
+
+      reset({
+        is_public: isPublic,
+        regions: regionIds,
+        genres: genreIds,
+        positions: positionData,
+      });
+    }
+  }, [myUserInfo, reset]);
 
   const { mutate: mutateImage } = useMutateImage();
 
@@ -78,7 +107,7 @@ export default function ProfileUpdate() {
     // 요청 성공 시 실행되는 콜백
     // 여기서는 프로필 페이지로 이동
     onSuccess: () => {
-      navigate("/profile");
+      //navigate("/profile");
     },
 
     // 요청 실패 시 실행되는 콜백
@@ -146,6 +175,7 @@ export default function ProfileUpdate() {
           id="image_file"
           onChange={handleImageChange}
           className="w-[250px] sm:max-w-[500px]"
+          defaultImage={myUserInfo?.profile.image_url || ""}
         />
       </section>
 
