@@ -19,6 +19,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import api from "@/libs/axios";
 import ImageInput from "@/components/input/ImageInput";
+import useMutateImage from "@/hooks/api/useMutateImage";
 
 // -------------------- 컴포넌트 --------------------
 export default function ProfileUpdate() {
@@ -43,19 +44,32 @@ export default function ProfileUpdate() {
     },
   });
 
+  const { mutate: mutateImage } = useMutateImage();
+
   //useMutation은 데이터 수정/생성/삭제 용
-  const { mutate } = useMutation({
+  const { mutate: mutateForm } = useMutation({
     //mutate는 useMutation에서 제공하는 함수로, 실제 서버 요청을 실행하는 거야.
     // mutationFn: 실제 서버에 요청을 보내는 함수
     // payload: useForm에서 받아온 폼 데이터 전체 (TProfileUpdateSchema 타입)
-    mutationFn: (payload: TProfileUpdateSchema) => {
+    mutationFn: (payload: TProfileUpdateSchema & { image_url?: string }) => {
+      const positionsData: { position_id: string; experience_level_id: string }[] = [];
+
+      payload.positions.forEach((position) => {
+        const tempPosition: { position_id: string; experience_level_id: string } = {
+          position_id: position.position.id,
+          experience_level_id: position.experience_level.id,
+        };
+
+        positionsData.push(tempPosition);
+      });
+
       // 서버에 보낼 최종 데이터만 뽑아서 객체로 생성
       const dataToSend = {
-        //image_url: payload.image_url,
+        image_url: payload.image_url,
         is_public: payload.is_public,
         regions: payload.regions,
         genres: payload.genres,
-        positions: payload.positions,
+        positions: positionsData,
       };
       // 서버 PATCH 요청, Content-Type: application/json
       return api.patch("/users/me/profile", dataToSend);
@@ -63,7 +77,9 @@ export default function ProfileUpdate() {
 
     // 요청 성공 시 실행되는 콜백
     // 여기서는 프로필 페이지로 이동
-    onSuccess: () => navigate("/profile"),
+    onSuccess: () => {
+      navigate("/profile");
+    },
 
     // 요청 실패 시 실행되는 콜백
     onError: (e) => {
@@ -85,6 +101,19 @@ export default function ProfileUpdate() {
   const onSubmit = (form: TProfileUpdateSchema) => {
     console.log("유효성 검사 통과, API 요청 시작:", form);
     //mutate(form);
+
+    if (form.image) {
+      mutateImage(form.image, {
+        onSuccess: (data) => {
+          mutateForm({ ...form, image_url: data.image_url });
+        },
+        onError: () => {
+          setApiError("이미지 업로드에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        },
+      });
+    } else {
+      mutateForm(form);
+    }
   };
 
   const onCancel = () => {
