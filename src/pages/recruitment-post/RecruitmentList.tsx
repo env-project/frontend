@@ -1,14 +1,16 @@
+import Button from "@/components/Button";
 import Filter from "@/components/Filter";
 import LoadingOverlay from "@/components/loading/LoadingOverlay";
 import RecruitmentCard from "@/components/RecruitmentCard";
 import H1 from "@/components/text/H1";
+import Text from "@/components/text/Text";
 import { useUserInfo } from "@/hooks/api/useUserInfo";
 import { useDebounce } from "@/hooks/useDebounce";
 import api from "@/libs/axios";
 import type { PostList } from "@/types/api-res-recruitment";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, type JSX } from "react";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
 export default function RecruitmentList() {
   const [searchParams] = useSearchParams();
@@ -31,7 +33,16 @@ export default function RecruitmentList() {
 
   return (
     <div className="p-4 gap-2 flex flex-col items-center justify-start sm:items-start sm:justify-start sm:flex-row bg-bg-primary text-text-primary min-h-screen">
-      <Filter filterType="recruitmentPostFilter" isLogin={!!userData} />
+      <div className="flex flex-col items-start space-y-1">
+        <Filter filterType="recruitmentPostFilter" isLogin={!!userData} className="w-full" />
+        {userData ? (
+          <Link to="/recruitment-post/new-post">
+            <Button>
+              <Text className="text-text-on-dark">글 작성</Text>
+            </Button>
+          </Link>
+        ) : null}
+      </div>
 
       {(() => {
         let content: JSX.Element;
