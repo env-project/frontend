@@ -43,7 +43,7 @@ export default function RecruitmentList() {
             content = (
               <div className="flex flex-wrap gap-2 w-full justify-center items-center">
                 {data.posts.map((post) => (
-                  <RecruitmentCard postData={post} key={post.id} className="h-64" />
+                  <RecruitmentCard postData={post} key={post.id} className="h-76" />
                 ))}
               </div>
             );
