@@ -64,12 +64,12 @@ export default function ImageInput({
     if (defaultImage) {
       setPreviewUrl(defaultImage);
 
-      fetch(defaultImage)
-        .then((response) => response.blob())
-        .then((blob) => {
-          const image = new File([blob], "image", { type: blob.type });
-          handleFile(image);
-        });
+      // fetch(defaultImage)
+      //   .then((response) => response.blob())
+      //   .then((blob) => {
+      //     const image = new File([blob], "image", { type: blob.type });
+      //     handleFile(image);
+      //   });
     }
   }, [defaultImage, handleFile]);
 
